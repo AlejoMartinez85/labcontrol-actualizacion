@@ -1,0 +1,171 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-gray">Permisos</h1>
+      <hr>
+    </div>
+    <div class="col-12">
+      <app-card [cardOptionBlock]="true">
+        <div class="text-rigth">
+          <button class="d-inline-block btn btn-info mb-3" id="atras" [routerLink]="['../../']">Regresar</button>
+          <button class="d-inline-block btn btn-danger mb-3" (click)="Retablecer()">Quitar todos los Permisos</button>
+          <button class="d-inline-block btn btn-success mb-3" (click)="allTrue()">Asignar todos los Permisos</button>
+          <br>
+        </div>
+        <form [formGroup]="formaPermisos">
+          <input type="hidden" [formControlName]="'_id'">
+          <input type="hidden" [formControlName]="'id_role'">
+          <div *ngIf="user.plataformaAdmin">
+            <h3>Módulos Logísticos</h3>
+            <table class="table table-striped" >
+              <thead>
+                <tr>
+                  <th>Módulo</th>
+                  <th>Editar</th>
+                  <th>Eliminar</th>
+                  <th>Crear</th>
+                  <th>ver</th>
+                </tr>
+              </thead>
+              <tbody>
+                 <tr>
+                  <td>Ensayos</td>
+                  <td><input type="checkbox" [formControlName]="'ensayos_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'ensayos_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'ensayos_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'ensayos_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Recepción de Muestras </td>
+                  <td><input type="checkbox" [formControlName]="'muestras_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'muestras_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'muestras_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'muestras_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Parámetros</td>
+                  <td><input type="checkbox" [formControlName]="'parametros_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'parametros_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'parametros_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'parametros_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Agrupación de parámetros</td>
+                  <td><input type="checkbox" [formControlName]="'agrupacion_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'agrupacion_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'agrupacion_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'agrupacion_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Configuración de Reportes</td>
+                  <td><input type="checkbox" [formControlName]="'configReporte_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'configReporte_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'configReporte_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'configReporte_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Clientes</td>
+                  <td><input type="checkbox" [formControlName]="'clientes_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'clientes_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'clientes_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'clientes_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Usuarios</td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_ver'" id=""></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <div *ngIf="user.plataformaTecnica">
+            <h3>Módulos Técnicos</h3>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Módulo</th>
+                  <th>Editar</th>
+                  <th>Eliminar</th>
+                  <th>Crear</th>
+                  <th>ver</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="!user.plataformaAdmin">
+                  <td>Parámetros</td>
+                  <td><input type="checkbox" [formControlName]="'parametros_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'parametros_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'parametros_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'parametros_ver'" id=""></td>
+                </tr>
+                <tr *ngIf="!user.plataformaAdmin">
+                  <td>usuarios</td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'usuarios_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Incertidumbre</td>
+                  <td><input type="checkbox" [formControlName]="'incertidumbre_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'incertidumbre_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'incertidumbre_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'incertidumbre_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Condiciones Ambientales</td>
+                  <td><input type="checkbox" [formControlName]="'condiciones_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'condiciones_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'condiciones_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'condiciones_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Cartas de control</td>
+                  <td><input type="checkbox" [formControlName]="'cartas_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'cartas_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'cartas_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'cartas_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Equipos</td>
+                  <td><input type="checkbox" [formControlName]="'equipos_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'equipos_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'equipos_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'equipos_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Datos atípicos</td>
+                  <td><input type="checkbox" [formControlName]="'datos_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'datos_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'datos_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'datos_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>Deriva instrumental</td>
+                  <td><input type="checkbox" [formControlName]="'deriva_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'deriva_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'deriva_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'deriva_ver'" id=""></td>
+                </tr>
+                <tr>
+                  <td>validación de métodos</td>
+                  <td><input type="checkbox" [formControlName]="'validacion_editar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'validacion_eliminar'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'validacion_crear'" id=""></td>
+                  <td><input type="checkbox" [formControlName]="'validacion_ver'" id=""></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="form-group">
+          <button class="btn btn-success" (click)="editar()">Editar</button>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>
+<app-preloader *ngIf="preloader"></app-preloader>

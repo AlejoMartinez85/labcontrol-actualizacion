@@ -1,0 +1,73 @@
+<div class="card" *ngIf="parametroresult!=undefined">
+  <div class="card-header">
+    <h4 class="card-header-text">Utotal </h4>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <label class="col-sm-2 col-form-label">K del certificado</label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" [(ngModel)]="parametro.kcertificado"
+          placeholder="K del certificado"  (input)="actualizardatos()">
+      </div>
+      <label class="col-sm-2 col-form-label"># Decimales</label>
+      <div class="col-sm-2">
+        <input type="number" class="form-control" [(ngModel)]="parametro.ndecimales"
+          placeholder="Numero decimales"  (input)="actualizardatos()">
+      </div>
+      
+      <div class="col-sm-6">
+        <label class="col-form-label">Uc:{{parametroresult.uc}}</label>
+        <strong></strong><br />
+        <label class="col-form-label">U:{{parametroresult.u}}</label>
+        <strong></strong>
+      </div>
+      <div class="col-sm-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Simbolo</th>
+              <th>Valor </th>
+              <th>Coeficiente </th>
+              <th>Incertidumbre </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let variable of parametroresult.variables;index as i;">
+              <td>{{i+1}}</td>
+              <td>
+                {{variable.nombre}}
+              </td>
+              <td>
+                {{variable.simbolo}}
+              </td>
+              <td>
+                <!-- <input type="number" class="form-control" name="var_valor{{i}}"
+                  
+                                                        placeholder="Valor " [(ngModel)]="variable.valor"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="actualizardatos()"> -->
+                                                        {{variable.valor}}
+              </td>
+              <td>
+                {{variable.coeficiente}}
+              </td>
+              <td>
+                {{variable.incertidumbre}}
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+      
+
+
+
+    </div>
+  </div>
+
+</div>

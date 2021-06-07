@@ -1,0 +1,332 @@
+<div class="page-body">
+  <!--profile cover start-->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="cover-profile">
+        <div class="profile-bg-img">
+          <img class="profile-bg-img img-fluid" src="assets/images/user-profile/bg-img1.jpg" alt="bg-img">
+          <div class="card-block user-info">
+            <div class="col-md-12">
+              <div class="media-left">
+                <a href="javascript:" class="profile-image">
+
+                <img  style="width: 100px;height: 100px;" class="user-img img-radius" src="{{cliente?.imagen?apiurl+'upload/files_client/'+cliente.imagen:'assets/images/avatar-blank.jpg'}}" alt="user-img">
+                </a>
+
+              </div>
+              <div class="media-body row">
+                <div class="col-lg-12">
+                  <div class="user-title">
+                    <h2></h2>
+                    <span class="text-white"></span>
+                  </div>
+                </div>
+                <div>
+                  <div class="pull-right cover-btn">
+                    <label class="custom-file btn">
+
+                      <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+                      <span class="code-header"> <i class="fa fa-upload  fa-2x text-info"></i>
+                      </span>
+
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--profile cover end-->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="md-tabs md-card-tabs">
+        <ngb-tabset>
+          <ngb-tab title="Información personal">
+            <ng-template ngbTabContent>
+              <div [@fadeInOutTranslate] class="m-t-15">
+                <!-- personal card start -->
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-header-text">Acerca de mi</h5>
+                    <button id="edit-btn" type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right"
+                      (click)="toggleEditProfile()">
+                      <i class="icofont {{ editProfileIcon }}"></i>
+                    </button>
+                  </div>
+                  <div class="card-body">
+                    <div class="view-info" *ngIf="editProfile">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="general-info">
+                            <div class="row">
+                              <div class="col-lg-12 col-xl-6">
+                                <div class="table-responsive">
+                                  <table class="table m-0">
+                                    <tbody>
+                                      <tr>
+                                        <th scope="row">Nombre</th>
+                                        <td>{{cliente?.nombre}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Tipo Identificación</th>
+                                        <td>{{cliente?.tid}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Numero de Identificación</th>
+                                        <td>{{cliente?.nid}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Contacto</th>
+                                        <td>{{cliente?.nombre_contacto}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">E-mail</th>
+                                        <td>{{cliente?.email_contacto}}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <!-- end of table col-lg-6 -->
+                              <div class="col-lg-12 col-xl-6">
+                                <div class="table-responsive">
+                                  <table class="table">
+                                    <tbody>
+                                      <tr>
+                                        <th scope="row">Dirección</th>
+                                        <td>{{cliente?.direccion}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Ciudad</th>
+                                        <td>{{cliente?.ciudad}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Departamento</th>
+                                        <td>{{cliente?.departamento}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Telefonos</th>
+                                        <td><ul>
+                                          <li *ngFor="let telefono of cliente?.telefonos;index as i;">
+                                            {{telefono.display}}
+                                          </li>
+                                        </ul></td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Descripción</th>
+                                        <td>{{cliente?.descripcion}}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <!-- end of table col-lg-6 -->
+                            </div>
+                            <!-- end of row -->
+                          </div>
+                          <!-- end of general info -->
+                        </div>
+                        <!-- end of col-lg-12 -->
+                      </div>
+                      <!-- end of row -->
+                    </div>
+                    <!-- end of view-info -->
+                    <div class="edit-info" *ngIf="!editProfile">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="general-info">
+          
+                            <form [formGroup]="form" class="row">
+                              <div class="col-lg-6">
+                                <div class="table-responsive">
+          
+                                  <table class="table">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="nombre"
+                                              [(ngModel)]="cliente.nombre" placeholder="Nombre">
+                                          </div>
+                                          <div
+                                            *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                                            <div class="messages text-danger" *ngIf="form.controls.nombre.errors?.required">
+                                              Campo Requerido
+                                            </div>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+          
+                                            <select name="tipoidentificacion" formControlName="tid"
+                                              placeholder="Tipo de identificación" class="form-control form-control-primary"
+                                              [(ngModel)]="cliente.tid">
+                                              <option value="">Seleccione</option>
+                                              <option value="NIT">NIT</option>
+                                              <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
+                                              <option value="Cédula de extranjería">Cédula de extranjería</option>
+                                              <option value="Tarjeta de identidad">Tarjeta de identidad</option>
+                                              <option value="Registro Civil">Registro Civil</option>
+                                              <option value="Pasaporte">Pasaporte</option>
+          
+          
+                                            </select>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="nid"
+                                              [(ngModel)]="cliente.nid" placeholder="Numero de Identificación">
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="nombre_contacto"
+                                              [(ngModel)]="cliente.nombre_contacto" placeholder="Contacto">
+                                          </div>
+                                          <div
+                                            *ngIf="form.controls.nombre_contacto.invalid && (form.controls.nombre_contacto.dirty || form.controls.nombre_contacto.touched)">
+                                            <div class="messages text-danger"
+                                              *ngIf="form.controls.nombre_contacto.errors?.required">
+                                              Campo Requerido
+                                            </div>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="email_contacto"
+                                              [(ngModel)]="cliente.email_contacto" placeholder="E-mail">
+                                          </div>
+                                          <div
+                                            *ngIf="form.controls.email_contacto.invalid && (form.controls.email_contacto.dirty || form.controls.email_contacto.touched)">
+                                            <div class="messages text-danger"
+                                              *ngIf="form.controls.email_contacto.errors?.required">
+                                              Campo Requerido
+                                            </div>
+                                          </div>
+                                        </td>
+          
+                                      </tr>
+                                    </tbody>
+                                  </table>
+          
+                                </div>
+                              </div>
+                              <!-- end of table col-lg-6 -->
+                              <div class="col-lg-6">
+                                <div class="table-responsive">
+                                  <table class="table">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="direccion"
+                                              [(ngModel)]="cliente.direccion" placeholder="Dirección">
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="ciudad"
+                                              [(ngModel)]="cliente.ciudad" placeholder="Ciudad">
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <input type="text" class="form-control" formControlName="departamento"
+                                              [(ngModel)]="cliente.departamento" placeholder="Departamento">
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+          
+                                            <tag-input [ngClass]="'tag-select'" theme='bootstrap' formControlName="telefonos"
+                                              [placeholder]="'Telefonos'" [(ngModel)]="cliente.telefonos" [addOnBlur]="true"
+                                              [clearOnBlur]="true" secondaryPlaceholder="Telefonos" >
+                                              <tag-input-dropdown [autocompleteItems]="autocompleteItems" [appendToBody]="false">
+                                              </tag-input-dropdown>
+                                            </tag-input>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"><label class="input-group-text"> <i
+                                                  class="icofont icofont-user"></i></label></span>
+                                            <textarea type="text" class="form-control" formControlName="descripcion"
+                                              [(ngModel)]="cliente.descripcion" placeholder="Descripción"></textarea>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </form>
+                            <!-- end of table col-lg-6 -->
+          
+                            <!-- end of row -->
+                            <div class="text-center">
+                              <button (click)="cactualizarItem()" class="btn btn-primary waves-effect waves-light m-r-20"
+                                [disabled]="!form.valid"><i class="icofont icofont-save"></i>Guardar</button>
+                              <a href="javascript:;" id="edit-cancel" class="btn btn-default waves-effect"
+                                (click)="toggleEditProfile()">Cancelar</a>
+                            </div>
+                          </div>
+                          <!-- end of edit info -->
+                        </div>
+                        <!-- end of col-lg-12 -->
+                      </div>
+                      <!-- end of row -->
+                    </div>
+                    <!-- end of edit-info -->
+                  </div>
+                  <!-- end of card-body -->
+                </div>
+
+                <!-- personal card end-->
+              </div>
+            </ng-template>
+          </ngb-tab>
+        
+
+        </ngb-tabset>
+      </div>
+    </div>
+  </div>
+</div>

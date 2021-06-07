@@ -1,0 +1,442 @@
+<!-- <div data-label="Paso 1" class="radial-bar radial-bar-90 radial-bar-lg radial-bar-success" placement="top" ngbTooltip="50%"></div> -->
+
+<h3>Solicitud de ensayos</h3>
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Infomación general solicitud de ensayo </h4>
+    <!-- <small> Campos requeridos *</small> -->
+
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form">
+  
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Código Referencia</label>
+        <div class="col-sm-4">
+
+          <input  type="text"  class="form-control" formControlName="codigo" [(ngModel)]="ensayo.codigo"
+            placeholder="Código Referencia">
+
+          <div
+            *ngIf="form.controls.codigo.invalid && (form.controls.codigo.dirty || form.controls.codigo.touched|| submited)">
+            <div class="messages text-danger" *ngIf="form.controls.codigo.errors?.required">
+              Campo Requerido
+            </div>
+          </div>
+        </div>
+  
+            <!-- Inicia logica para mostrar o no estado -->
+            <label  *ngIf="ensayo.estado == 'Esperando Confirmación' || ensayo.estado == 'Cotización' || ensayo.estado == 'Aprobado'" class="col-sm-2 col-form-label">Estado</label>
+            <div class="col-sm-4 text-right">
+              <label *ngIf="ensayo.estado == 'Esperando Confirmación' || ensayo.estado == 'Cotización' || ensayo.estado == 'Aprobado'" class="labelModal label-lg" [ngClass]="{'label-info': ensayo.estado == 'Esperando Confirmación', 'label-warning': ensayo.estado == 'Cotización', 'label-success': ensayo.estado == 'Aprobado'}"> {{ensayo.estado}} </label>
+            </div>
+           <!-- cambio: no se muestra estado si no pertenece a esa etapa  -->
+
+      </div>
+
+      
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Cliente</label>
+        <div (click)="refrescarClientes()" class="col-sm-4">
+
+          <ng-select [ngClass]="'ng-select'" [disabled]="!ensayo.creolab" formControlName="cliente"
+            placeholder="Selecciona un cliente" [options]="clientes" [(ngModel)]="ensayo.cliente" >
+          </ng-select>
+
+          <!-- <button type="button" class="btn btn-primary"><span class="icofont icofont-ui-plus"></span></button> -->
+          <div
+            *ngIf="form.controls.cliente.invalid && (form.controls.cliente.dirty || form.controls.cliente.touched|| submited)">
+            <div class="messages text-danger" *ngIf="form.controls.cliente.errors?.required">
+              Campo Requerido
+            </div>
+          </div>
+          <a (click)="nuevoclienteClickeado = true" class="" routerLink="/config/cliente" target="_blank">
+            <span class=""><p style="font-size: 12px;  padding-top: 10px;">+ Crear cliente</p></span>
+          </a>
+        </div>
+            <div class="">
+              <div class="btn-group" role="group" aria-label="Basic example" >
+                <a *ngIf="nuevoclienteClickeado" class="btn badge badge-success text-white" (click)="recargarEmpresa()">
+                  <span class="fa fa-refresh"></span>
+                </a>
+                <!-- <a *ngIf="!nuevoclienteClickeado" (click)="nuevoclienteClickeado = true" class="btn badge badge-primary" style="font-size: 8px;" routerLink="/config/cliente" target="_blank">
+                  <span class="icofont icofont-plus " [ngbTooltip]="tipAgregarCliente"></span>
+                </a> -->
+                <ng-template #tipAgregarCliente>Crear nuevo cliente</ng-template>
+              </div>
+            </div>
+      </div>
+
+      <div class="form-group row">
+
+
+        <label class="col-sm-2 col-form-label">Fecha solicitud</label>
+        <div class="col-sm-4">
+          <input *ngIf="user.analista == false" type="date"  class="form-control" formControlName="fsolicitud" placeholder="Fecha solicitud"
+            [(ngModel)]="ensayo.fsolicitud">
+            <div>
+              <p *ngIf="user.analista">{{ensayo.fsolicitud}}</p>
+            </div>
+
+          <div *ngIf="form.controls.fsolicitud.invalid && (form.controls.fsolicitud.dirty || form.controls.fsolicitud.touched|| submited)">
+            <div class="messages text-danger" *ngIf="form.controls.fsolicitud.errors?.required">
+              Campo Requerido
+            </div>
+          </div>
+
+          
+
+        </div>
+
+        
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Descripción rapida</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" [readonly]="!ensayo.creolab" formControlName="descripcion" rows="5" cols="5"
+            placeholder="Descripción rapida" [(ngModel)]="ensayo.descripcion"></textarea>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Muestras a ensayar </h4>
+
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="col-xl-12 ">
+        <div [ngClass]="{'table-responsive': !buscarmuestra}">
+          <table class="table ">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Codigo Muestra *</th>
+            <th>Descripción </th>
+            <th>Observaciónes</th>
+            <th>Fecha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let muestra of ensayo.muestras;index as i;">
+            <td></td>
+            <td><span *ngIf="!EditarMuestra">{{muestra['codigo']}}</span>
+              <input type="text" class="form-control" *ngIf="EditarMuestra" name="m_codigo_{{i}}"
+                placeholder="Codigo Muestra" [(ngModel)]="muestra['codigo']">
+            </td>
+            <td><span *ngIf="!EditarMuestra"> {{muestra['descripcion']}}</span>
+              <input type="text" class="form-control" *ngIf="EditarMuestra" name="m_nombre_{{i}}"
+                placeholder="Descripción" [(ngModel)]="muestra['descripcion']">
+
+            </td>
+
+            <td><span *ngIf="!EditarMuestra">{{muestra['observaciones']}}</span>
+              <input type="text"  class="form-control" *ngIf="EditarMuestra" name="m_descripcion_{{i}}"
+                placeholder="Observaciónes" [(ngModel)]="muestra['observaciones']">
+            </td>
+            <td><span *ngIf="!EditarMuestra">{{muestra['fecha_ingreso']}}</span>
+              <input type="date" class="form-control" *ngIf="EditarMuestra" name="m_fecha_ingreso_{{i}}"
+                placeholder="Fecha ingreso" [(ngModel)]="muestra['fecha_ingreso']">
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm" style="float: none;">
+                <button *ngIf="EditarMuestra" type="button" (click)="editMuestra(muestra)"
+                  class="tabledit-edit-button btn btn-primary waves-effect waves-light"><span
+                    class="icofont icofont-ui-check"></span></button>
+
+
+
+                <button type="button" *ngIf="!EditarMuestra"
+                  class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                  (click)="EditarMuestra=true"><span class="icofont icofont-ui-edit"></span></button>
+
+                <button type="button" *ngIf="!EditarMuestra"
+                  class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                  (click)="celiminarMuestra(i)"><span class="icofont icofont-ui-delete"></span></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr *ngIf="!buscarmuestra">
+            <td ><button (click)="buscarmuestra=true" (click)="cargarMuestras()" [ngbTooltip]="tipTextoLupa" class="btn btn-primary md-"><i class="icofont icofont-search"></i>
+              </button></td>
+                <ng-template #tipTextoLupa>Buscar Muestra Existente</ng-template>
+            <td> <input type="text" class="form-control" name="codigo_add" placeholder="Codigo Muestra"
+                [(ngModel)]="muestraAdd.codigo">
+            </td>
+            <td>
+              <input type="text" class="form-control" placeholder="Descripción" name="nombre_add"
+                [(ngModel)]="muestraAdd.nombre">
+            </td>
+
+            <td>
+              <input type="text" class="form-control" name="descripcion_add" placeholder="Observaciónes"
+                [(ngModel)]="muestraAdd.descripcion">
+            </td>
+            <td>
+              <input type="date" class="form-control" name="fecha_ingreso_add"
+                [(ngModel)]="muestraAdd.fecha_ingreso">
+            </td>
+            <td>
+              <button (click)="guardarMuestra($event)" class="btn btn-primary md-"><i class="icofont icofont-save"></i>
+                Agregar Muestra</button>
+
+            </td>
+          </tr>
+          <tr *ngIf="buscarmuestra">
+            <td >
+              <ng-select [ngClass]="'ng-select'" name="muestras" placeholder="Buscar muestra"
+                [options]="muestras" [(ngModel)]="muestrasel">
+              </ng-select>
+              <div  class="btn-group floar-rigth">
+                <button (click)="buscarmuestra=false" class="btn btn-danger md-"><i
+                    class="icofont icofont-ui-close"></i> </button>
+                <button (click)="agregarrMuestra($event)" (click)="buscarmuestra=false" class="btn btn-primary md-"><i
+                    class="icofont icofont-ui-check"></i> </button>
+              </div>
+            </td>
+            <td>
+            </td>
+          </tr>
+        </tfoot>
+
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Agrupación de parámetros </h4>
+
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Agrupación :</label>
+        <div class="col-sm-6">
+          <div class="d-flex">
+            
+              <ng-select [ngClass]="'ng-select'" name="agrupaciones" placeholder="Seleccione la agrupación"
+                [options]="agrupaciones" [(ngModel)]="agrupacionsel" [ngModelOptions]="{standalone: true}">
+              </ng-select>
+
+            <div *ngIf="nuevaagrupacionClieckeada == true" class="btn-group"  role="group" aria-label="Basic example" >
+              <a style="margin-left: 5px;" class="btn badge badge-success text-white" (click)="recargarAgrupacion()">
+                <span class="fa fa-refresh"></span>
+              </a>
+              <ng-template #tipAgregarCliente>Crear nuevo cliente</ng-template>
+            </div>
+          </div>
+          <a *ngIf="agrupaciones?.length != 0" (click)="nuevaagrupacionClieckeada = true" class="" routerLink="/config/agrupacionparametro" target="_blank">
+            <span class=""><p style="font-size: 12px;  padding-top: 10px;">+ Crear agrupación de parámetros</p></span>
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <button (click)="aplicarAgrupacion($event)" class="btn btn-primary md-" [disabled]="ensayo?.muestras==undefined || ensayo.muestras?.length==0"><i
+              class="icofont icofont-ui-check" ></i> Aplicar Agrupación </button>
+              <div class="messages text-danger" *ngIf="ensayo.muestras==undefined || ensayo.muestras.length==0">
+                Debes seleccionar primero una muestra
+              </div>
+        </div>
+        
+      </div>
+
+
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+
+<div class="card">
+  <div class="card-header"> 
+    <h4 class="card-header-text">Parametros a realizar </h4> 
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="col-xl-12">
+        <div class="table-responsive">
+          <table class="table" style="padding: 0.2rem !important;">
+            <thead>
+              <tr>
+                <!-- <th>#</th> -->
+                <th>Nombre</th>
+                <th>Metodo</th>
+                <th>Tecnica analítica</th>
+                <th>Unidad</th>
+                <th *ngIf="!user.analista && !user.infofinanciera">Valor Unt.</th>
+                <th *ngFor="let muestra of ensayo.muestras;index as i;">
+                  {{muestra.codigo}}
+                </th>
+                <th *ngIf="!user.analista && !user.infofinanciera">Valor</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let parametro of ensayo.parametros;index as i;">
+                <!-- <td>{{i+1}}</td> -->
+                <td>{{parametro.parametro.nombre}}</td>
+                <td>{{parametro.parametro.metodo}}</td>
+                <td>{{parametro.parametro.tecnica_analitica}}</td>
+                <td>{{parametro.parametro.unidad}}</td>
+                <td *ngIf="!user.analista && !user.infofinanciera"><input type="number" class="form-control"
+                    name="m_parametro_{{i}}" placeholder="Valor Unt." (input)="calcualrtotales()"
+                    [(ngModel)]="parametro.valor_unit">
+                </td>
+  
+                <td *ngFor="let muestra of parametro.muestras;index as j;">
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox" type="checkbox" id="checkbox_{{i}}_{{j}}"
+                        (change)="agregarparametro(muestra,parametro,$event)" [(ngModel)]="muestra.seleccionado"
+                        name="checkbox_{{i}}_{{j}}" [checked]="muestra.seleccionado">
+  
+                      <label class="border-checkbox-label" for="checkbox_{{i}}_{{j}}"></label>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="!user.analista && !user.infofinanciera">
+                  {{calculatvalorparametro(parametro)*parametro.valor_unit|currency : 'USD' : 'symbol' : '1.0-0'}}
+                </td>
+                <td>
+                  <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                    (click)="celiminarParametro(parametro)"><span class="icofont icofont-ui-delete"></span></button>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td [attr.colspan]="calcularcolspan()">
+                  <div (click)=cargarParametros()>
+                  <ng-select [ngClass]="'ng-select'" name="parametros" placeholder="Seleccione el parametro"
+                    [options]="parametros" [(ngModel)]="parametronew" ></ng-select>
+                  </div>
+                  <div class="messages text-danger" *ngIf="ensayo.muestras==undefined || ensayo.muestras.length==0">
+                    Debes seleccionar primero una muestra
+                  </div>
+                  <a *ngIf="parametros?.length != 0"  class="" routerLink="/config/parametro" target="_blank">
+                    <span (click)="nuevoparametroClickeado = true" class=""><p style="font-size: 12px;  padding-top: 10px;">+ Crear parámetros de ensayo</p></span>
+                  </a>
+  
+                </td>
+                <td> 
+                    <div *ngIf="nuevoparametroClickeado == true" class="btn-group" role="group" aria-label="Basic example">
+                      <a class="btn badge badge-success text-white" style="font-size: 10px;" (click)="recargarParametros()">
+                        <span class="fa fa-refresh"></span>
+                      </a>
+                      <!-- <a class="btn btn-info" routerLink="/config/parametro" target="_blank">
+                        <span class="icofont icofont-plus"></span>
+                      </a> -->
+                    </div> 
+                </td>
+                <td>
+                  <ng-template #tipParametro>Agregar parámetro a realizar</ng-template>
+                  <div [ngbTooltip]="tipParametro">
+                    <button (click)="agregarParametro($event)" class="btn btn-primary md-" [disabled]="!parametronew || ensayo?.muestras==undefined || ensayo.muestras?.length==0" ><i
+                      class="icofont icofont-ui-add"></i></button>
+                  </div>
+                </td>
+                <td> </td>
+              </tr>
+              <tr *ngIf="!user.analista && !user.infofinanciera">
+                <td [attr.colspan]="calcularcolspan()"></td>
+                <td> Sub Total</td>
+                <td>{{ensayo.subtotal|currency : 'USD' : 'symbol' : '1.0-0'}}</td>
+                <td> </td>
+              </tr>
+              <tr *ngIf="!user.analista && !user.infofinanciera">
+                <td [attr.colspan]="calcularcolspan()"></td>
+                <td> Iva({{ensayo.piva}}%)</td>
+                <td> {{ensayo.iva|currency : 'USD' : 'symbol' : '1.0-0'}}</td>
+                <td> </td>
+              </tr>
+              <tr *ngIf="!user.analista && !user.infofinanciera">
+                <td [attr.colspan]="calcularcolspan()"></td>
+                <td> Total</td>
+                <td> {{ensayo.total|currency : 'USD' : 'symbol' : '1.0-0'}}</td>
+                <td> </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+<div class="card">
+  <div class="card-body ">
+    <app-cargar-archivos [ensayo]="ensayo" [lab]="true" [tipo]="'solicitud'" [info]="'Documentos adjuntos que se mostraran en el reporte'" (uploadfile)="uploadfile($event)"></app-cargar-archivos>
+  </div>
+
+</div>
+<div class="card">
+  <div class="card-body text-right">
+    <div class="btn-group float-right">
+
+      <button (click)="guardarEnsayo($event)" class="btn btn-primary md-"><i class="icofont icofont-save"></i>Guardar Cambios</button>
+      <button (click)="closeMyModal($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+        Cerrar!</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- INICIO CARD NAVEGACION -->
+<div *ngIf="!user.analista && (ensayo.estado == 'Esperando Confirmación' || ensayo.estado == 'Cotización' || ensayo.estado == 'Aprobado')" class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Navegación </h4>
+
+    <ng-template #tipNavegacion>En este apartado podrás decidir si estas listo para llevar tu proceso al siguiente paso</ng-template>
+    <i class="fa fa-question-circle-o text-gray" [ngbTooltip]="tipNavegacion"></i>
+
+  </div>
+
+  <div class="card-body  d-flex  justify-content-between">
+      <div class="col-8"> 
+        <p *ngIf="showNavegacion">
+         Al avanzar al Paso 2: permitirás que tus analistas visualicen a que muestras y que ensayos deben realizar y podrán empezar a registrar los resultados de estos. Quieres continuar al paso 2 ?
+        </p>
+      </div>
+    
+      <div class="btn-group float-rigth text-right">
+        
+        <!-- INICIO LOGICA TOOLTIP VALIDACION QUE ENSAYO TENGA CODIGO,MUESTRAS,PARAMETROS -->
+        <ng-template #tipContent> 
+          Codigo referencia
+          <i *ngIf="form.controls.codigo.invalid" class="fa fa-exclamation-triangle text-warning"></i> 
+          <i *ngIf="form.controls.codigo.valid" class="fa fa-check-circle-o text-success"></i>
+          <br>
+          Cliente
+          <i *ngIf="form.controls.cliente.invalid" class="fa fa-exclamation-triangle text-warning"></i> 
+          <i *ngIf="form.controls.cliente.valid" class="fa fa-check-circle-o text-success"></i>
+          <br>
+          Muestra(s) ingresadas
+          <i *ngIf="ensayo.muestras == undefined" class="fa fa-exclamation-triangle text-warning"></i> 
+          <i *ngIf="ensayo.muestras.length > 0" class="fa fa-check-circle-o text-success"></i>
+          <br>
+          Parametros de ensayo ingresados
+          <i [hidden]="ensayo && ensayo.parametros.length > 0" class="fa fa-exclamation-triangle text-warning"></i> 
+          <i *ngIf="ensayo && ensayo.parametros.length > 0" class="fa fa-check-circle-o text-success"></i>
+        
+        </ng-template>
+        <!-- FIN LOGICA TOOLTIP VALIDACION QUE ENSAYO TENGA CODIGO,MUESTRAS,PARAMETROS -->
+        <div (mouseover)="showContenidoNavegacion()" (mouseout)="showContenidoNavegacion()" [ngbTooltip]="tipContent">
+        <button (click)="pasarAEnProceso2($event)"  class="btn btn-success md-" ><span class="font-btn-medium ">Continuar al Paso 2 ❯</span></button>
+        <!-- [disabled]="form.controls.codigo.invalid || form.controls.cliente.invalid || ensayo.muestras==undefined || ensayo.muestras.length==0 || ensayo.parametros.length < 0">   -->
+      </div>
+      </div>
+  </div>
+</div>
+<!-- FIN CARD NAVEGACION -->
+<!-- Se agrego card que contiene la navegación para poder pasar de un estado a otro con botones y reemplazar desplegable de estados -->

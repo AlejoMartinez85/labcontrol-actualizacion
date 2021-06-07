@@ -1,0 +1,88 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Información general solicitud de ensayo</h4>
+
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Laboratorio</label>
+        <div class="col-sm-4">
+
+
+          <ng-select [ngClass]="'ng-select'" name="laboratorio" formControlName="laboratorio"
+            placeholder="Seleccione el laboratorio" [options]="laboratorios" [(ngModel)]="ensayo.tercero">
+          </ng-select>
+
+          <div
+            *ngIf="form.controls.laboratorio.invalid && (form.controls.laboratorio.dirty || form.controls.laboratorio.touched)">
+            <div class="messages text-danger" *ngIf="form.controls.laboratorio.errors?.required">
+              Campo Requerido
+            </div>
+          </div>
+
+
+        </div>
+
+        <label class="col-sm-2 col-form-label">Estado</label>
+        <h4>{{ensayo.estado}}</h4>
+        <!-- <div class="col-sm-4">
+          <select name="estado" formControlName="estado" class="form-control form-control-primary"  [(ngModel)]="ensayo.estado">
+            <option disabled value="">Seleccione un estado</option>
+            <option disabled value="Aprobado">Aprobado</option>
+            <option disabled value="Cancelado">Cancelado</option>
+            <option disabled value="Detenido">Detenido</option>
+            <option disabled value="Esperando Confirmación">Esperando Confirmación</option>
+            <option disabled value="Cotización">Cotización</option>
+            <option disabled value="En Proceso">En Proceso</option>
+            <option disabled value="Completado">Completado</option>
+            <option disabled value="Finalizado">Finalizado</option>
+
+          </select>
+          <div
+            *ngIf="form.controls.estado.invalid && (form.controls.estado.dirty || form.controls.estado.touched)">
+            <div class="messages text-danger" *ngIf="form.controls.estado.errors?.required">
+              Campo Requerido
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Descripción rápida</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" [readonly]="!ensayo.creocli" formControlName="descripcion" rows="5" cols="5"
+            placeholder="Descripción rapida" [(ngModel)]="ensayo.descripcion"></textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+       
+        <!-- <div class="col-sm-10" *ngIf="ensayo.estado=='Cotización'">
+          <button (click)="aprobarEnsayo($event)" class="btn btn-primary md-"><i
+            class="icofont icofont-save"></i>Aceptar Cotización </button>
+        </div> -->
+      </div>
+
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+<div class="card">
+  <div class="card-body ">
+    <app-cargar-archivos [ensayo]="ensayo" [lab]="false" [tipo]="'solicitud'" [info]="'Documentos adjuntos que se mostraran en el reporte'" (uploadfile)="uploadfile($event)"></app-cargar-archivos>
+  </div>
+
+</div>
+
+<div class="card">
+  <div class="card-body text-right">
+    <div class="btn-group floar-rigth">
+
+      <button (click)="guardarEnsayo($event)" class="btn btn-primary md-" ><i
+          class="icofont icofont-save"></i>Guardar
+        Cambios</button>
+      <button (click)="closeMyModal($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+        Cerrar!</button>
+    </div>
+  </div>
+</div>

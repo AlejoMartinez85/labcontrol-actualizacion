@@ -1,0 +1,290 @@
+<h3>Registro de resultados</h3>
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Información general orden de ensayo </h4>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="form-group row">
+
+        <!-- Se comento deplegable -->
+        <label class="col-sm-2 col-form-label">Tiempo Estimado de entrega</label>
+        <div class="col-sm-4">
+          <span class="label font-weight-bold" [ngClass]="{'label-success': calcularVigencia() >= 1,'label-warning': calcularVigencia() == 0
+            ,'label-danger': calcularVigencia() <= -1}">{{calcularVigencia()}} dias</span>
+        </div>
+
+
+        <label *ngIf="ensayo.estado == 'En Proceso' || ensayo.estado == 'Completado'"
+          class="col-sm-2 col-form-label">Estado</label>
+        <div class="col-sm-4 text-right">
+          <label *ngIf="ensayo.estado == 'En Proceso' || ensayo.estado == 'Completado'"
+            class="label label-warning label-lg font-weight-bold"
+            [ngClass]="{'label-warning': ensayo.estado=='En Proceso','label-success': ensayo.estado=='Completado','label-danger': ensayo.estado=='Detenido'}">
+            {{ensayo.estado}} {{ensayo.totalmuestras?.realizadas}}/{{ensayo.totalmuestras?.total}}</label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Fecha Ensayo</label>
+        <div class="col-sm-4">
+
+          <input *ngIf="!user.analista" type="date" class="form-control" formControlName="fEnsayo"
+            [(ngModel)]="ensayo.fEnsayo" placeholder="Fecha Ensayo">
+          <div>
+            <p *ngIf="user.analista">{{ensayo.fEnsayo}}</p>
+          </div>
+        </div>
+
+        <label class="col-sm-2 col-form-label">Fecha Estimada de Entrega</label>
+        <div class="col-sm-4">
+          <input *ngIf="!user.analista" type="date" class="form-control" formControlName="fEntrega"
+            [(ngModel)]="ensayo.fEntrega" placeholder="Fecha Estimada de Entrega">
+          <div>
+            <p *ngIf="user.analista">{{ensayo.fEntrega}}</p>
+          </div>
+          <!-- <div
+            *ngIf="form.controls.fEntrega.invalid && (form.controls.fEntrega.dirty || form.controls.fEntrega.touched|| submited)">
+            <div class="messages text-danger" *ngIf="form.controls.fEntrega.errors?.required">
+              Campo Requerido
+            </div>
+          </div> -->
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+</div>
+
+<!-- INICIO MUESTRAS PASO 2 -->
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Muestras a ensayar </h4>
+
+  </div>
+  <div class="card-body">
+    <form>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <!-- <th>#</th> -->
+              <th>Codigo Muestra *</th>
+
+              <th>Descripción</th>
+
+              <th>Observaciones</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let muestra of ensayo.muestras;index as i;">
+              <!-- <td>{{i+1}}</td> -->
+              <td><span>{{muestra.codigo}}</span> </td>
+              <td><span>{{muestra.descripcion}}</span> </td>
+              <td><span>{{muestra.observaciones}}</span></td>
+            </tr>
+          </tbody>
+
+
+
+        </table>
+      </div>
+
+    </form>
+  </div>
+</div>
+<!-- FIN MUESTRAS PASO 2 -->
+
+<!-- INICIO RESULTADOS PARAMETROS PASO 2 -->
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Parametros a realizar </h4>
+
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <!-- <th>#</th> --> 
+                <th>Nombre</th> 
+                <!-- <th>Metodo</th>
+                <th>Tecnica analítica</th> -->
+                
+                <th *ngFor="let muestra of ensayo.muestras;index as i;">
+                  {{muestra.codigo}}
+                </th>
+                <th > </th>
+                
+
+
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let parametro of ensayo.parametros;index as i;">
+
+              <tr >
+                <!-- <td class="paddingnulo">{{i+1}}</td> -->
+                <td class="paddingnulo">{{parametro.parametro.nombre}}</td>
+                <!-- <td class="paddingnulo">{{parametro.parametro.metodo}}</td>
+                <td class="paddingnulo">{{parametro.parametro.tecnica_analitica}}</td> -->
+                 
+
+              <td *ngFor="let muestra of parametro.muestras;index as j;" class="paddingnulo">
+                <div _ngcontent-c7="" class="input-group" style="margin-bottom: 0px;">
+                  <span *ngIf="user.plataformaTecnica == true" class="input-group-prepend" title="Calcular medición" (click)="abrirparametros(parametro,muestra,j)"><label
+                      class="input-group-text"><i class="fa fa-bolt"></i></label></span>
+
+                  <input type="text" *ngIf="muestra.seleccionado" class="form-control" name="muestravalor_{{i}}_{{j}}"
+                    [(ngModel)]="muestra.valor" placeholder="Resultado" (paste)="inputs($event, ensayo.parametros, i, j)">
+                  <!-- <span *ngIf="user.plataformaTecnica == true&& muestra._id" class="input-group-prepend"
+                    title="Parametros medición" (click)="abrirDetalle(parametro,muestra)"><label class="input-group-text"><i
+                        class="fa fa-eye"></i></label></span> -->
+                </div>
+
+
+                </td>
+                <td class="paddingnulo text-center">{{parametro.parametro.unidad}}</td>
+                
+
+              </tr>
+              <tr>
+                <td [attr.colspan]="parametro.muestras.length+5" *ngIf="parametro.show">
+              
+                  <app-incertidumbre-detalle-muestra *ngIf="parametro.show" [muestraSeleccionada]="parametro.muestrasel.parambase"></app-incertidumbre-detalle-muestra>
+
+                </td>
+              </tr>
+              
+            </ng-container>
+            </tbody>
+
+
+
+
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- FIN RESULTADOS PARAMETROS PASO 2 -->
+
+<div class="card" *ngIf="muestrasel">
+  <div class="card-body ">
+    <app-incertidumbre-muestra [parametroId]="parametrosel?.parametro._id" [cancelarbutton]="true"
+      (endAction)="endAction($event)"></app-incertidumbre-muestra>
+  </div>
+
+</div>
+
+<!-- BOTON DESCARGA EXCEL -->
+<div class="card-body text-right">
+  <button class="btn btn-success " (click)="exportexcel()">Descargar datos en 
+    Excel</button>
+</div>
+<!--FIN BOTON DESCARGA EXCEL -->
+
+<!-- ADJUNTOS PASO 2 -->
+<div class="card">
+  <div class="card-body ">
+    <app-cargar-archivos [ensayo]="ensayo" [lab]="true" [tipo]="'orden'"
+      [info]="'Documentos adjuntos que se mostraran en el reporte'" (uploadfile)="uploadfile($event)">
+    </app-cargar-archivos>
+  </div>
+<!-- FIN ADJUNTOS PASO 2-->
+
+</div>
+<!-- BOTON GUARDAR CAMBIO CANCELAR -->
+<div class="card">
+  <div class="card-body text-right">
+    <div class="btn-group floar-rigth">
+
+      <button id="btnGuardarEnsayo" (click)="guardarEnsayo($event)" class="btn btn-primary md-"><i
+          class="icofont icofont-save"></i>Guardar
+        Cambios</button>
+      <button (click)="closeMyModal($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+        Cerrar!</button>
+    </div>
+  </div>
+</div>
+<!-- FIN BOTON GUARDAR CAMBIO CANCELAR -->
+
+<!-- TABLA EXCEL -->
+<div class=" table-border-style" hidden>
+  <div class="table-responsive">
+    <table class="table table-borderless" id="excel-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Parametro</th>
+          <th>Método</th>
+          <th>tecnica analítica</th>
+          <th>Unidad</th>
+          <th *ngFor="let muestra of ensayo.muestras;index as i;">
+            {{muestra.codigo}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let parametro of ensayo.parametros;index as i;">
+          <td>{{i+1}}</td>
+          <td>{{parametro.parametro.nombre}}</td>
+          <td>{{parametro.parametro.metodo}}</td>
+          <td>{{parametro.parametro.tecnica_analitica}}</td>
+          <td>{{parametro.parametro.unidad}}</td>
+
+          <td *ngFor="let muestra of parametro.muestras;index as j;">
+            {{muestra.valor | numeroPasteComaToPunto}}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- TABLA EXCEL -->
+
+
+
+<!-- INICIO CARD NAVEGACION PASO 2 -->
+<div *ngIf="!user.analista && (ensayo.estado == 'En Proceso' || ensayo.estado == 'Completado')" class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Navegación </h4>
+
+    <ng-template #tipNavegacion>En este apartado podrás decidir si has terminado de registrar resultados y estas listo
+      para empezar el reporte</ng-template>
+    <i class="fa fa-question-circle-o text-gray" [ngbTooltip]="tipNavegacion"></i>
+
+  </div>
+
+  <div class="card-body  d-flex  justify-content-between">
+    <div class="col-8">
+      <p *ngIf="showNavegacion">
+        Al avanzar al Paso 3: Tus analistas <strong>no</strong> podrán registrar más resultados. Empezaras el proceso de
+        realización de tú informe, donde podras preparar todo para la publicación de éste. Quieres continuar al Paso 3 ?
+      </p>
+    </div>
+
+    <div class="btn-group float-rigth text-right">
+
+      <!-- INICIO LOGICA TOOLTIP VALIDACION QUE ENSAYO TENGA CODIGO,MUESTRAS,PARAMETROS -->
+      <ng-template #tipContent>
+        Resultados registrados {{ensayo.totalmuestras?.realizadas}}/{{ensayo.totalmuestras?.total}}
+        <i *ngIf=" ensayo.estado != 'Completado' " class="fa fa-exclamation-triangle text-warning"></i>
+        <i *ngIf="ensayo.estado == 'Completado'" class="fa fa-check-circle-o text-success"></i>
+
+      </ng-template>
+      <!-- INICIO LOGICA TOOLTIP VALIDACION QUE ENSAYO TENGA CODIGO,MUESTRAS,PARAMETROS -->
+
+      <button (click)="pasarAEnReporte2($event) " (mouseover)="showContenidoNavegacion()"
+        (mouseout)="showContenidoNavegacion()" class="btn btn-success md-" [ngbTooltip]="tipContent"><span
+          class="font-btn-medium  ">Continuar al Paso 3 ❯</span></button>
+    </div>
+  </div>
+</div>
+<!-- FIN CARD NAVEGACION -->

@@ -1,0 +1,109 @@
+<div class="card" *ngIf="item!=undefined">
+  <div class="card-header">
+    <h4 class="card-header-text">Configuración Incertidumbre </h4>
+
+  </div>
+  <div class="card-body">
+    <form >
+      <div class="form-group row" *ngIf="reload">
+        <label class="col-sm-4 col-form-label">Formula cálculo coeficiente de sensibilidad</label>
+        <div class="col-sm-4">
+          <app-matheditor [formula]="formulaactual" [editable]="false"    #mathEditor>
+          </app-matheditor>
+        
+        </div>
+        <div class="col-sm-4">
+          <label class="col-form-label">Coeficiente de sensibilidad:</label>
+          <strong>{{item.simbolo}}={{item.coeficiente}} {{item.unidad}}</strong><br/>
+          <label class="col-form-label">Incertidumbre:</label>
+          <strong>{{item.simbolo}}={{item.incertidumbre}} {{item.unidad}}</strong>
+        </div>
+      </div>
+      <div class="form-group row">
+
+        <div class="col-sm-12">
+          <div class="border-checkbox-section">
+            <div class="border-checkbox-group border-checkbox-group-primary">
+              <input class="border-checkbox" type="checkbox" id="checkbox_isequipo" [(ngModel)]="item.isequipo"
+                name="checkbox_isequipo" [checked]="item.isequipo">
+              <label class="border-checkbox-label" for="checkbox_isequipo">Se mide en un equipo?</label>
+            </div>
+          </div>
+        </div>
+
+
+
+        <ng-container *ngIf="item.isequipo">
+          <label class="col-sm-2 col-form-label">Equipo:</label>
+          <div class="col-sm-4">
+            <ng-select [ngClass]="'ng-select'" name="agrupaciones" placeholder="Seleccione el equipo"
+              [options]="equipos"  [disabled]="true" [(ngModel)]="item.equipoId">
+            </ng-select>
+
+            
+          </div>
+         
+        </ng-container>
+       
+
+
+      </div>
+      <div class="form-group row" *ngIf="item.equipoId ">
+        <label class="col-sm-2 col-form-label">Variables Equipo:</label>
+        <div class="col-sm-4">
+          <ng-select [ngClass]="'ng-select'"  name="variableEquipo" placeholder="Seleccione la variable del equipo"
+            [options]="opcionesVariables" [(ngModel)]="item.variableEquipoId"
+            [disabled]="true" [allowClear]=true >
+          </ng-select>
+
+          
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-12 col-form-label">Lista de Elementos de Incertidumbre</label>
+        <div class="col-sm-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Observaciones</th>
+                <th>Valor</th>
+                <th>Seleccionar</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let elementoIncertidumbre of item.elementosIncertidumbre; index as i;">
+                <td scope="row">{{i+1}}</td>
+                <td>{{elementoIncertidumbre.nombre}}</td>
+                <td>{{elementoIncertidumbre.tipo}}</td>
+                <td>{{elementoIncertidumbre.observacion}}</td>
+                <td>{{elementoIncertidumbre.valor}}</td>
+                <td>
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox" type="checkbox" id="checkbox_elemSel_{{i+1}}"
+                        [(ngModel)]="elementoIncertidumbre.seleccionado" name="checkbox_elemSel_{{i+1}}"
+                        [checked]="item.seleccionado" disabled [ngModelOptions]="{standalone: true}" (change)="selectElemento($event)">
+                      <label class="border-checkbox-label" for="checkbox_elemSel_{{i+1}}"></label>
+                    </div>
+                  </div>
+                  
+                </td>
+              
+              </tr>
+
+            </tbody>
+
+          </table>
+        </div>
+    
+      </div>
+    
+    </form>
+  </div>
+
+</div>

@@ -1,0 +1,655 @@
+<div class="page-body">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <app-card [title]="" [cardOptionBlock]="true">
+                <h3 *ngIf="item._id == undefined">Nuevo equipo</h3>
+                <div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="">
+                                <form [formGroup]="form">
+                                    <!-- START OPTIONS BUTTON -->
+                                    <div class="row">
+                                        <div class="col-lg-10 col-12">
+                                        </div>
+                                        <div *ngIf="permisosLocal.editar || permisosLocal.eliminar" class="col-12 col-lg-2">
+                                            <div class="btn-group w-100 no-print" *ngIf="opcionesEditItem">
+                                                <button type="button" class="btn btn-block btn-secundary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="desplegableEvent()">Opciones</button>
+                                                <div class="dropdown-menu" *ngIf="desplegable">
+                                                    <a class="dropdown-item text-warning" *ngIf="!editItem && permisosLocal.editar" (click)="metodo('edit',0)">Editar equipo</a>
+                                                    <a class="dropdown-item text-info" *ngIf="editItem" (click)="guardar($event)" (click)="desplegableEvent()">Guardar Cambios</a>
+                                                    <a class="dropdown-item text-warning" *ngIf="editItem" (click)="metodo('cancel',0)" (click)="desplegableEvent()">Cancelar</a>
+                                                    <a *ngIf="permisosLocal.editar" class="dropdown-item " (click)="openModal('alertas')">Config. recordatorios por email</a>
+                                                    <a *ngIf="permisosLocal.eliminar" class="dropdown-item " (click)="metodo('delete',0)">Eliminar equipo</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END OPTIONS BUTTON -->
+
+                                    <!-- HEADER EQUIPTMENT-->
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col" *ngIf="editItem">
+                                                    <label for="">Información adicional Cabecera</label>
+                                                </div>
+                                                <div class="col text-right" *ngIf="editItem">
+                                                    <button class="btn btn-primary waves-effect waves-light mb-3" (click)="AgregarImagen('effect','myckeditorinfoAdicionalHeader')"><i class="fa fa-image"></i>Insertar imagen</button>
+                                                </div>
+                                                <div class="col-12">
+                                                    <ckeditor *ngIf="editItem" #myckeditorinfoAdicionalHeader [(ngModel)]="item.infoAdicionalHeader" [config]="ckeconfig" formControlName="infoAdicionCabecera"></ckeditor>
+                                                    <div *ngIf="!editItem" [innerHTML]="item.infoAdicionalHeader|safeHtmlEquipos"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END HEADER EQUIPTMENT -->
+
+                                    <div class="col-12 row d-flex justify-content-between">
+
+                                        <!-- START EQUIPTMENT NAME -->
+                                        <h2>{{item.nombre}}</h2>
+                                        <!-- END EQUIPTMENT NAME -->
+
+                                        <!-- START EQUIPTMENT QR CODE -->
+                                        <div class=" mt-3 float-left">
+                                            <qrcode [qrdata]="myAngularxQrCode" [size]="100" class="imagen-qr" #qr [ngbTooltip]="imprimirQR" (click)="imprimir(qr)"></qrcode>
+                                            <ng-template #imprimirQR>Dar click para imprimir QR </ng-template>
+                                        </div>
+                                        <!-- END EQUIPTMENT QR CODE -->
+                                    </div>
+
+
+
+
+                                    <!-- START EQUIPTMENT IMAGE AND INFO BLOCK -->
+                                    <div class="row">
+                                        <div class="col-lg-4 d-flex justify-content-around">
+                                            <div class="card-block" *ngIf="!editItem">
+                                                <div class="col-md-12 ">
+                                                    <a href="javascript:" class="profile-image">
+
+                                                        <img style="width: 300px;height: 300px;" class="user-img" src="{{compeseurlimage()}}" alt="user-img">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="card-block " *ngIf="editItem">
+
+                                                <div class="col-md-12">
+                                                    <div class="media-left" *ngIf="!editarImagen">
+
+                                                        <a href="javascript:" class="profile-image">
+                                                            <img style="width: 300px;height: 300px;" class="user-img " src="{{compeseurlimage()}}" alt="user-img">
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body row">
+                                                        <div class="col-lg-12">
+                                                            <div class="user-title">
+                                                                <h2></h2>
+                                                                <span class="text-white"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <div class="pull-right cover-btn">
+                                                                <label class="custom-file btn">
+                                                                    <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+                                                                    <span class="code-header"> <i class="fa fa-upload  fa-2x text-info"></i></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12" *ngIf="uploader.progress>0 ">
+                                                    <ngb-progressbar type="primary" height=".3rem" [value]="uploader.progress"></ngb-progressbar>
+                                                </div>
+                                                <div class="col-sm-12  text-center">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="CropMe()"><span class="icofont icofont-crop"></span></button>
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="zoomIn()"><span class="icofont icofont-ui-zoom-in"></span></button>
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="zoomOut()"><span class="icofont icofont-ui-zoom-out"></span></button>
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="rotate()"><span class="icofont icofont-rotation"></span></button>
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="move(-1)"><span class="icofont icofont-arrow-left"></span></button>
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="move(1)"><span class="icofont icofont-arrow-right"></span></button>
+
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="moveUp(-1)"><span class="icofont icofont-arrow-up"></span></button>
+                                                        <button *ngIf="editarImagen" class="btn btn-primary waves-effect waves-light m-r-20" (click)="moveUp(1)"><span class="icofont icofont-arrow-down"></span></button>
+                                                        <button class="btn btn-primary waves-effect waves-light m-r-20" (click)="cropimage()"><span *ngIf="!editarImagen" class="icofont icofont-ui-edit"></span><span *ngIf="editarImagen" class="icofont icofont-ui-close"></span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 ">
+                                                    <angular-cropper *ngIf="editarImagen" #angularCropper [cropperOptions]="{ highlight:true,zoomable: true,viewMode:0,background:true, movable: true, scalable: true,rotatable:true }" (export)="resultImageFun($event)" (ready)="checkstatus($event)" [imageUrl]="imageurl">
+                                                    </angular-cropper>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- START EQUIPTMENT INFO BLOCK -->
+                                        <div class="col-lg-8 my-auto">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="col-6 paddingItems">
+                                                    <div class="row">
+                                                        <label for="" class="col-6">Nombre</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="nombre" [(ngModel)]="item.nombre" placeholder="Nombre">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.nombre}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">Código</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="codigo" [(ngModel)]="item.codigo" placeholder="Código">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.codigo}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">Estado</label>
+                                                        <select *ngIf="editItem" class="form-control col-6" formControlName="estado" placeholder="Estado" [(ngModel)]="item.estado">
+                                                            <option value="">Seleccione</option>
+                                                            <option class="text-danger" value="Fuera de servicio">Fuera de servicio</option>
+                                                            <option class="text-warning" value="En mantenimiento">En mantenimiento</option>
+                                                            <option class="text-c-green" value="Funcional">Funcional</option>
+                                                        </select>
+                                                        <label class="col-6" *ngIf="!editItem" [ngClass]="{'text-warning': item.estado == 'En mantenimiento','text-danger': item.estado == 'Fuera de servicio','text-c-green': item.estado == 'Funcional'}">{{item.estado}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">Software</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="softwarefim" [(ngModel)]="item.softwarefim" placeholder="Software/Firmware">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.softwarefim}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems" *ngIf="campos.activaN1">
+                                                        <label for="" class="col-6">{{campos.nombre1}}</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="nombre1" [(ngModel)]="item.nombre1" placeholder="Nombre1">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.nombre1}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems" *ngIf="campos.activaN3">
+                                                        <label for="" class="col-6">{{campos.nombre3}}</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="nombre3" [(ngModel)]="item.nombre3" placeholder="Nombre3">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.nombre3}}</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">Fabricante</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="fabricante" [(ngModel)]="item.fabricante" placeholder="Fabricante">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.fabricante}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">N° Serie</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="nserie" [(ngModel)]="item.nserie" placeholder="N° Serie">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.nserie}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">Fecha Ingreso</label>
+                                                        <input class="col-6" *ngIf="editItem" type="date" class="form-control col-6" formControlName="fingreso" placeholder="Fecha ingreso" [(ngModel)]="item.fingreso">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.fingreso}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems">
+                                                        <label for="" class="col-6">Ubicación</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="ubicacion" [(ngModel)]="item.ubicacion" placeholder="Ubicación">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.ubicacion}}</label>
+                                                    </div>
+                                                    <div class="row paddingItems" *ngIf="campos.activaN2">
+                                                        <label for="" class="col-6">{{campos.nombre2}}</label>
+                                                        <input *ngIf="editItem" type="text" class="form-control col-6" formControlName="nombre2" [(ngModel)]="item.nombre2" placeholder="Nombre2">
+                                                        <label class="col-6" *ngIf="!editItem"> {{item.nombre2}}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!-- END EQUIPTMENT INFO BLOCK -->
+                                    </div>
+                                    <!-- END EQUIPTMENT IMAGE AND INFO BLOCK -->
+
+                                    <!-- START EQUIPTMENT ADITIONAL INFO -->
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col" *ngIf="editItem">
+                                                    <label for="">Información adicional</label>
+                                                </div>
+                                                <div class="col text-right" *ngIf="editItem">
+                                                    <button class="btn btn-primary waves-effect waves-light mb-3" (click)="AgregarImagen('effect','myckeditorInfoAdicional')"><i class="fa fa-image"></i>Insertar imagen</button>
+                                                </div>
+                                                <div class="col-12">
+                                                    <ckeditor *ngIf="editItem" #myckeditorInfoAdicional [(ngModel)]="item.infoAdicional" [config]="ckeconfig" formControlName="infoAdicional"></ckeditor>
+                                                    <div *ngIf="!editItem" [innerHTML]="item.infoAdicional|safeHtmlEquipos"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <!-- END EQUIPTMENT ADITIONAL INFO -->
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Guardar cambios -->
+                        <div class="card col-12" *ngIf="editItem">
+                            <div class="card-body text-right">
+                                <div class="btn-group float-right">
+                                    <button (click)="guardar($event)" class="btn btn-primary md-"><i class="icofont icofont-save "></i>Guardar Cambios</button>
+                                    <button (click)="metodo('cancel',0)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>Cancelar!</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin Guardar cambios -->
+
+                        <div class="col-lg-12">
+                            <div class="">
+                                <div class="card-header bg-primary">
+                                    Archivos y documentos adjuntos
+                                </div>
+
+                                <div class="card-body table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>#</th> -->
+                                                <th>Archivo</th>
+
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let archivo of item.archivos; index as i;">
+                                                <!-- <td scope="row">{{i+1}}</td> -->
+                                                <td><a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm" style="float: none;">
+                                                        <button *ngIf="editItem" type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light" (click)="eliminararchivo(i)"><span class="icofont icofont-ui-delete"></span></button>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+
+                                                <td colspan="3">
+                                                    <label class="custom-file btn">
+                                                        <input type="file" ng2FileSelect [uploader]="uploaderequipo" class="custom-file-input">
+                                                        <span *ngIf="permisosLocal.editar" class="code-header no-print"> <i class="fa fa-plus  fa-2x text-info"></i></span>
+                                                    </label>
+                                                    <ngb-progressbar type="primary" height=".3rem" [value]="uploaderequipo.progress">
+                                                    </ngb-progressbar>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+
+                                </div>
+                                <!-- end of card-body -->
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    Variables
+                                </div>
+
+                                <div class="card-body table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>#</th> -->
+                                                <th>Nombre</th>
+                                                <th>Última calibración</th>
+                                                <th>Próxima calibración</th>
+                                                <th *ngIf="item.avisarCorreo">Fecha Aviso</th>
+                                                <th>Vigencia</th>
+                                                <th><button *ngIf="editItem" type="button" class="tabledit-delete-button btn btn-primary waves-effect waves-light" (click)="openvariables(i)"><span class="icofont icofont-ui-edit"></span></button></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let variable of item.variables; index as i;">
+                                                <!-- <td scope="row">{{i+1}}</td> -->
+                                                <td scope="row">{{variable.nombre}}</td>
+                                                <td scope="row">{{variable.ultcalibracion|date:'dd/MM/yyyy'}}</td>
+                                                <td scope="row">{{variable.proxcalibracion|date:'dd/MM/yyyy'}} </td>
+                                                <td scope="row" *ngIf="item.avisarCorreo"> {{variable.fechaAviso | date }}</td>
+                                                <td scope="row"> {{variable.vigencia * -1}} Días</td>
+                                                <td scope="row"></td>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                                <!-- end of card-body -->
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header bg-primary row m-0">
+                                    <div class="col-9">
+                                        <span class="d-block mt-3 mb-2">Registro de daño, mal funcionamiento, modificación, reparación y/o Mantenimiento</span>
+                                    </div>
+                                    <div class="col-3">
+                                        <button *ngIf="permisosLocal.editar" class="btn btn-light btn-block no-print" (click)="openModal('programar-eventos')">Programar Eventos</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-12 col-lg-6"></div>
+                                            <div class="col-12 col-lg-6">
+                                                <div class="input-group mb-3 no-print">
+                                                    <input type="text" class="form-control" placeholder="Buscar Mantenimientos" (keyup)="buscadorMantenimientos($event);" id="input_busqueda">
+                                                    <div class="input-group-append" (click)="cargardatos()">
+                                                        <span class="input-group-text" id="basic-addon2">
+                                                            <i class="icofont icofont-close-line"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>#</th> -->
+                                                <th>Fecha</th>
+                                                <th *ngIf="item.avisarCorreo">Fecha Aviso</th>
+                                                <th>Clasificación</th>
+                                                <th>Adjuntos</th>
+                                                <th>Descripción</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let reparacion of item.reparaciones; index as i;">
+                                                <!-- <td scope="row">{{i+1}}</td> -->
+                                                <td scope="row">{{reparacion.fechaNovedad | date }}</td>
+                                                <td scope="row" *ngIf="item.avisarCorreo"> {{reparacion.fechaAviso | date}}</td>
+                                                <td scope="row">{{reparacion.clasificacion }}</td>
+                                                <td scope="row">
+                                                    <ul>
+                                                        <li *ngFor="let archivo of reparacion.archivos; index as i;">
+                                                            <a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td scope="row">
+                                                    {{reparacion.descripcion}}
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm" style="float: none;">
+
+
+                                                        <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light" (click)="editdano(i)"><span class="icofont icofont-ui-edit"></span></button>
+                                                        <button type="button" class="tabledit-edit-button btn btn-info waves-effect waves-light" (click)="metodo('ver-registros',i)"><span class="icofont icofont-eye"></span></button>
+
+                                                        <button *ngIf="editItem" type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light" (click)="celiminardano(i)"><span class="icofont icofont-ui-delete"></span></button>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button (click)="newRepair=true" (click)="activateNewEvent()" (click)="metodo2('new-event')" style="float:right" class="btn btn-primary no-print md-"><i class="icofont icofont-ui-add"></i>Agregar Registro</button>
+                                        </div>
+                                        <div *ngIf="agregarReparacion">
+                                            <br>
+                                            <app-equipo-reparacion (endAction)="guardarReparacion($event)" [clasificaciones]="clasificaciones" [eventoedit]="eventoedit" [ver_registros]="ver_registros" [AgregarArchivos]="true"></app-equipo-reparacion>
+                                        </div>
+                                        <div *ngIf="newRepair">
+                                            <br>
+                                            <app-equipo-reparacion (endAction)="guardarReparacion($event)" [clasificaciones]="clasificaciones" [eventoedit]="eventoedit" [ver_registros]="ver_registros" [AgregarArchivos]="true"></app-equipo-reparacion>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- end of card-body -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </app-card>
+        </div>
+    </div>
+</div>
+<app-modal-animation [modalID]="'programar-eventos'" #modaladd [modalClass]="'md-programar-eventos md-large'">
+    <div class="modal-header">
+        <h3 class="modal-title">Programar Eventos </h3>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formaEventos">
+            <div class="form-group row">
+                <div class="col">
+                    <label for="clasificacion">Clasificación </label>
+                    <select formControlName="clasificacion" id="clasificacion" class="form-control" (change)="seleccionaClasificacion($event.target.value)">
+                        <option selected disabled hidden value="">Seleccione una Opción</option>
+                        <option *ngFor="let clasificacion of clasificaciones" [value]="clasificacion">{{clasificacion}}</option>
+                    </select>
+                    <input type="text" class="form-control" id="clasificacion-id" placeholder="Otro" *ngIf="Otro">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="fechaInicio">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio" formControlName="fechaInicio">
+                </div>
+                <div class="col">
+                    <label for="fechaFin">Fecha Fin</label>
+                    <input type="date" class="form-control" id="fechaFin" formControlName="fechaFin">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="intervalo">Intervalo</label>
+                    <input type="number" class="form-control" id="intervalo" formControlName="intervalo">
+                </div>
+                <div class="col">
+                    <label for="repetirCada">Repetir Cada</label>
+                    <select formControlName="repetirCada" id="repetirCada" class="form-control">
+            <option selected disabled hidden value="">Seleccione una Opción</option>
+            <option *ngFor="let repeticion of repeticiones" [value]="repeticion.valor">{{repeticion.nombre}}</option>
+          </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer text-right">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal('programar-eventos')">Cerrar</button>
+        <button class="btn btn-success" (click)="calcularEventos()">Guardar</button>
+    </div>
+    <button (click)="closeModal('programar-eventos')" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<app-modal-animation [modalID]="'variables'" [modalClass]="'md-variables md-large'">
+    <app-equipo-add></app-equipo-add>
+</app-modal-animation>
+<app-modal-animation [modalID]="'alertas'" [modalClass]="'md-alertas md-large'" *ngIf="item.calibraciones || modal_config">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Configuración recordatorios por email</h3>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formconfiguraciones">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="text-center my-3">Calibraciones</h6>
+                        <hr>
+                    </div>
+                    <div class="col">
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-lg-4">Vencimiento Calibraciones</label>
+                            <div class="col-12 col-lg-8">
+                                <input type="email" formControlName="email" id="" class="form-control" placeholder="E-mail envio de alerta">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-lg-4">Correos Secundarios </label>
+                            <div class="col-12 col-lg-8">
+                                <input type="email" #idemails1 id="idemails1" class="form-control" formControlName="emails1" [placeholder]="'Otros Correos'" (keyup.enter)="addemails(idemails1.value, 'emails1')">
+                                <div class="contentArr d-block p-3 my-3 border">
+                                    <span class="bg-primary btn mb-2" *ngFor="let email1 of emails1">{{email1}} <span (click)="deletearr(email1, 'emails1')">X</span></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-lg-4">Recordad Cada</label>
+                            <div class="col-12 col-lg-4">
+                                <input type="number" min="0" formControlName="Rcada" id="" class="form-control" placeholder="Recordad Cada">
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <select formControlName="tiempo" id="" class="form-control">
+                                    <option>Seleccione Tiempo</option>
+                                    <option value="1">Días</option>
+                                    <option value="7">Semanas</option>
+                                    <option value="30">Meses</option>
+                                    <option value="365">Años</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="text-center my-3">Mantenimientos</h6>
+                        <hr>
+                    </div>
+                    <div class="col">
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-lg-4">Vencimiento Mantenimientos</label>
+                            <div class="col-12 col-lg-8">
+                                <input type="email" formControlName="email2" id="" class="form-control" placeholder="E-mail envio de alerta">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-lg-4">Correos Secundarios</label>
+                            <div class="col-12 col-lg-8">
+                                <input type="email" #idemails2 id="idemails2" class="form-control" formControlName="emails2" [placeholder]="'Otros Correos'" (keyup.enter)="addemails(idemails2.value, 'emails2')">
+                                <div class="contentArr d-block p-3 my-3 border">
+                                    <span class="bg-primary btn mb-2" *ngFor="let email2 of emails2">{{email2}} <span (click)="deletearr(email2, 'emails2')">X</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-lg-4">Recordad Cada</label>
+                            <div class="col-12 col-lg-4">
+                                <input type="number" min="0" formControlName="Rcada2" id="" class="form-control" placeholder="Recordad Cada">
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <select formControlName="tiempo2" id="tiempo" class="form-control">
+                                    <option>Seleccione Tiempo</option>
+                                    <option value="1">Días</option>
+                                    <option value="7">Semanas</option>
+                                    <option value="30">Meses</option>
+                                    <option value="365">Años</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="text-center my-3">Aviso Correo</h6>
+                        <hr>
+                    </div>
+                    <div class="col">
+                        <div class="form-group row">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" formControlName="avisarCorreo" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1"> Recibir recordatorio vía email</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer text-right">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal('alertas')">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="guardarConfig(true)">Guardar</button>
+    </div>
+    <button (click)="closeModal('alertas')" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+
+
+
+<app-modal-animation [modalID]="'modalVariables'" #modalVariables [modalClass]="'md-effect-3  md-large'">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Configuración Variables Equipo </h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-lg-12" *ngIf="ViewVariables">
+                    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+                        <app-equipo-add (endAction)="endAction($event)" [equipoedit]="item._id"></app-equipo-add>
+                    </perfect-scrollbar>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <button (click)="closeModal('modalVariables')" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+
+<app-modal-animation [modalID]="'effect'" #modaladdImagen [modalClass]="'md-effect md-large'">
+    <div class="row col-12">
+        <div class="col-12 text-center">
+            <h3>Galeria de Imagenes</h3>
+        </div>
+    </div>
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+        <div class="card">
+            <div class="card-body text-left">
+                <div class="row">
+                    <div class="col-lg-12 col-xl-12 mb-2">
+                        <label class="custom-file ">
+                            <label class="custom-file">
+                                <input type="file" ng2FileSelect [uploader]="uploaderImagenEditor" class="custom-file-input outline-primary">
+                                <i class="fa fa-upload  fa-3x text-info"><span class="text-info">Subir nuevas imagenes</span></i>
+                            </label>
+                        <p class="mt-2">
+                            <ngb-progressbar type="primary" [value]="uploaderImagenEditor.progress"></ngb-progressbar>
+                        </p>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngFor="let imagen of imagenes;index as i;" class="col-lg-3 col-xl-3 ">
+                        <div class="card list-view-media">
+                            <div class="card-block text-center">
+                                <img src="{{apiurl}}upload/files_client/{{imagen.filename}}?name={{imagen.originalname}}" alt="img" class="img-fluid img-150">
+                                <h6>{{imagen.originalname}}</h6>
+                                <p class="text-muted m-b-15"><small class="d-block">{{imagen.mimetype|uppercase}}-{{imagen.size/1000|number}}KB</small></p>
+                                <div class="card-footer row">
+                                    <button class="btn" (click)="insertarImagen(imagen)" [ngbTooltip]="tipInsertar"><i class="fa fa-plus-square"></i></button>
+                                    <ng-template #tipInsertar>Insertar imagen</ng-template>
+                                    <button class="btn" (click)="delimagen(imagen)" [ngbTooltip]="tipEliminar"><i class="icofont icofont-delete-alt"></i></button>
+                                    <ng-template #tipEliminar>Eliminar imagen</ng-template>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<app-preloader *ngIf="preloader"></app-preloader>

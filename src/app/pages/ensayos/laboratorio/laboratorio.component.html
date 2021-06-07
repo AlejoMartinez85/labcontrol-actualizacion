@@ -1,0 +1,507 @@
+<div class="page-body">
+  <div class="row">
+    <!-- order-card start -->
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-blue order-card">
+        <div class="card-block">
+          <h5 class="m-b-20" style="font-weight: 400;">Cotizaciones y solicitudes</h5>
+          <!-- <h2 class="text-right"><i class="ti-shopping-cart f-left"></i><span>${{indicadores?.enespera[0]?.total|number: '1.0-0'}}</span></h2> -->
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.enespera[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-yellow order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Pedidos en proceso</h6>
+          <h2 class="text-right"><i class="ti-reload f-left"></i><span>${{indicadores?.proceso[0]?.total|number: '1.0-0'}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.proceso[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-green order-card">
+        <div class="card-block">
+          <h5 class="m-b-20" style="font-weight: 400;">Informes realizados</h5>
+          <!-- <h2 class="text-right"><i class="ti-wallet f-left"></i><span>${{indicadores?.finalizados[0]?.total|number: '1.0-0'}}</span></h2> -->
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.finalizados[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    <!-- order-card end -->
+
+    <div class="col-sm-12">
+      <app-card [cardOptionBlock]="true">
+        <button type="button" class="btn btn-info" popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+          (click)="openMyModal('effect-3')">
+          <i class="fa fa-plus"></i> Crear una solicitud de ensayo</button>
+      </app-card>
+    </div>
+
+    <!-- tabs card start -->
+    <div class="col-sm-12">
+      <app-card [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <h4>Información de ensayos</h4>
+        <div class="md-tabs">
+          <ngb-tabset (tabChange)="beforeChange($event)">
+            <ngb-tab id="tab-pendientes">
+              <ng-template ngbTabTitle> <span class="font-weight-bold-tabs fsize-22" style="font-size: 22px !important;"><i class="icofont icofont-stop"></i> Cotizaciones y solicitudes</span> </ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="paso1" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Laboratorio">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['tercero']?.nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado" [width]="200" >
+                        <ng-template let-row="row"  let-value="nombre" ngx-datatable-cell-template >
+                          <span [ngbTooltip]="muestrasParametros"
+                            [ngClass]="{'label-success': row.estado=='Aprobado','label-warning': row.estado=='Cotización'
+                        ,'label-info': row.estado=='Esperando Confirmación','label-danger': row.estado=='Cancelado'}"
+                            class="label font-weight-bold " >{{row['estado']}} </span>
+                            <ng-template #muestrasParametros>{{row.muestras?.length}} Muestras, {{row['parametros'].length}} Parámetros</ng-template>
+
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                  
+                </div>
+              </ng-template>
+            </ngb-tab>
+            
+            <!-- <ngb-tab id="tab-proceso">
+              <ng-template ngbTabTitle><i class="icofont icofont-key"></i> En proceso</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="paso2" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Laboratorio">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['tercero']?.nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Tiempo estimado">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span class="label label-success">{{calcularVigencia(row)}} dias</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span class="pcoded-badge label label-warning">{{row.totalmuestras?.total}}/{{row.totalmuestras?.realizadas}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['estado']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                  
+                </div>
+              </ng-template>
+            </ngb-tab> -->
+            <ngb-tab id="tab-finalizado">
+              <ng-template ngbTabTitle><span class="font-weight-bold-tabs" style="font-size: 22px !important;"> <i class="icofont icofont-file-alt"></i>Reportes</span></ng-template>
+              <!-- cambio: Se puso etiqueta span y negrilla para hacer mas grande titulo tab -->
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-12 col-lg-6"></div>
+                      <div class="col-12 col-lg-6">
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Buscar Ensayos"
+                            (keyup)="buscadorpaso3($event);">
+                          <div class="input-group-append" (click)="tabdata()">
+                            <span class="input-group-text" id="basic-addon2">
+                              <i class="icofont icofont-close-line"></i>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="paso3" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="50" [scrollbarH]="true" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['nombreCliente']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <!-- <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row.muestras?.length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column> -->
+                      <!-- <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column> -->
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency : 'USD' : 'symbol' : '1.0-0'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span [ngbTooltip]="muestrasParametros"
+                            [ngClass]="{'label-primary': row.estado=='En Reporte','label-success': row.estado=='Reportado'}"
+                            class="label font-weight-bold">{{row['estado']}} </span>
+                            <ng-template #muestrasParametros>{{row.muestras?.length}} Muestras, {{row['parametros'].length}} Parámetros</ng-template>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" [ngbTooltip]="editarReporte" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row,'')">
+                              <span class="icofont icofont-ui-edit"></span>
+                              <ng-template #editarReporte>Editar Reporte</ng-template>
+                            </button>
+                          </div>
+
+                          <div id="bR" *ngIf="row.estado=='Reportado'" class="btn-group btn-group-sm btn-primary"
+                            style="float: none;">
+                            <a routerLink="/ensayos/vistaprevia/{{row._id}}" target="_blank">
+                              <button type="button" class="tabledit-edit-button btn  waves-effect waves-light">
+                                <span class="icofont icofont-file-alt"></span>
+                              </button>
+                            </a>
+                          </div>
+                          <!-- se agrego boton imprimir y se elimino clase btn- primary  -->
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div>
+    <!-- order-card start -->
+
+    <!-- Info payments -->
+    <!-- <div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-blue order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Total pedidos vigentes por pagar</h6>
+          <h2 class="text-right"><i class="ti-wallet f-left"></i><span>${{indicadores?.finalizados[0]?.total|number: '1.0-0'}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.finalizados[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-yellow order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Total pedidos vencidos por pagar</h6>
+          <h2 class="text-right"><i class="ti-reload f-left"></i><span>{{pagos?.nopagosVencidos[0]?.total|currency}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{pagos?.nopagosVencidos[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-12">
+      <app-card [title]="'Información de pagos'" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <div class="md-tabs">
+          <ngb-tabset >
+            <ngb-tab id="tab-nopago">
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Realizados No Pagos</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="pagos?.nopago" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['cliente'].nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row.totalmuestras?.total}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['estado']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                  
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="tab-pago">
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Realizado Pagos</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="pagos?.pagados" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['cliente'].nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row.totalmuestras?.total}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['estado']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                  
+                </div>
+              </ng-template>
+            </ngb-tab>
+           
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div> </div> -->
+    <!-- end info payments -->
+
+    <!-- tabs card end -->
+    <!-- <div class="col-lg-12">
+      <app-graficas></app-graficas>
+    </div>
+    <div class="col-lg-12">
+      <app-actividad>
+       
+      </app-actividad>
+    </div> -->
+   
+  </div>
+</div>
+<app-modal-animation [modalID]="'effect-3'" #modaladd [modalClass]="'md-effect-3 md-large'">
+  <h3>Información solicitud de ensayo {{ensayo?.codigo}}
+  </h3>
+  <div>
+
+
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="md-tabs">
+            <ngb-tabset (tabChange)="beforeChangeEnsayo($event)" #tabset="ngbTabset">
+              <ngb-tab id="solicitudTab" >
+                <ng-template ngbTabTitle><i class="icofont icofont-plus"></i> Solicitud de ensayos</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="card-body">
+                      <app-solicitud-cli [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-solicitud-cli>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab id="reporteTab">
+                <ng-template ngbTabTitle><i class="icofont icofont-file-document"></i> Reporte de resultados</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="card-body">
+                      <app-pago-cli [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-pago-cli>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+
+            </ngb-tabset>
+          </div>
+        </div>
+       
+        <div class="col-lg-12" *ngIf="ensayo && ensayo._id!=undefined">
+          <app-comentarios [ensayo_id]="ensayo?._id" [tipo]="1"></app-comentarios>
+        </div>
+      </div>
+    </perfect-scrollbar>
+
+
+
+  </div>
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>

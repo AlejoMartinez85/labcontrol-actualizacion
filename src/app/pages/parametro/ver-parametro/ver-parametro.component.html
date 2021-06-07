@@ -1,0 +1,231 @@
+<!-- Page-body start -->
+<div class="page-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="text-gray">Mediciones e Incertidumbre</h1>
+            <br> 
+            <app-card [cardOptionBlock]="true" class="text-right">
+
+                <div ngbDropdown class="dropdown-primary">
+                    <button type="button" ngbDropdownToggle class="btn btn-info" popoverTitle="configurar Incertidumbre"
+                        placement="bottom">
+                        <i class="fa fa-cogs"></i> </button>
+                    <div ngbDropdownMenu>
+                        <a class="dropdown-item waves-light waves-effect" href="javascript:"
+                            (click)="verOpcion(0)">Mediciones</a>
+                        <div class="dropdown-divider"></div>
+                        <a *ngIf="permisosLocal.editar" class="dropdown-item waves-light waves-effect" href="javascript:"
+                            (click)="verOpcion(1)">Config. Incertidumbre</a>
+                        <a *ngIf="permisosLocal.editar" class="dropdown-item waves-light waves-effect" href="javascript:"
+                            (click)="verOpcion(2)">Config. Alertas</a>
+
+                    </div>
+                </div>
+            </app-card>
+        </div>
+        <div [@fadeInOutTranslate] *ngIf="opcion==opcionesIncertidumbre.MUESTRAS" class="col-sm-12">
+            <app-incertidumbre-muestra [parametroId]="item._id"></app-incertidumbre-muestra>
+
+        </div>
+        <div class="col-sm-12" [@fadeInOutTranslate] *ngIf="opcion==opcionesIncertidumbre.INSERTIDUMBRE">
+            <app-card [title]="" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+                <wizard navigationMode="free" navBarLayout="large-filled-symbols">
+                    <wizard-step stepTitle="Parametros" optionalStep navigationSymbol="1">
+
+                        <form [formGroup]="form">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Simbolo</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" formControlName="simbolo"
+                                        [(ngModel)]="item.simbolo" placeholder="Simbolo">
+
+                                    <div
+                                        *ngIf="form.controls.simbolo.invalid && (form.controls.simbolo.dirty || form.controls.simbolo.touched)">
+                                        <div class="messages text-danger"
+                                            *ngIf="form.controls.simbolo.errors?.required">
+                                            Campo Requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-sm-2 col-form-label">Unidad</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" formControlName="unidad"
+                                        [(ngModel)]="item.unidad" placeholder="Unidad">
+                                    <div
+                                        *ngIf="form.controls.unidad.invalid && (form.controls.unidad.dirty || form.controls.unidad.touched)">
+                                        <div class="messages text-danger" *ngIf="form.controls.unidad.errors?.required">
+                                            Campo Requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-12" *ngIf="reload">
+                                    <label class="col-form-label">Formula</label><br>
+                                    <app-matheditor [variables]="item.variables" [formula]="formulaactual"
+                                        [editable]="true" (changeFormula)="onChangeFormula($event)" #mathEditor>
+                                    </app-matheditor>
+                                    <input type="hidden" formControlName="formula" [(ngModel)]="item.formula"><br>
+                                    <label class="col-form-label">Resultado:</label>
+                                    <strong>{{item.simbolo}}={{resultadoEvaluacion}} {{item.unidad}}</strong>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="form-group row">
+
+                            </div>
+
+                            <h4>Variables</h4>
+                            <br>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nombre</th>
+                                                <th>Simbolo</th>
+                                                <th>Valor </th>
+
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let variable of item.variables;index as i;">
+                                                <td>{{i+1}}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="var_nombre{{i}}"
+                                                        placeholder="Nombre " [(ngModel)]="variable.nombre"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="actualizarParametro(variable)">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="var_name{{i}}"
+                                                        placeholder="Simbolo " [(ngModel)]="variable.simbolo"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="actualizarParametro(variable)">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control" name="var_valor{{i}}"
+                                                        placeholder="Valor " [(ngModel)]="variable.valor"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (input)="actualizarParametro(variable)">
+                                                </td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                                                        (click)="eliminarVariable(variable)"><span
+                                                            class="icofont icofont-ui-delete"></span></button>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="var_add_nombre{{i}}"
+                                                        placeholder="Nombre " [(ngModel)]="variablenew.nombre"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="var_add_name{{i}}"
+                                                        placeholder="Simbolo " [(ngModel)]="variablenew.simbolo"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control" name="var_add_valor{{i}}"
+                                                        placeholder="Valor " [(ngModel)]="variablenew.valor"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </td>
+                                                <td>
+                                                    <button (click)="guardarParametro($event)"
+                                                        class="btn btn-primary md-"><i class="icofont icofont-save"></i>
+                                                        Agregar</button>
+
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="form-group row text-right">
+                                <label class="col-sm-2"></label>
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-success m-b-0" [disabled]="!form.valid"
+                                        (click)="actualizarItem()">Guardar</button>
+                                    <button type="submit" class="btn btn-primary m-b-0" [disabled]="!form.valid"
+                                        (click)="actualizarItem()" nextStep>Siguiente</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </wizard-step>
+                    <wizard-step stepTitle="Incertidumbre" navigationSymbol="2">
+                        <div class="col-sm-12" *ngIf="reload">
+                            <div class="md-tabs ">
+                                <ngb-tabset (tabChange)="beforeChange($event)">
+                                    <ngb-tab *ngFor="let variable of item.variables;index as i;"
+                                        id="tab-{{variable._id}}">
+                                        <ng-template ngbTabTitle class="col-lg-3"><i
+                                                class="icofont icofont-molecule"></i> <span class="font-weight-bold">
+                                                {{variable.simbolo}}</span></ng-template>
+                                        <!-- cambio: Se puso etiqueta span y negrilla para hacer mas grande titulo tab -->
+                                        <ng-template ngbTabContent>
+                                            <div [@fadeInOutTranslate] class="m-t-15">
+                                                <app-incertidumbre-add [parametroId]="item._id"
+                                                    [variableId]="variable._id" (endAction)="refreshParametro($event)" ></app-incertidumbre-add>
+                                            </div>
+                                        </ng-template>
+                                    </ngb-tab>
+                                </ngb-tabset>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-10 text-right">
+
+                            <button type="submit" class="btn btn-warning m-b-0" [disabled]="!form.valid"
+                                (click)="actualizarItem()" previousStep>Atras</button>
+                            <button type="submit" class="btn btn-primary m-b-0" [disabled]="!form.valid"
+                                (click)="actualizarItem()" nextStep>Siguiente</button>
+                        </div>
+
+
+                    </wizard-step>
+                    <wizard-step stepTitle="Utotal" navigationSymbol="3">
+                        <div class="col-sm-12" *ngIf="reload">
+                            <app-incertidumbre-utotal [parametro]="item"  > </app-incertidumbre-utotal>
+                        </div>
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-success m-b-0" [disabled]="!form.valid"
+                                (click)="actualizarItem()">Guardar</button>
+                            <button type="submit" class="btn btn-warning m-b-0" [disabled]="!form.valid"
+                                (click)="actualizarItem()" previousStep>Atras</button>
+
+                        </div>
+                    </wizard-step>
+                </wizard>
+            </app-card>
+        </div>
+        <div class="col-sm-12" [@fadeInOutTranslate] *ngIf="opcion==opcionesIncertidumbre.ALERTAS">
+            <app-incertidumbre-validaciones [parametroId]="item._id"></app-incertidumbre-validaciones>
+        </div>
+
+    </div>
+
+
+
+</div>

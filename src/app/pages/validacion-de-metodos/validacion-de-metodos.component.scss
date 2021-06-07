@@ -1,0 +1,39 @@
+table.table.table-bordered.table-banco-muestras tr td {
+    text-align: center;
+    min-width: 130px;
+}
+.ajusteTam, .campomodific, .list-group-item {
+    input {
+        height: 100%;
+    }
+}
+.input-group-text {
+    background-color: #FF5370;
+    border-color: #FF5370;
+    color: #fff;
+    cursor: pointer;
+    -webkit-transition: all ease-in 0.3s;
+    transition: all ease-in 0.3s;
+}
+.form-modific {
+    width: 100%;
+    overflow-x: auto;
+    .row-modific {
+        width: 2500px;
+        .col-modific {
+            width: 100px;
+            margin: 0;
+            display: inline-block;
+            text-align: center;
+        }
+    }
+}
+.list-group-item {
+    padding: 10px;
+}
+th, td {
+    font-size: 10px;
+    .btn {
+        padding: 4px;
+    }
+}

@@ -1,0 +1,26 @@
+.exit {
+    // float: right !important;
+    background-color: transparent !important;
+    border-width: 0px !important;
+    border-style: none !important;
+}
+
+.justify {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.link:hover {
+    color: #38a9f9;
+}
+
+.content {
+    height: 300px;
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 1rem;
+}
+
+.nocontet {
+    height: auto;
+}

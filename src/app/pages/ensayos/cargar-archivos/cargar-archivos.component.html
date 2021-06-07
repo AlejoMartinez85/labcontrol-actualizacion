@@ -1,0 +1,98 @@
+<div class="card">
+  <div class="card-header" *ngIf="muestraTitulo">
+    <h5 class="card-header-text">{{muestraTitulo}} </h5><small>{{getmsg()}}</small>
+
+  </div>
+  <div class="card-body text-left">
+    <div class="row">
+
+      <div class="col-md-6" *ngIf="archivos && archivos.length>0">
+        <div class="panel panel-primary">
+          <div class="panel-heading bg-primary">{{tituloarchivosCargados}}</div>
+          <div class="panel-body">
+            <ul class="basic-list">
+              <!-- ngRepeat: f in files1 -->
+              <li class="list-group-item ng-scope" *ngFor="let archivo of archivos;index as j;">
+
+                <a target="_blank" class="ng-binding"
+                  href="{{apiurl}}upload/files_client/{{archivo.filename}}?name={{archivo.originalname}}"
+                  download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                <button class="btn btn-danger btn-xs pull-right" (click)="delFile(archivo)"  *ngIf="lab"><i
+                    class="fa fa-trash"></i></button>
+
+              </li><!-- end ngRepeat: f in files1 -->
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <div [ngClass]="{'col-md-6':archivos&& archivos.length>0,'col-md-12':archivos&& archivos.length==0}">
+        <div class="panel panel-primary">
+          <div class="panel-heading bg-primary" *ngIf="informacionbaner != ''">{{informacionbaner}}</div>
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table table-hover" *ngIf="tipo!='reporte' && archivoslab">
+                <tbody>
+                  <ng-container *ngFor="let archivo of archivoslab;index as j;">
+
+
+                    <tr *ngIf="archivo.tipo!='reporte'">
+                      <td>
+                        <a target="_blank" class="ng-binding"
+                          href="{{apiurl}}upload/files_client/{{archivo.filename}}?name={{archivo.originalname}}"
+                          download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                      </td>
+                      <td>
+                        <button class="btn btn-danger btn-xs pull-right" *ngIf="lab" (click)="delFile(archivo)"><i
+                            class="fa fa-trash"></i></button>
+
+                      </td>
+
+                    </tr>
+                  </ng-container>
+
+                </tbody>
+              </table>
+              <table class="table table-hover" *ngIf="tipo=='reporte' && archivoslab">
+                <tbody>
+                  <ng-container *ngFor="let archivo of archivoslab;index as j;">
+                    <tr *ngIf="archivo.tipo=='reporte'">
+                      <td>
+                        <a target="_blank" class="ng-binding"
+                          href="{{apiurl}}upload/files_client/{{archivo.filename}}?name={{archivo.originalname}}"
+                          download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                      </td>
+                      <td>
+                        <button class="btn btn-danger btn-xs pull-right" *ngIf="lab" (click)="delFile(archivo)"><i
+                            class="fa fa-trash"></i></button>
+
+                      </td>
+
+                    </tr>
+
+                  </ng-container>
+
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <label class="custom-file">
+
+          <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+          <span class="code-header"> <i class="fa fa-upload  fa-2x text-info"></i>
+            Adjunte los <code>archivos</code> Soportes y documentos adjuntos</span>
+
+        </label>
+        <p>
+          <ngb-progressbar type="primary" [value]="uploader.progress"></ngb-progressbar>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

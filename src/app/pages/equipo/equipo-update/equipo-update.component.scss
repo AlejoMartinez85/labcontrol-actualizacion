@@ -1,0 +1,19 @@
+.dropdown-menu {
+    display: block;
+}p.text-muted.m-b-10.ng-star-inserted {
+    display: none;
+}
+ul.breadcrumb-title.b-t-default.p-t-10 {
+    display: none;
+}
+.paddingItems{
+    padding-top: 0.6rem;
+}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}

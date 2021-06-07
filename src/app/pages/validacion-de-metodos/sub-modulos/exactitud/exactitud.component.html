@@ -1,0 +1,366 @@
+<div class="card-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h4 class="m-0">Exactitud</h4>
+            </div>
+            <div class="col-12 col-lg-2 text-right">
+                <button *ngIf="permisosLocal.eliminar" class="btn btn-danger" (click)="EliminarExactitud()">
+          <span class="icofont icofont-ui-delete"></span>
+        </button>
+                <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+          <span class="icofont icofont-ui-edit"></span>
+        </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <form [formGroup]="formaExactitud">
+        <div class="form-group">
+            <label for="">Opción determinación veracidad</label>
+            <div *ngIf="!edit" class="form-group">
+
+                <label>Unidades: </label>
+                <span>{{ArrLExactitud['unidad']}}</span>
+            </div>
+            <div *ngIf="edit" class="form-group">
+                <label>Unidades: </label>
+                <input type="text" class="form-control" [formControlName]="'unidad'" id="">
+            </div>
+            <div class="form-check">
+
+                <input *ngIf="edit" type="checkbox" class="form-check-input" [formControlName]="'exactitud1'" id="" value="exactitud1" checked (change)="selectCheck2($event)">
+                <label class="form-check-label">
+          Medir el Material de Referencia usando el Método candidato
+        </label>
+            </div>
+            <div class="form-check">
+                <input *ngIf="edit" type="checkbox" class="form-check-input" [formControlName]="'exactitud2'" id="" value="exactitud2">
+                <label class="form-check-label" for="exampleRadios2">
+          Medir blancos de matriz ó muestras de ensayos no adicionadas y adicionadas
+        </label>
+            </div>
+            <div class="form-check">
+                <input *ngIf="edit" type="checkbox" class="form-check-input" [formControlName]="'exactitud3'" id="" value="exactitud3" (change)="selectCheck($event)">
+                <label class="form-check-label" for="exampleRadios2">
+          medir el MR / Muestra de ensayo utilizando el método candidato y el método alternativo
+        </label>
+            </div>
+            <div class="form-check">
+                <input *ngIf="edit" type="checkbox" class="form-check-input" [checked]="exactitud" (change)="usaMatrisBlancos(exactitud, 'exactitud');">
+                <label class="form-check-label" for="exampleRadios2">
+          Usar banco de muestras
+        </label>
+            </div>
+        </div>
+        <div class="form-group row" *ngIf="muestraData2">
+            <div class="col">
+                <label for="">XRef: </label>
+                <span *ngIf="!edit">{{ArrLExactitud['Xref']}}</span>
+                <input *ngIf="edit" type="number" class="form-control" [formControlName]="'xref'" min="1">
+            </div>
+        </div>
+        <div class="form-group" *ngIf="banco_muestras && exactitud">
+            <label for="">Matriz</label>
+            <p *ngIf="!edit">{{ArrLExactitud['Matriz']}}</p>
+            <select *ngIf="edit" [formControlName]="'matriz'" id="" class="form-control">
+        <option value="">Seleccione Una matriz</option>
+        <option *ngIf="matrizBk1" value="Bk1">Bk1</option>
+        <option *ngIf="matrizBk2" value="Bk2">Bk2</option>
+        <option *ngIf="matrizBk3" value="Bk3">Bk3</option>
+        <option *ngIf="matrizBk4" value="Bk4">Bk4</option>
+        <option *ngIf="matrizBk5" value="Bk5">Bk5</option>
+        <option *ngIf="matrizEb" value="Eb">Eb</option>
+        <option *ngIf="matrizEm" value="Em">Em</option>
+        <option *ngIf="matrizEa" value="Ea">Ea</option>
+        <option *ngIf="matrizM1" value="M1">M1</option>
+        <option *ngIf="matrizM2" value="M2">M2</option>
+        <option *ngIf="matrizM3" value="M3">M3</option>
+        <option *ngIf="matrizM1Ab" value="M1Ab">M1Ab</option>
+        <option *ngIf="matrizM1Aa" value="M1Aa">M1Aa</option>
+        <option *ngIf="matrizM2Ab" value="M2Ab">M2Ab</option>
+        <option *ngIf="matrizM2Aa" value="M2Aa">M2Aa</option>
+        <option *ngIf="matrizM3Ab" value="M3Ab">M3Ab</option>
+        <option *ngIf="matrizM3Aa" value="M3Aa">M3Aa</option>
+      </select>
+        </div>
+        <div class="form-group" *ngIf="!exactitud && muestraData2 || !exactitud && muestraData">
+            <ul *ngIf="edit" class="list-group" [formArrayName]="'arrsExctitud'">
+                <li class="list-group-item">Método Candidato</li>
+                <li class="list-group-item p-0 ajusteTam">
+                    <input type="text" (paste)="data2($event,'arrExctitud')" class="form-control" placeholder="Pega tus datos">
+                </li>
+                <li class="list-group-item p-0" *ngFor="let item of arrExctitud.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="input-group m-0 campomodific">
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex, 'arrExctitud')">
+                <span class="icofont icofont-plus-circle"></span>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control" [formControlName]="'arrExctitud'">
+                        <div class="input-group-prepend btn-danger">
+                            <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'arrExctitud')">
+                <span class="icofont icofont-ui-delete"></span>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <app-tabla-arrays *ngIf="!edit" [array]="ArrLExactitud['Matriz']" [nombre]='"Método Candidato"'>
+            </app-tabla-arrays>
+        </div>
+        <div class="form-group mt-3" *ngIf="muestraData">
+            <ul *ngIf="edit" class="list-group" [formArrayName]="'metodosRef'">
+                <li class="list-group-item">Método de Referencia</li>
+                <li class="list-group-item p-0 ajusteTam">
+                    <input type="text" (paste)="data2($event,'metodoRef')" class="form-control" placeholder="Pega tus datos">
+                </li>
+                <li class="list-group-item p-0" *ngFor="let item of MetodoRef.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="input-group m-0 campomodific">
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex, 'metodoRef')">
+                <span class="icofont icofont-plus-circle"></span>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control" [formControlName]="'metodoRef'">
+                        <div class="input-group-prepend btn-danger">
+                            <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'metodoRef')">
+                <span class="icofont icofont-ui-delete"></span>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <app-tabla-arrays *ngIf="!edit" [array]="ArrLExactitud['metodosRef']" [nombre]='"Método de Referencia"'>
+            </app-tabla-arrays>
+        </div>
+        <div class="form-group mt-3">
+            <button class="btn btn-success" id="btn-Exactutud" (click)="llenadoDeArrayCalculos(formaExactitud, 'Exactitud')">Calcular</button>
+            <button class="btn btn-success" (click)="guardarExactitud()" *ngIf="btnExactitud && edit">Guardar</button>
+        </div>
+    </form>
+    <div class="constainer-fluid">
+        <div class="row" *ngIf="op1">
+            <div class="col-12 mb-3">
+                <h6>Calculos Exactitud</h6>
+            </div>
+            <div class="col-12 col-lg-3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        b
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudb | number: '1.1-3'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        b (%)
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudbpor | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R (%)
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudr | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-3" *ngIf="arrayCalc.length > 0">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R' (%)
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudrpor | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row" *ngIf="exactitud">
+            <div class="col-12 mb-3">
+                <h6>% Error de Estandares</h6>
+            </div>
+            <div class="col-12 col-lg-3" *ngIf="Ebajo">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        % Error Eb
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{errorEb | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-3" *ngIf="Emedio">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        % Error Em
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{errorEm | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-3 mb-3" *ngIf="EAlto">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        % Error Ea
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{errorEa | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row" *ngIf="op2">
+            <div class="col-12">
+                <h6>Calculos De Muestras</h6>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 1">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M1Ab
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM1 | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 1">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M1Aa
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM1Aa | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 1">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M1A
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM1Ab | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 2">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M2Ab
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM2 | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+                <h6></h6>
+                <span> </span>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 2">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M2Aa
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM2Aa | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 2">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M2A
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM2Ab | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M3Ab
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM3 | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M3Aa
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM3Aa | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 3">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R'(%) M3A
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{promrecnM3Ab | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row" *ngIf="op3">
+            <div class="col-12">
+                <h6>Calculos b, b(%), R(%)</h6>
+            </div>
+            <div class="col-12 col-lg-4">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        b
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudb2 | number: '1.1-3'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        b(%)
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudbpor2 | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-4">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        R(%)
+                    </li>
+                    <li class="list-group-item">
+                        <span> {{exactitudr2 | percent: '1.1-4'}} </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

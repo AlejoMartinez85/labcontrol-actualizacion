@@ -1,0 +1,298 @@
+<div *ngIf="user['cuentaActiva']" class="page-body">
+  <h1 class="text-gray">Usuarios</h1>
+  <br>
+  <div class="row">
+    <div class="col-sm-12" *ngIf="user['admin']">
+      <app-card [cardOptionBlock]="true">
+        <div class="btn-group">
+
+          <button type="button" class="btn btn-info" popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+          (click)="openMyModal('effect-3')">
+          <i class="fa fa-plus"></i> Crear Usuario</button>
+          <button class="btn btn-success" (click)="openMyModal('roles')"> <i class="fa fa-plus"></i> Crear Rol </button>
+          <button class="btn btn-secundary" [routerLink]="['../roles']"> Listado de Roles </button>
+        </div>
+      </app-card>
+    </div>
+    <div class="col-sm-12">
+      <app-card [title]="" [cardOptionBlock]="true">
+        <!-- cambio: se quita title 'Información de usuarios' -->
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <h4>Lista de Usuarios</h4>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Buscar Parametros" (keyup)="buscadorUsuarios($event);">
+              <div class="input-group-append" (click)="cargardatos()">
+                  <span class="input-group-text" id="basic-addon2">
+                      <i class="icofont icofont-close-line"></i>
+                  </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <hr>
+        </div>
+      </div>
+        <ngx-datatable class="data-table" [rows]="usuarios" [columns]="columns" [columnMode]="'force'"
+          [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="15" [scrollbarH]="true">
+          <ngx-datatable-column name="Nombre">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['name']}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Apellido">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['last_name']}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Email">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['email']}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Cargo">
+            <ng-template let-row="row" let-value="cargo" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['cargo']}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name=" Es analista">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['analista']?'SI':'NO'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Recepción Muestras">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['recepcionM']?'SI':'NO'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Información Financiera">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="!row['edit']">{{row['infofinanciera']?'Oculta':'Visible'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="" *ngIf="user['admin']">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+              <div class="btn-group btn-group-sm" style="float: none;" >
+
+
+
+
+                <button type="button" (click)="ceditarrItem(row)" class="tabledit-edit-button btn btn-primary waves-effect waves-light"><span
+                    class="icofont icofont-ui-edit"   ></span></button>
+                  <button *ngIf="user.admin && row['_id'] !== user.id" type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                  (click)="eliminarUsuario(row['_id'])"><span class="icofont icofont-ui-delete"></span></button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </app-card>
+    </div>
+  </div>
+
+</div>
+
+<app-modal-animation [modalID]="'roles'" [modalClass]="'md-roles md-large'">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Creación de permisos</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="coleModal('roles')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="guardarRole(nombreRol)">
+        <div class="form-group">
+          <label for="nombre">Rol</label>
+          <input type="text" class="form-control" placeholder="Nombre" #nombreRol>
+        </div>
+        <div class="form-group text-right">
+          <button class="btn btn-success d-inline-block" type="submit">Guardar</button>
+        </div>
+      </form>
+      <div *ngIf="catchRol">
+        <hr>
+        <h5 id="tbl-title-roles">Listado de permisos</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rol of Roles; let i = index">
+              <td>{{ i+1 }}</td>
+              <td>{{ rol.nombre }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="coleModal('roles')">Close</button>
+    </div>
+  </div>
+</app-modal-animation>
+<app-modal-animation [modalID]="'effect-3'" [modalClass]="'md-effect-3 md-large'">
+  <h3>Nuevo Usuario
+  </h3>
+  <div>
+
+
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-header-text">Información del Usuario </h4>
+
+            </div>
+            <div class="card-body">
+              <form [formGroup]="form">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Nombre</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" formControlName="nombre" [(ngModel)]="item.name"
+                      placeholder="Nombre">
+
+                    <div
+                      *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                      <div class="messages text-danger" *ngIf="form.controls.nombre.errors?.required">
+                        Campo Requerido
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Apellido</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" formControlName="last_name" [(ngModel)]="item.last_name"
+                      placeholder="Apellido">
+                    <div
+                      *ngIf="form.controls.last_name.invalid && (form.controls.last_name.dirty || form.controls.last_name.touched)">
+                      <div class="messages text-danger" *ngIf="form.controls.last_name.errors?.required">
+                        Campo Requerido
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" formControlName="email" placeholder="Email"
+                      [(ngModel)]="item.email">
+
+                    <div
+                      *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)">
+                      <div class="messages text-danger" *ngIf="form.controls.email.errors?.required">
+                        Campo Requerido
+                      </div>
+                    </div>
+                    <label class="text-success col-form-label">La contraseña será enviada al Email </label>
+                  </div>
+                  
+                </div>
+
+                <div class="form-group row">
+                  
+                </div>
+
+                <h4>Información de permisos y roles</h4>
+                <br>
+                <div class="col-sm-4">
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox" type="checkbox" [disabled]="item.principal" id="checkbox_analista" [(ngModel)]="item.analista"
+                        name="checkbox_analista" [checked]="item.analista" formControlName="analista">
+                      <label class="border-checkbox-label" for="checkbox_analista">Es un Analista</label>
+                      <ng-template #tipAnalista>Sí marcas está casilla este usuario solo podrá acceder a la información relativa al registro de resultados </ng-template>
+                      <i class="fa fa-question-circle-o text-gray text-help" [ngbTooltip]="tipAnalista"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox" type="checkbox" [disabled]="item.principal" id="checkbox_recepcionM" [(ngModel)]="item.recepcionM"
+                        name="checkbox_recepcionM" [checked]="item.recepcionM" formControlName="recepcionM">
+                      <label class="border-checkbox-label" for="checkbox_recepcionM">Recepción Muestras</label>
+                      <ng-template #tipMuestra>Sí marcas está casilla este usuario solo podrá acceder a los modulos de recepción de muestras </ng-template>
+                      <i class="fa fa-question-circle-o text-gray text-help" [ngbTooltip]="tipMuestra"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="border-checkbox-section">
+                    <div class="border-checkbox-group border-checkbox-group-primary">
+                      <input class="border-checkbox"  type="checkbox" [disabled]="item.infofinanciera" id="checkbox_infofinanciera" [(ngModel)]="item.infofinanciera"
+                        name="checkbox_infofinanciera" [checked]="item.infofinanciera" formControlName="infofinanciera">
+                      <label class="border-checkbox-label" title="Permitir Visualizar Información Financiera" for="checkbox_infofinanciera">Ocultar Información Financiera</label>
+                      <ng-template #tipInfoFinanciera>Sí marcas está casilla toda información relativa a dinero no estará disponible para esté usuario</ng-template>
+                      <i class="fa fa-question-circle-o text-gray text-help" [ngbTooltip]="tipInfoFinanciera"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 mt-3"  *ngIf="catchRol">
+                  <div class="form-group">
+                    <label for="">Rol</label>
+                    <select name="" id="" formControlName="rol" [(ngModel)]="item.rol" class="form-control">
+                      <option value="" >Seleccione Rol</option>
+                      <option value="{{rol._id}}" *ngFor="let rol of Roles">{{rol.nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+            <!-- end of card-body -->
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+    <div class="card">
+      <div class="card-body text-right">
+        <div class="btn-group floar-rigth">
+
+          <button (click)="guardar($event)" class="btn btn-primary md-" [disabled]="!form.valid"><i
+              class="fa fa-plus"></i>Crear usuario</button>
+          <button (click)="closeMyModalbtn($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+            Cerrar!</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>
+
+<!-- BLOQUE CUENTA NO ACTIVA -->
+<div *ngIf="!user['cuentaActiva']" class="page-body">
+  <h1 class="text-success">Cuenta creada</h1>
+  <div class="card">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+      <div class="col-md-12 p-lg-12 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Tu cuenta estará activa dentro de poco</h1>
+        <p class="lead font-weight-normal">Se há creado tu cuenta con exito, en breve nos pondremos en contacto para ayudarte a empezar tu experiencia</p>
+        <a class="btn btn-outline-secondary" href="mailto:preguntas@labcontrol.co">Tienes preguntas, escribenos</a>
+      </div>
+      <div class="product-device shadow-sm d-none d-md-block"></div>
+      <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    </div>
+  </div>
+</div>

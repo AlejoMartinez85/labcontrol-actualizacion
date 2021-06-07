@@ -1,0 +1,104 @@
+<wizard navigationMode="free" navBarLayout="large-filled-symbols">
+  <wizard-step stepTitle="Parametros" optionalStep navigationSymbol="1">
+    <div class="container-fluid">
+      <div class="col-lg-12" *ngIf="muestraSeleccionada">
+        <app-incertidumbre-detalle [parametro]="muestraSeleccionada" [validacionCheck]='validacionCheck' [parametroresult]="parametroresult"></app-incertidumbre-detalle>
+      </div>
+    </div>
+  </wizard-step>
+  <wizard-step stepTitle="Incertidumbre" navigationSymbol="2">
+    <div class="col-sm-12" >
+      <div class="md-tabs ">
+          <ngb-tabset (tabChange)="beforeChange($event)">
+              <ngb-tab *ngFor="let variable of muestraSeleccionada?.variables;index as i;"
+                  id="tab-{{variable._id}}">
+                  <ng-template ngbTabTitle class="col-lg-3"><i
+                          class="icofont icofont-molecule"></i> <span class="font-weight-bold">
+                          {{variable.simbolo}}</span></ng-template>
+                  <!-- cambio: Se puso etiqueta span y negrilla para hacer mas grande titulo tab -->
+                  <ng-template ngbTabContent>
+                      <div [@fadeInOutTranslate] class="m-t-15">
+                          <app-incertidumbre-detalle-var [item]="variable"></app-incertidumbre-detalle-var>
+                      </div>
+                  </ng-template>
+              </ngb-tab>
+          </ngb-tabset>
+      </div>
+  </div>
+  </wizard-step>
+  <wizard-step stepTitle="Utotal" navigationSymbol="3">
+    <div class="card" *ngIf="muestraSeleccionada!=undefined">
+      <div class="card-header">
+        <h4 class="card-header-text">Utotal </h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <label class="col-sm-2 col-form-label">K del certificado</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" [(ngModel)]="muestraSeleccionada.parametro.kcertificado"
+              placeholder="K del certificado"  [disabled]="true">
+          </div>
+          <label class="col-sm-2 col-form-label"># Decimales</label>
+          <div class="col-sm-2">
+            <input type="number" class="form-control" [(ngModel)]="muestraSeleccionada.parametro.ndecimales"
+              placeholder="Numero decimales"  [disabled]="true">
+          </div>
+          
+          <div class="col-sm-6">
+            <label class="col-form-label">Uc:{{muestraSeleccionada.uc}}</label>
+            <strong></strong><br />
+            <label class="col-form-label">U:{{muestraSeleccionada.u}}</label>
+            <strong></strong>
+          </div>
+          <div class="col-sm-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Simbolo</th>
+                  <th>Valor </th>
+                  <th>Coeficiente </th>
+                  <th>Incertidumbre </th>
+    
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let variable of muestraSeleccionada.variables;index as i;">
+                  <td>{{i+1}}</td>
+                  <td>
+                    {{variable.nombre}}
+                  </td>
+                  <td>
+                    {{variable.simbolo}}
+                  </td>
+                  <td>
+                    <!-- <input type="number" class="form-control" name="var_valor{{i}}"
+                      
+                                                            placeholder="Valor " [(ngModel)]="variable.valor"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            (input)="actualizardatos()"> -->
+                                                            {{variable.valor}}
+                  </td>
+                  <td>
+                    {{variable.coeficiente}}
+                  </td>
+                  <td>
+                    {{variable.incertidumbre}}
+                  </td>
+                </tr>
+    
+              </tbody>
+    
+            </table>
+          </div>
+          
+    
+    
+    
+        </div>
+      </div>
+    
+    </div>
+  </wizard-step>
+</wizard>

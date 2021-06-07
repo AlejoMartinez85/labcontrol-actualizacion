@@ -1,0 +1,424 @@
+<div *ngIf="user.cuentaActiva; else elseBlock" class="page-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-gray my-5">Configuración Reporte Automatico</h1>
+      </div>
+      <div class="col-sm-12">
+        <app-card [cardOptionBlock]="true">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 text-right" *ngIf="restriccionCreacion">
+                <button (click)="openModal('crear-estructura')" class="btn btn-success">Crear Estructura</button>
+              </div>
+              <div class="col-12" *ngIf="!restriccionCreacion">
+                <p><span class="code text-danger">Contactanos para habilitar más Estructuras</span></p>
+              </div>
+            </div>
+          </div>
+        </app-card>
+        <app-card [cardOptionBlock]="true">
+          <h4>Muestras reportadas por hoja</h4>
+
+          <form>
+            <div class="form-group">
+              <div class="input-group mb-2">
+                <input type="number" class="form-control" id="inlineFormInputGroup" placeholder="Cantidad" #cantidad>
+                <div class="input-group-prepend" (click)="cantida(cantidad);">
+                  <div class="input-group-text"><i class="icofont icofont-gears mr-1"></i> Guardar</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </app-card>
+      </div>
+      <div class="col-12">
+        <app-card [title]="" [cardOptionBlock]="true">
+          <div class="row mb-5">
+            <div class="col-12 col-lg-6">
+              <h4 class="mb-3">Listado de Estructuras</h4>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Buscar Estructura"
+                  (keyup)="buscarEstructura($event);">
+                <div class="input-group-append" (click)="cargaEstructuras(0)">
+                  <span class="input-group-text mt-0" id="basic-addon2">
+                    <i class="icofont icofont-close-line"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Fecha Creación</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let estructura of estructuras; let i = index">
+                  <td>{{ i+1 }}</td>
+                  <td>{{ estructura?.nombre }}</td>
+                  <td>{{ estructura?.updatedAt | date }}</td>
+                  <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      <button class="btn btn-info" (click)="getId(estructura?._id, 'ver')">
+                        <span class="icofont icofont-eye"></span>
+                      </button>
+                      <a class="btn btn-warning" (click)="getId(estructura?._id, 'edit')">
+                        <span class="icofont icofont-pencil text-white"></span>
+                      </a>
+                      <button type="button" class="btn btn-danger " (click)="deleteEstructura(estructura?._id);">
+                        <span class="icofont icofont-ui-delete text-white"></span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><button class="page-link" (click)="cargaEstructuras(desde - 10)" [disabled]="!estado">Anterior</button></li>
+              <li class="page-item"><button class="page-link" (click)="cargaEstructuras(desde + 10)" [disabled]="!continue">Siguiente</button></li>
+            </ul>
+          </nav>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Cuando no se cuenta con la cuenta activa -->
+<ng-template #elseBlock>
+  <div class="page-body">
+    <h1 class="text-success">Cuenta creada</h1>
+    <div class="card">
+      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+        <div class="col-md-12 p-lg-12 mx-auto my-5">
+          <h1 class="display-4 font-weight-normal">Tu cuenta estará activa dentro de poco</h1>
+          <p class="lead font-weight-normal">Se há creado tu cuenta con exito, en breve nos pondremos en contacto
+            para
+            ayudarte a empezar tu experiencia</p>
+          <a class="btn btn-outline-secondary" href="mailto:preguntas@labcontrol.co">Tienes preguntas,
+            escribenos</a>
+        </div>
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<app-modal-animation [modalID]="'crear-estructura'" [modalClass]="'md-crear-estructura md-large'">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3>Crear Estructura</h3>
+      </div>
+      <div class="col-12">
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+          <form [formGroup]="formEncavezados">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" [formControlName]="'nombre'" placeholder="Nombre" class="form-control">
+            </div>
+            <div class="form-group">
+              <h6 class="text-center"> Header Reporte</h6>
+              <hr>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Insertar variables</label>
+                <div class="col-sm-7">
+                  <select name="select" (change)="addVariable($event,'headerCreate') " class="form-control">
+                    <option value="">Seleccione </option>
+                    <option value="Codigo Informe">Código Informe</option>
+                    <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                    <option value="Cliente nombre">Nombre Cliente</option>
+                    <option value="Cliente Telefono">Teléfono Cliente</option>
+                    <option value="Cliente Numero de Identificacion">Número de Identificación Cliente</option>
+                    <option value="Cliente Contacto">Contacto Cliente</option>
+                    <option value="Cliente Direccion">Dirección Cliente</option>
+                    <option value="Cliente Ciudad">Ciudad Cliente</option>
+                    <option value="Cliente Departamento">Departamento Cliente</option>
+                    <option value="Fecha solicitud">Fecha solicitud</option>
+                    <option value="Fecha Ensayo">Fecha Ensayo</option>
+                    <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                    <option value="Fecha recepcion">Fecha recepción</option>
+                    <option value="Fecha de analisis">Fecha de análisis</option>
+                    <option value="Firma Imagen">Firma Electronica</option>
+                    <option value="Firma el informe">Nombre persona que firma</option>
+                    <option value="Cargo">Cargo</option>
+                    <option value="Fecha de hoy">Fecha de hoy</option>
+                    <option value="Telefono Responsable">Teléfono Responsable</option>
+                    <option value="Email Responsable">Email Responsable</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <button class="btn btn-primary btn-outline-primary btn-block"
+                    (click)="openMyModal('effect-3','headerCreate')"><i class="fa fa-image"></i> insertar Imagen</button>
+                </div>
+                <div class="col-12 mt-3">
+                  <ckeditor [config]="ckeconfig" #headerCreate [formControlName]="'header'"></ckeditor>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+							<h6 class="text-center"> Footer Reporte</h6>
+              <hr>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Insertar variables</label>
+                <div class="col-sm-7">
+                  <select name="select" (change)="addVariable($event,'footerCreate') " class="form-control">
+                    <option value="">Seleccione </option>
+                    <option value="Codigo Informe">Código Informe</option>
+                    <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                    <option value="Cliente nombre">Nombre Cliente</option>
+                    <option value="Cliente Telefono">Teléfono Cliente</option>
+                    <option value="Cliente Numero de Identificacion">Número de Identificación Cliente</option>
+                    <option value="Cliente Contacto">Contacto Cliente</option>
+                    <option value="Cliente Direccion">Dirección Cliente</option>
+                    <option value="Cliente Ciudad">Ciudad Cliente</option>
+                    <option value="Cliente Departamento">Departamento Cliente</option>
+                    <option value="Fecha solicitud">Fecha solicitud</option>
+                    <option value="Fecha Ensayo">Fecha Ensayo</option>
+                    <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                    <option value="Fecha recepcion">Fecha recepción</option>
+                    <option value="Fecha de analisis">Fecha de análisis</option>
+                    <option value="Firma Imagen">Firma Electronica</option>
+                    <option value="Firma el informe">Nombre persona que firma</option>
+                    <option value="Cargo">Cargo</option>
+                    <option value="Fecha de hoy">Fecha de hoy</option>
+                    <option value="Telefono Responsable">Teléfono Responsable</option>
+                    <option value="Email Responsable">Email Responsable</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <button class="btn btn-primary btn-outline-primary btn-block"
+                    (click)="openMyModal('effect-3','footerCreate')"><i class="fa fa-image"></i> insertar Imagen</button>
+                </div>
+                <div class="col-12 mt-3">
+                  <ckeditor [config]="ckeconfig" #footerCreate [formControlName]="'footer'"></ckeditor>
+                </div>
+              </div>
+						</div>
+          </form>
+        </perfect-scrollbar>
+      </div>
+      <div class="col-12">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-success" (click)="GuardarForm()">Guardar</button>
+          <button type="button" class="btn btn-danger" (click)="closeModal('crear-estructura')">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-animation>
+<app-modal-animation [modalID]="'edit-estructura'" [modalClass]="'md-edit-estructura md-large'">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3>Editar Estructura</h3>
+      </div>
+      <div class="col-12">
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+          <form [formGroup]="formEncavezadosEdit">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" [formControlName]="'nombre'" placeholder="Nombre" class="form-control">
+              <input type="hidden" id="nombre" [formControlName]="'_id'" placeholder="Nombre" class="form-control">
+            </div>
+            <div class="form-group">
+              <h6 class="text-center"> Header Reporte</h6>
+              <hr>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Insertar variables</label>
+                <div class="col-sm-7">
+                  <select name="select" (change)="addVariable($event,'headerEdit') " class="form-control">
+                    <option value="">Seleccione </option>
+                    <option value="Codigo Informe">Código Informe</option>
+                    <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                    <option value="Cliente nombre">Nombre Cliente</option>
+                    <option value="Cliente Telefono">Teléfono Cliente</option>
+                    <option value="Cliente Numero de Identificacion">Número de Identificación Cliente</option>
+                    <option value="Cliente Contacto">Contacto Cliente</option>
+                    <option value="Cliente Direccion">Dirección Cliente</option>
+                    <option value="Cliente Ciudad">Ciudad Cliente</option>
+                    <option value="Cliente Departamento">Departamento Cliente</option>
+                    <option value="Fecha solicitud">Fecha solicitud</option>
+                    <option value="Fecha Ensayo">Fecha Ensayo</option>
+                    <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                    <option value="Fecha recepcion">Fecha recepción</option>
+                    <option value="Fecha de analisis">Fecha de análisis</option>
+                    <option value="Firma Imagen">Firma Electronica</option>
+                    <option value="Firma el informe">Nombre persona que firma</option>
+                    <option value="Cargo">Cargo</option>
+                    <option value="Fecha de hoy">Fecha de hoy</option>
+                    <option value="Telefono Responsable">Teléfono Responsable</option>
+                    <option value="Email Responsable">Email Responsable</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <button class="btn btn-primary btn-outline-primary btn-block"
+                    (click)="openMyModal('effect-3','headerEdit')"><i class="fa fa-image"></i> insertar Imagen</button>
+                </div>
+                <div class="col-12 mt-3">
+                  <ckeditor [config]="ckeconfig" #headerEdit [formControlName]="'header'"></ckeditor>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+							<h6 class="text-center"> Footer Reporte</h6>
+              <hr>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Insertar variables</label>
+                <div class="col-sm-7">
+                  <select name="select" (change)="addVariable($event,'footerEdit') " class="form-control">
+                    <option value="">Seleccione </option>
+                    <option value="Codigo Informe">Código Informe</option>
+                    <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                    <option value="Cliente nombre">Nombre Cliente</option>
+                    <option value="Cliente Telefono">Teléfono Cliente</option>
+                    <option value="Cliente Numero de Identificacion">Número de Identificación Cliente</option>
+                    <option value="Cliente Contacto">Contacto Cliente</option>
+                    <option value="Cliente Direccion">Dirección Cliente</option>
+                    <option value="Cliente Ciudad">Ciudad Cliente</option>
+                    <option value="Cliente Departamento">Departamento Cliente</option>
+                    <option value="Fecha solicitud">Fecha solicitud</option>
+                    <option value="Fecha Ensayo">Fecha Ensayo</option>
+                    <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                    <option value="Fecha recepcion">Fecha recepción</option>
+                    <option value="Fecha de analisis">Fecha de análisis</option>
+                    <option value="Firma Imagen">Firma Electronica</option>
+                    <option value="Firma el informe">Nombre persona que firma</option>
+                    <option value="Cargo">Cargo</option>
+                    <option value="Fecha de hoy">Fecha de hoy</option>
+                    <option value="Telefono Responsable">Teléfono Responsable</option>
+                    <option value="Email Responsable">Email Responsable</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <button class="btn btn-primary btn-outline-primary btn-block"
+                    (click)="openMyModal('effect-3','footerEdit')"><i class="fa fa-image"></i> insertar Imagen</button>
+                </div>
+                <div class="col-12 mt-3">
+                  <ckeditor [config]="ckeconfig" #footerEdit [formControlName]="'footer'"></ckeditor>
+                </div>
+              </div>
+						</div>
+          </form>
+        </perfect-scrollbar>
+      </div>
+      <div class="col-12">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-success" (click)="GuardarFormEdit()">Guardar</button>
+          <button type="button" class="btn btn-danger" (click)="closeModal('edit-estructura')">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-animation>
+<app-modal-animation [modalID]="'view-estructura'" [modalClass]="'md-view-estructura md-large'">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3 class="mb-5">Vista previa Estructura {{estructuraSingel?.nombre}}</h3>
+      </div>
+      <div class="col-12">
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <h6 id="nombre">{{estructuraSingel?.nombre}}</h6>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div>
+                  <small id="updatedAt"></small>
+                </div>
+              </div>
+              <div class="col-12">
+                <hr>
+              </div>
+              <div class="col-12 col-lg-12">
+                <h6>Encabezado</h6>
+                <div id="header"></div>
+              </div>
+              <div class="col-12 col-lg-12">
+                <h6>Pie de Página</h6>
+                <div id="footer"></div>
+              </div>
+            </div>
+          </div>
+        </perfect-scrollbar>
+      </div>
+      <div class="col-12">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-danger" (click)="closeModal('view-estructura')">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-animation>
+
+<!-- GALERIA DE IMAGENES A INSERTAR -->
+<app-modal-animation [modalID]="'effect-3'" #modaladd [modalClass]="'md-effect-3 md-large'">
+	<div class="row col-12">
+		<div class="col-12 text-center">
+			<h3>Galeria de Imagenes</h3>
+		</div>
+	</div>
+	<perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+		<div class="card">
+			<div class="card-body text-left">
+				<div class="row">
+					<div class="col-lg-12 col-xl-12 mb-2">
+						<label class="custom-file ">
+							<label class="custom-file">
+								<input type="file" ng2FileSelect [uploader]="uploader"
+									class="custom-file-input outline-primary">
+								<i class="fa fa-upload  fa-3x text-info"><span class="text-info">Subir nuevas
+										imagenes</span></i>
+							</label>
+							<p class="mt-2">
+								<ngb-progressbar type="primary" [value]="uploader.progress"></ngb-progressbar>
+							</p>
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div *ngFor="let imagen of imagenes;index as i;" class="col-lg-3 col-xl-3 ">
+						<div class="card list-view-media">
+							<div class="card-block text-center">
+								<img src="{{apiurl}}upload/files_client/{{imagen.filename}}?name={{imagen.originalname}}"
+									alt="img" class="img-fluid img-150">
+								<h6>{{imagen.originalname}}</h6>
+								<p class="text-muted m-b-15">
+									<small>{{imagen.mimetype|uppercase}}-{{imagen.size/1000|number}}KB</small>
+								</p>
+								<div class="card-footer row">
+									<button class="btn" (click)="insertarImagen(imagen)" [ngbTooltip]="tipInsertar"><i
+											class="fa fa-plus-square"></i></button>
+									<ng-template #tipInsertar>Insertar imagen</ng-template>
+									<button class="btn" (click)="delimagen(imagen)" [ngbTooltip]="tipEliminar"><i
+											class="icofont icofont-delete-alt"></i></button>
+									<ng-template #tipEliminar>Eliminar imagen</ng-template>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+	</perfect-scrollbar>
+	<button (click)="closeMyModal('effect-3')" aria-label="Close" class="md-close-btn"><i
+			class="icofont icofont-ui-close"></i></button>
+
+
+</app-modal-animation>

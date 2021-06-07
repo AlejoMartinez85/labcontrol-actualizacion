@@ -1,0 +1,195 @@
+<h3>Reporte de resultados</h3>
+
+<!-- INFORMACION DEL REPORTE -->
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Información del Informe de resultados </h4>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="formp">
+
+      <div class="form-group row">
+
+        <label class="col-sm-2 col-form-label">Código Informe</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" formControlName="codigoinforme"
+            [(ngModel)]="ensayo.reporte.codigoinforme" placeholder="Codigo Informe">
+        </div>
+
+        <label *ngIf="ensayo.estado == 'En Reporte' || ensayo.estado == 'Reportado'"
+          class="col-sm-2 col-form-label">Estado</label>
+        <div *ngIf="ensayo.estado == 'En Reporte' || ensayo.estado == 'Reportado'" class="col-sm-4 text-right">
+          <label class="label label-lg font-weight-bold"
+            [ngClass]="{'label-success': ensayo.estado=='Reportado','label-primary': ensayo.estado=='En Reporte'}">
+            {{ensayo.estado}} </label>
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Firma el informe </label>
+        <div class="col-sm-4">
+          <ng-select [ngClass]="'ng-select'" formControlName="usufirma" placeholder="Firma el informe "
+            [options]="usuarios" [(ngModel)]="ensayo.reporte.usufirma">
+          </ng-select>
+          <div
+            *ngIf="formp.controls.usufirma.invalid && (formp.controls.usufirma.dirty || formp.controls.usufirma.touched|| submited)">
+            <div class="messages text-danger" *ngIf="formp.controls.usufirma.errors?.required">
+              Campo Requerido
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-4">
+          <div class="border-checkbox-section">
+            <div class="border-checkbox-group border-checkbox-group-primary">
+              <input class="border-checkbox" type="checkbox" id="checkbox_notificar"
+                [(ngModel)]="ensayo.reporte.notificar" name="checkbox_notificar" [checked]="ensayo.reporte.notificar"
+                formControlName="notificar">
+              <label class="border-checkbox-label" for="checkbox_notificar">Enviar un Email al cliente una vez
+                expedído</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-4">
+          <div class="border-checkbox-section">
+            <div class="border-checkbox-group border-checkbox-group-primary">
+              <input class="border-checkbox" type="checkbox" id="checkbox_ver" [(ngModel)]="ensayo.reporte.ver"
+                name="checkbox_ver" [checked]="ensayo.reporte.ver" formControlName="ver">
+              <label class="border-checkbox-label" for="checkbox_ver">Permitir al cliente visualización del
+                informe</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group row">
+        <ng-template #tipContent>
+          Informe firmado
+          <i *ngIf=" !ensayo.reporte.usufirma" class="fa fa-exclamation-triangle text-warning"></i>
+          <i *ngIf="ensayo.reporte.usufirma " class="fa fa-check-circle-o text-success"></i>
+          <br>
+          Código de informe
+          <i *ngIf=" !ensayo.reporte.codigoinforme " class="fa fa-exclamation-triangle text-warning"></i>
+          <i *ngIf=" ensayo.reporte.codigoinforme " class="fa fa-check-circle-o text-success"></i>
+
+        </ng-template>
+
+      </div>
+      <!-- se puso alerta en antes de publicar para explicar que significa esto  -->
+
+    </form>
+  </div>
+</div>
+<!-- FIN INFORMACION DEL REPORTE -->
+
+<!-- VISUALIZACIÓN DE RESULTADOS -->
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Vista previa del informe </h4>
+    <br>
+  </div>
+  <div class="card-body text-left">
+    <div class="btn-group d-flex justify-content-between">
+
+      <a id="btnVistaPrevia" routerLink="/ensayos/vistaprevia/{{ensayo._id}}" target="_blank"
+        class="btn btn-primary md-"><i class="icofont icofont-printe"></i>Vista de Impresión</a>
+      <button class="btn btn-primary" (click)="subirReposteManual()" *ngIf="!reporteManual">Subir Reporte
+        manual</button>
+      <button class="btn btn-primary" (click)="nosubirReposteManual()" *ngIf="reporteManual">No subir Reporte
+        manual</button>
+    </div>
+    <hr>
+    <div class=" row">
+      <div class="col-sm-12" *ngIf="ensayo">
+        <app-resultado-view *ngIf="!reporteManual" [idensayo]="ensayo._id" [print]="false"
+          (saveData)="reloadensayo($event)"></app-resultado-view>
+      </div>
+      <div class="col-12" *ngIf="reporteManual">
+        <label for="imagen" class="btn btn-info">
+          Subir PDF
+        </label>
+        <input type="file" id="imagen" class="hidden" ng2FileSelect [uploader]="uploader">
+        <pdf-viewer [src]="pdf" [show-all]="true" [page]="1" [ngStyle]="estilos"></pdf-viewer>
+      </div>
+    </div>
+    <div class="float-right"><button id="btnPublicar" [ngbTooltip]="tipContent" (click)="publicar($event,2)"
+        class="btn btn-primary font-btn-medium md-" type="button"><i class="icofont fa fa-share-alt "></i> <span
+          style="font-size: 16px;">Expedír
+          Informe de resultados {{ensayo.reporte.codigoinforme}}</span></button>
+    </div>
+  </div>
+</div>
+<!-- FIN VISUALIZACIÓN DE RESULTADOS -->
+
+<!-- ADJUNTOS -->
+<div class="card">
+  <div class="card-body ">
+    <app-cargar-archivos [ensayo]="ensayo" [lab]="true" [tipo]="'reporte'"
+      [info]="'Documentos adjuntos que se mostraran en el reporte'" (uploadfile)="uploadfile($event)">
+    </app-cargar-archivos>
+  </div>
+</div>
+<!-- FIN ADJUNTOS -->
+
+<!-- BOTONES GUARDAR Y CANCELAR -->
+<div class="card">
+  <div class="card-body text-right">
+    <div class="btn-group floar-rigth">
+
+      <button (click)="guardarEnsayo($event,1)" type="button" class="btn btn-primary md-"><i
+          class="icofont icofont-save"></i> <span style="font-size: 16px;">Guardar
+          y continuar despues</span> </button>
+      <button (click)="closeMyModal($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+        <span style="font-size: 16px;">Cerrar!</span> </button>
+    </div>
+  </div>
+</div>
+<!-- FIN BOTONES GUARDAR Y CANCELAR -->
+
+<!-- INICIO CARD NAVEGACION -->
+<div *ngIf="ensayo.estado == 'En Reporte' " class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Navegación </h4>
+
+    <ng-template #tipNavegacion>En este apartado podrás decidir si estas listo para expedír el informe final de
+      resultados</ng-template>
+    <i class="fa fa-question-circle-o text-gray" [ngbTooltip]="tipNavegacion"></i>
+
+  </div>
+
+  <div class="card-body  d-flex  justify-content-between">
+    <div class="col-8">
+      <p *ngIf="showNavegacion">
+        Al Expedir informe: Tus resultados así como toda la información que ingresaste se incluira en tú informe, se
+        dara por terminado el proceso de reporte y con este se expedirá el informe final. Quieres continuar ?
+      </p>
+    </div>
+
+    <div class="btn-group float-rigth text-right">
+
+      <!-- INICIO LOGICA TOOLTIP VALIDACION QUE ENSAYO TENGA CODIGO,MUESTRAS,PARAMETROS -->
+      <ng-template #tipContent>
+        Informe firmado
+        <i *ngIf=" !ensayo.reporte.usufirma" class="fa fa-exclamation-triangle text-warning"></i>
+        <i *ngIf="ensayo.reporte.usufirma " class="fa fa-check-circle-o text-success"></i>
+        <br>
+        Código de informe
+        <i *ngIf=" !ensayo.reporte.codigoinforme " class="fa fa-exclamation-triangle text-warning"></i>
+        <i *ngIf=" ensayo.reporte.codigoinforme " class="fa fa-check-circle-o text-success"></i>
+
+      </ng-template>
+      <!-- INICIO LOGICA TOOLTIP VALIDACION QUE ENSAYO TENGA CODIGO,MUESTRAS,PARAMETROS -->
+
+      <button (click)="pasarAPublicar() " (mouseover)="showContenidoNavegacion()" (mouseout)="showContenidoNavegacion()"
+        class="btn btn-success md-" [ngbTooltip]="tipContent"><span class="btn  md- ">Expedír informe
+          {{ensayo.reporte.codigoinforme}}</span></button>
+    </div>
+  </div>
+</div>
+<!-- FIN CARD NAVEGACION -->
+
+<app-preloader *ngIf="preloader"></app-preloader>

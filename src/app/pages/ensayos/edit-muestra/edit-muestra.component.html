@@ -1,0 +1,101 @@
+<div class="card">
+  <div class="card-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <h4> Muestra #{{ Muestra['codigo'] }}</h4>
+        </div>
+        <div class="col-12 col-lg-6 text-right">
+          <button class="btn btn-danger" (click)="eliminarMuestra(Muestra['_id'])"> Eliminar Muestra #{{ Muestra['codigo'] }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-lg-12">
+          <form (ngSubmit)="editarForm()" [formGroup]="formaMuestras">
+            <div class="row">
+              <div class="col-12 col-lg-4">
+                <h6 class="text-center">Selecciona una imagen</h6>
+                
+                <label for="imagen">
+                  <img [src]="imagePath" alt="" class="img-fluid cursor-pioter">
+                </label>
+                <input type="file" id="imagen"  class="hidden" ng2FileSelect [uploader]="uploader"> 
+                <input type="hidden" [formControlName]="'imagen_perfil'">
+              </div>
+              <div class="col-12 col-lg-8">
+                <div class="form-group">
+                  <label for="codigo">Código</label>
+                  <input type="text" id="codigo" [formControlName]="'codigo'" class="form-control" placeholder="Código" aria-describedby="codigo">
+                </div>
+                <div class="form-group">
+                  <label for="descripcion">Descripción</label>
+                  <input type="text" id="descripcion" [formControlName]="'descripcion'" class="form-control" placeholder="Descripción"
+                    aria-describedby="descripcion">
+                </div>
+                <div class="form-group">
+                  <label for="fecha_ingreso">Fecha de ingreso</label>
+                  <input type="date" name="" id="fecha_ingreso" [formControlName]="'fecha_ingreso'" class="form-control" placeholder="Fecha de ingreso"
+                    aria-describedby="fecha_ingreso">
+                </div>
+                <div class="form-group">
+                  <label for="observaciones">Observaciones</label>
+                  <textarea name="" class="form-control" [formControlName]="'observaciones'" id="observaciones" cols="30" rows="3" placeholder="Observaciones"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="submit" class="btn btn-success d-inline-block">Editar Muestra</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <h4>Cargar Archivos a la muestras</h4>
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <app-cargar-archivos [lab]="'true'" [muestraTitulo]="'Cargar archivos'" [tituloarchivosCargados]="'Archivos cargados'" [info]="''" [informacionbaner]="''" (uploadfile)="uploadfile1($event)" [ensayo]="ensayo">
+      </app-cargar-archivos>
+    </div>
+    <div class="form-goup">
+      <button class="btn btn-success" (click)="GuardarArchivos()">Guardar Archivos</button>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <h4>Archivos de las muestras</h4>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <td>Nombre</td>
+          <td>Eliminar</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let archivo of archivosMuestrasbd">
+          <td><a href="{{archivo.url}}" download="{{archivo.nombre}}">{{archivo.nombre}}</a></td>
+          <td>
+            <button class="btn btn-danger" (click)="eliminarArchivo(archivo._id)">
+              <span class="font-weight-bold">
+                <i class="fa fa fa-trash m-0"></i>
+              </span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

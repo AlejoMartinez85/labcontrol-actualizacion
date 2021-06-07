@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-header-text">Estadisticas</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12 col-lg-5">
+        <app-card [title]="'Facturas'" [headerContent]="'Informacion de vigencias de facturas'">
+          <chart [type]="type4" [data]="data4" #chartfacturas></chart>
+        </app-card>
+      </div>
+      <div class="col-md-12 col-lg-7" *ngIf="user.tercero.tipo!=1">
+        <app-card [title]="'Ventas'"
+          [headerContent]="'Estadisticas de ventas de los ultimos meses'">
+          <chart [type]="type6" [data]="data5" [options]="options7" #charventas></chart>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

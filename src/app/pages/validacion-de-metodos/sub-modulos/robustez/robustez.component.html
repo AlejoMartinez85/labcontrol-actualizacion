@@ -1,0 +1,185 @@
+<div class="card-header">
+    <div class="conatiner-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h6 class="m-0">Robustez</h6>
+            </div>
+            <div class="col-12 col-lg-2 text-right">
+                <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+          <span class="icofont icofont-ui-edit"></span>
+        </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <form [formGroup]="formaRobustez">
+            <div class="form-group">
+                <label for="">Unidades:</label>
+                <input type="text" *ngIf="edit" type="text" [formControlName]="'unidad'" class="form-control">
+                <span *ngIf="!edit">{{formaRobustez.value.unidad}}</span>
+            </div>
+            <table class="table table-bordere table-sm">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td colspan="3"></td>
+                        <td>Ensayo 1</td>
+                        <td>Ensayo 2</td>
+                        <td>Ensayo 3</td>
+                        <td>Ensayo 4</td>
+                        <td>Ensayo 5</td>
+                        <td>Ensayo 6</td>
+                        <td>Ensayo 7</td>
+                        <td>Ensayo 8</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr [ngClass]="{'bg-danger': X_x[0] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor1Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor1Nombre}}</span></td>
+                        <td>A,a</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor1Va'"><span *ngIf="!edit">{{formaRobustez.value.valor1Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor1Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor1Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor1Va}}</td>
+                        <td>{{formaRobustez.value.valor1Va}}</td>
+                        <td>{{formaRobustez.value.valor1Va}}</td>
+                        <td>{{formaRobustez.value.valor1Va}}</td>
+                        <td>{{formaRobustez.value.valor1Vb}}</td>
+                        <td>{{formaRobustez.value.valor1Vb}}</td>
+                        <td>{{formaRobustez.value.valor1Vb}}</td>
+                        <td>{{formaRobustez.value.valor1Vb}}</td>
+                        <td>
+                            <div *ngIf="X_x[0] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1>No Sensible</ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[1] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor2Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor2Nombre}}</span></td>
+                        <td>B,b</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor2Va'"><span *ngIf="!edit">{{formaRobustez.value.valor2Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor2Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor2Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor2Va}}</td>
+                        <td>{{formaRobustez.value.valor2Va}}</td>
+                        <td>{{formaRobustez.value.valor2Va}}</td>
+                        <td>{{formaRobustez.value.valor2Vb}}</td>
+                        <td>{{formaRobustez.value.valor2Va}}</td>
+                        <td>{{formaRobustez.value.valor2Vb}}</td>
+                        <td>{{formaRobustez.value.valor2Vb}}</td>
+                        <td>{{formaRobustez.value.valor2Vb}}</td>
+                        <td>
+                            <div *ngIf="X_x[1] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1><span class="text-success">No Sensible</span></ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[2] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor3Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor3Nombre}}</span></td>
+                        <td>C,c</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor3Va'"><span *ngIf="!edit">{{formaRobustez.value.valor3Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor3Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor3Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor3Va}}</td>
+                        <td>{{formaRobustez.value.valor3Vb}}</td>
+                        <td>{{formaRobustez.value.valor3Va}}</td>
+                        <td>{{formaRobustez.value.valor3Vb}}</td>
+                        <td>{{formaRobustez.value.valor3Va}}</td>
+                        <td>{{formaRobustez.value.valor3Vb}}</td>
+                        <td>{{formaRobustez.value.valor3Va}}</td>
+                        <td>{{formaRobustez.value.valor3Vb}}</td>
+                        <td>
+                            <div *ngIf="X_x[2] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1><span class="text-success">No Sensible</span></ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[3] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor4Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor4Nombre}}</span></td>
+                        <td>D,d</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor4Va'"><span *ngIf="!edit">{{formaRobustez.value.valor4Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor4Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor4Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor4Va}}</td>
+                        <td>{{formaRobustez.value.valor4Va}}</td>
+                        <td>{{formaRobustez.value.valor4Vb}}</td>
+                        <td>{{formaRobustez.value.valor4Vb}}</td>
+                        <td>{{formaRobustez.value.valor4Vb}}</td>
+                        <td>{{formaRobustez.value.valor4Vb}}</td>
+                        <td>{{formaRobustez.value.valor4Va}}</td>
+                        <td>{{formaRobustez.value.valor4Va}}</td>
+                        <td>
+                            <div *ngIf="X_x[3] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1><span class="text-success">No Sensible</span></ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[4] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor5Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor5Nombre}}</span></td>
+                        <td>E,e</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor5Va'"><span *ngIf="!edit">{{formaRobustez.value.valor5Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor5Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor5Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor5Va}}</td>
+                        <td>{{formaRobustez.value.valor5Vb}}</td>
+                        <td>{{formaRobustez.value.valor5Va}}</td>
+                        <td>{{formaRobustez.value.valor5Vb}}</td>
+                        <td>{{formaRobustez.value.valor5Vb}}</td>
+                        <td>{{formaRobustez.value.valor5Va}}</td>
+                        <td>{{formaRobustez.value.valor5Vb}}</td>
+                        <td>{{formaRobustez.value.valor5Va}}</td>
+                        <td>
+                            <div *ngIf="X_x[4] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1><span class="text-success">No Sensible</span></ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[5] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor6Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor6Nombre}}</span></td>
+                        <td>F,f</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor6Va'"><span *ngIf="!edit">{{formaRobustez.value.valor6Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor6Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor6Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor6Va}}</td>
+                        <td>{{formaRobustez.value.valor6Vb}}</td>
+                        <td>{{formaRobustez.value.valor6Vb}}</td>
+                        <td>{{formaRobustez.value.valor6Va}}</td>
+                        <td>{{formaRobustez.value.valor6Va}}</td>
+                        <td>{{formaRobustez.value.valor6Vb}}</td>
+                        <td>{{formaRobustez.value.valor6Vb}}</td>
+                        <td>{{formaRobustez.value.valor6Va}}</td>
+                        <td>
+                            <div *ngIf="X_x[5] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1><span class="text-success">No Sensible</span></ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[6] > RobustezCritica}">
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor7Nombre'"><span *ngIf="!edit">{{formaRobustez.value.valor7Nombre}}</span></td>
+                        <td>G,g</td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor7Va'"><span *ngIf="!edit">{{formaRobustez.value.valor7Va}}</span></td>
+                        <td><input *ngIf="edit" type="text" [formControlName]="'valor7Vb'"><span *ngIf="!edit">{{formaRobustez.value.valor7Vb}}</span></td>
+                        <td>{{formaRobustez.value.valor7Va}}</td>
+                        <td>{{formaRobustez.value.valor7Vb}}</td>
+                        <td>{{formaRobustez.value.valor7Vb}}</td>
+                        <td>{{formaRobustez.value.valor7Va}}</td>
+                        <td>{{formaRobustez.value.valor7Vb}}</td>
+                        <td>{{formaRobustez.value.valor7Va}}</td>
+                        <td>{{formaRobustez.value.valor7Va}}</td>
+                        <td>{{formaRobustez.value.valor7Vb}}</td>
+                        <td>
+                            <div *ngIf="X_x[6] > RobustezCritica; else elseBlock1">Sensible</div>
+                            <ng-template #elseBlock1><span class="text-success">No Sensible</span></ng-template>
+                        </td>
+                    </tr>
+                    <tr [ngClass]="{'bg-danger': X_x[7] > RobustezCritica}">
+                        <td colspan="4"></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato1'"><span *ngIf="!edit">{{formaRobustez.value.dato1}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato2'"><span *ngIf="!edit">{{formaRobustez.value.dato2}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato3'"><span *ngIf="!edit">{{formaRobustez.value.dato3}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato4'"><span *ngIf="!edit">{{formaRobustez.value.dato4}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato5'"><span *ngIf="!edit">{{formaRobustez.value.dato5}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato6'"><span *ngIf="!edit">{{formaRobustez.value.dato6}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato7'"><span *ngIf="!edit">{{formaRobustez.value.dato7}}</span></td>
+                        <td><input *ngIf="edit" type="number" [formControlName]="'dato8'"><span *ngIf="!edit">{{formaRobustez.value.dato8}}</span></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <hr>
+    <button class="btn btn-success" (click)="calculaRobustez()">Calcular</button>
+    <button class="btn btn-success" (click)="guardarRobustez()" *ngIf="edit">Guardar / Editar</button>
+</div>

@@ -1,0 +1,318 @@
+<div *ngIf="user.cuentaActiva" class="page-body">
+  <h1 class="text-gray">Ensayos</h1>
+  <br>
+  <div class="row">
+    <!-- order-card start -->
+
+    <div *ngIf="tabactive == 'tab-proceso'" class="col-md-6 col-xl-6">
+      <div class="card bg-c-yellow order-card">
+        <div class="card-block">
+          <h5 class="m-b-20" style="font-weight: 400;">Solicitudes en ensayo</h5>
+          <h2 class="text-right"><i
+              class="fa fa-flask f-left"></i><span>{{paso2enproceso.length}}</span>
+          </h2>
+          <p *ngIf="!user.analista || !user.infofinanciera" class="m-b-0">Total En ensayo<span
+              class="f-right">${{totalpaso2|number: '1.0-0'}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="tabactive == 'tab-finalizado'" class="col-md-6 col-xl-6">
+      <div class="card bg-c-green order-card">
+        <div class="card-block">
+          <h5 class="m-b-20" style="font-weight: 400;">Total Solicitudes Completadas</h5>
+          <h2 class="text-right"><i
+              class="icofont icofont-check-alt f-left" ></i><span>{{paso2completados?.length}}</span>
+          </h2>
+          <p *ngIf="!user.analista || !user.infofinanciera" class="m-b-0">Total Completado<span class="f-right">${{totalCompletado|number: '1.0-0'}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-12">
+      <app-card [cardOptionBlock]="true">
+        <a class="btn btn-info font-weight-bold" href="https://scaner-lab-control.stackblitz.io" target="_blank">
+          <i class="fa fa-plus"></i> Escanear Código QR
+        </a>
+      </app-card>
+    </div>
+
+
+
+    <!-- tabs card start -->
+    <div class="col-sm-12">
+      <app-card [title]="" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <h4 style="font-weight: 500;">Solicitudes en proceso de ensayo</h4>
+        <br>
+        <div class="md-tabs">
+          <ngb-tabset (tabChange)="beforeChange($event)">
+
+            <ngb-tab id="tab-proceso">
+              <ng-template ngbTabTitle><i class="fa fa-flask"></i> En proceso</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="row">
+                    <div class="col-12 col-lg-6"></div>
+                    <div class="col-12 col-lg-6">
+                      <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Buscar Ensayos en proceso" (keyup)="buscadorpasodosEnproceso($event);">
+                          <div class="input-group-append" (click)="tabdata()">
+                              <span class="input-group-text" id="basic-addon2">
+                                  <i class="icofont icofont-close-line"></i>
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="paso2enproceso" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [scrollbarH]="true">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['nombreCliente']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      
+                      <ngx-datatable-column name="Tiempo estimado">
+                          <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                            <span class="label label-success font-weight-bold" [ngClass]="{'label-success': calcularVigencia(row)>='1','label-warning': calcularVigencia(row)=='0'
+                            ,'label-danger': calcularVigencia(row)<='-1'}"
+                            >{{calcularVigencia(row)}} dias</span>
+  
+                          </ng-template>
+                        </ngx-datatable-column>
+                      
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span >{{row.muestras?.length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                     
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span class="label label-warning font-weight-bold">{{row['estado']}}
+                         {{row.totalmuestras?.realizadas}}/{{row.totalmuestras?.total}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row, 'proceso')">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="tab-finalizado">
+              <ng-template ngbTabTitle><i class="icofont icofont-check-alt"></i> Completados</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="row">
+                    <div class="col-12 col-lg-6"></div>
+                    <div class="col-12 col-lg-6">
+                      <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Buscar Ensayos en proceso" (keyup)="buscadorpasodosCompletados($event);">
+                          <div class="input-group-append" (click)="tabdata()">
+                              <span class="input-group-text" id="basic-addon2">
+                                  <i class="icofont icofont-close-line"></i>
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="paso2completados" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['nombreCliente']}}</span>
+
+                        </ng-template>
+                      
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row.muestras?.length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+            
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span class="label label-success font-weight-bold">{{row['estado']}}
+                         {{row.totalmuestras?.realizadas}}/{{row.totalmuestras?.total}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row, '')">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- tabs card end -->
+
+    <div class="col-lg-12" *ngIf="!user.analista">
+      <app-actividad [tipoComentario]="'Ensayo'">
+       
+      </app-actividad>
+    </div>
+    
+  </div>
+</div>
+<app-modal-animation [modalID]="'effect-3'" #modaladd [modalClass]="'md-effect-3 md-large'">
+  <h3>Información solicitud de ensayo {{ensayo?.codigo}}
+  </h3>
+  <div>
+
+
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+      <div class="row">
+
+        <div class="col-lg-12">
+          <!-- Inicio barra de logica de progreso muestra estado segun etapa y muestra icono -->
+          <div class="col-lg-12 d-flex " [ngClass]="{'justify-content-start': !user.analista}">
+              <div class="col-lg-4 text-center" *ngIf="!user.analista" > 
+                <span *ngIf="ensayo.estado === 'Esperando Confirmación' || ensayo.estado == 'Cotización' || ensayo.estado === 'Aprobado'" class="label font-weight-bold" [ngClass]="{'label-primary': ensayo.estado == 'Esperando Confirmación', 'label-warning': ensayo.estado == 'Cotización', 'label-success': ensayo.estado == 'Aprobado'}">{{ensayo.estado}}</span>
+                <span *ngIf="ensayo.estado != 'Esperando Confirmación' && ensayo.estado != 'Cotización' && ensayo.estado != 'Aprobado'" class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+              </div>
+              <div class="col-lg-4 text-center">
+                <span *ngIf="ensayo.estado == 'En Proceso' || ensayo.estado == 'Completado'" class="label font-weight-bold" [ngClass]="{'label-warning': ensayo.estado == 'En Proceso', 'label-success': ensayo.estado == 'Completado'}">{{ensayo.estado}}</span>
+                <span *ngIf="ensayo.estado == 'En Reporte' || ensayo.estado == 'Reportado'" class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+              </div>
+              <div class="col-lg-4 text-center " *ngIf="!user.analista">
+                <span *ngIf="ensayo.estado == 'En Reporte'" class="label font-weight-bold" [ngClass]="{'label-primary': ensayo.estado == 'En Reporte', 'label-success': ensayo.estado == 'Reportado'}">{{ensayo.estado}}</span>
+                <span *ngIf="ensayo.estado == 'Reportado'" class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+              </div>
+            </div>
+            <!-- cambio: Se hizo una nuva logica para mostrar iconos de finalizado una vez que se vaya avanzando en el proceso de la solicitud -->
+
+          <div class="md-tabs">
+            <ngb-tabset (tabChange)="beforeChangeEnsayo($event)">
+              <ngb-tab *ngIf="!user.analista" id="solicitudTab" >
+                <ng-template ngbTabTitle><i class="icofont icofont-clock-time"></i>Paso 1: Solicitar ensayos</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="card-body">
+                      <app-solicitud [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-solicitud>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab id="resultadoTab">
+                <ng-template ngbTabTitle><i class="fa fa-flask"></i> Paso 2: Registrar resultados
+                </ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <app-orden [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-orden>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab *ngIf="!user.analista"  id="reporteTab">
+                <ng-template ngbTabTitle><i class="icofont icofont-file-alt"></i>Paso 3: Realizar informe de resultados</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="card-body">
+                      <app-pago [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-pago>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <!-- <ngb-tab *ngIf="!user.analista && !user.infofinanciera" id="pagosTab">
+                <ng-template ngbTabTitle><i class="icofont icofont-bill-alt"></i> Información de pagos
+                </ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15" *ngIf="ensayo">
+                    <div class="card-body">
+                      <app-enayoresultado [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-enayoresultado>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab> -->
+
+            </ngb-tabset>
+          </div>
+        </div>
+        <div class="col-lg-12" *ngIf="ensayo._id!=undefined">
+          <app-comentarios [ensayo_id]="ensayo?._id" [tipo]="tipocomentario"></app-comentarios>
+        </div>
+      </div>
+    </perfect-scrollbar>
+
+
+
+  </div>
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>
+
+<!-- BLOQUE CUENTA NO ACTIVA -->
+<div *ngIf="!user.cuentaActiva" class="page-body">
+  <h1 class="text-success">Cuenta creada</h1>
+  <div class="card">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+      <div class="col-md-12 p-lg-12 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Tu cuenta estará activa dentro de poco</h1>
+        <p class="lead font-weight-normal">Se há creado tu cuenta con exito, en breve nos pondremos en contacto para ayudarte a empezar tu experiencia</p>
+        <a class="btn btn-outline-secondary" href="mailto:preguntas@labcontrol.co">Tienes preguntas, escribenos</a>
+      </div>
+      <div class="product-device shadow-sm d-none d-md-block"></div>
+      <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    </div>
+  </div>
+</div>

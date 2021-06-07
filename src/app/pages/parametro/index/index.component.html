@@ -1,0 +1,648 @@
+<div *ngIf="user.cuentaActiva" class="page-body">
+    <h1 class="text-gray">Parámetros de ensayo</h1>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <app-card [cardOptionBlock]="true">
+                <div class="btn-group">
+                    <button type="button" *ngIf="permisosLocal.crear" class="btn btn-info font-btn-medium btn-sm"
+                        popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+                        (click)="openMyModal('effect-3')">
+                        <i class="fa fa-plus"></i> Crear parámetro
+                    </button>
+                    <button *ngIf="crear && permisosLocal.crear" type="button" class="btn btn-info font-btn-medium btn-sm"
+                        popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+                        (click)="openMyModal('configuracion-parametros')">
+                        <i class="icofont icofont-settings-alt"></i> Configuración de párametros
+                    </button>
+                    <button *ngIf="edit && permisosLocal.crear" type="button" class="btn btn-info font-btn-medium btn-sm"
+                        popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+                        (click)="openMyModal('configuracion-parametros-edit')">
+                        <i class="icofont icofont-settings-alt"></i> Configuración de párametros
+                    </button>
+                    <button type="button" *ngIf="permisosLocal.crear" class="btn btn-info btn-sm" popoverTitle=" Crear una solicitud de ensayo"
+                        placement="bottom" (click)="openMyModal('usuarios-masivos')">
+                        <i class="fa fa-plus"></i> Crear parámetros masivos</button>
+
+                    <button class="btn btn-success btn-sm" (click)="exportexcel()">Descargar listado en
+                        Excel</button>
+                </div>
+            </app-card>
+        </div>
+        <div class="col-sm-12">
+            <app-card [title]="" [cardOptionBlock]="true">
+                <!-- cambio: se quita title 'Información de párametros'  -->
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <h4>Lista de párametros de ensayo</h4>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Buscar Parametros"
+                                (keyup)="buscarParametros($event);">
+                            <div class="input-group-append" (click)="cargardatos()">
+                                <span class="input-group-text" id="basic-addon2">
+                                    <i class="icofont icofont-close-line"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="items" [columns]="columns" [columnMode]="'force'"
+                        [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="100" [scrollbarH]="true">
+                        <ngx-datatable-column name="{{columns[0].name}}">
+                            <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['codigo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="codigo"
+                                    [(ngModel)]="row.codigo" placeholder="{{columns[0].name}}">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[1].name}}">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['nombre']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="nombre"
+                                    [(ngModel)]="row.nombre" placeholder="{{columns[1].name}}">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[2].name}}">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']"> {{row['unidad']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" ame="unidad"
+                                    placeholder="{{columns[2].name}}" [(ngModel)]="row.unidad">
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="{{columns[3].name}}">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['metodo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="metodo"
+                                    [(ngModel)]="row.metodo" placeholder="{{columns[3].name}}">
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="{{columns[4].name}}" *ngIf="variableTecnica">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['tecnica_analitica']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="tecnica_analitica"
+                                    placeholder="{{columns[4].name}}" [(ngModel)]="row.tecnica_analitica">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[6].name}}" *ngIf="campo1">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['variable1anexo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="variable1anexo"
+                                    placeholder="{{columns[6].name}}" [(ngModel)]="row.variable1anexo">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[7].name}}" *ngIf="campo2">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['variable2anexo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="variable2anexo"
+                                    placeholder="{{columns[7].name}}" [(ngModel)]="row.variable2anexo">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[8].name}}" *ngIf="campo3">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['variable3anexo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="variable3anexo"
+                                    placeholder="{{columns[8].name}}" [(ngModel)]="row.variable3anexo">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[9].name}}" *ngIf="campo4">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['variable4anexo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="variable4anexo"
+                                    placeholder="Estado" [(ngModel)]="row.variable4anexo">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="{{columns[10].name}}" *ngIf="campo5">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span *ngIf="!row['edit']">{{row['variable5anexo']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="variable5anexo"
+                                    placeholder="{{columns[10].name}}" [(ngModel)]="row.variable5anexo">
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="{{columns[5].name}}" *ngIf="!user.analista && !user.infofinanciera">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                <span
+                                    *ngIf="!row['edit']">{{row['valor_unit']}}</span>
+                                <input type="text" *ngIf="row['edit']" class="form-control" name="valor_unit"
+                                    placeholder="{{columns[5].name}}" [(ngModel)]="row.valor_unit">
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="">
+                            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                                <div class="btn-group btn-group-sm" style="float: none;">
+                                    <button *ngIf="row['edit']" type="button" (click)="cactualizarItem(row)"
+                                        class="tabledit-edit-button btn btn-primary waves-effect waves-light"><span
+                                            class="icofont icofont-ui-check"></span></button>
+
+                                    <button type="button" *ngIf="!row['edit'] && permisosLocal.editar"
+                                        class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                        (click)="row['edit']=true"><span
+                                            class="icofont icofont-ui-edit"></span></button>
+
+                                    <button type="button" *ngIf="(!row['edit']|| row['edit']==undefined) && permisosLocal.eliminar"
+                                        class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                                        (click)="celiminarItem(row)"><span
+                                            class="icofont icofont-ui-delete"></span></button>
+                                    <button *ngIf="user.plataformaTecnica == true" type="button"
+                                        class="tabledit-delete-button btn btn-warning waves-effect waves-light"
+                                        [routerLink]="['ver', row['_id']]"><span
+                                            class="fa fa-bolt"></span></button>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-column>
+                    </ngx-datatable>
+                </div>
+
+                <table style="display: none;" class="table table-borderless" id="excel-table">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Unidades</th>
+                            <th>Metodo</th>
+                            <th>Tecnica analitica</th>
+                            <th>Valor ensayo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td>{{item.codigo}}</td>
+                            <td>{{item.nombre}}</td>
+                            <td>{{item.unidad}}</td>
+                            <td>{{item.metodo}}</td>
+                            <td>{{item.tecnica_analitica}}</td>
+                            <td>{{item.valor_unit}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </app-card>
+        </div>
+    </div>
+
+</div>
+
+
+<app-modal-animation [modalID]="'effect-3'" [modalClass]="'md-effect-3 md-large'">
+    <h3>Nuevo párametro de ensayo</h3>
+    <div>
+
+
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-header-text">Información del nuevo párametro de ensayo </h4>
+                        </div>
+
+                        <div class="card-body">
+                            <form [formGroup]="form">
+
+                                <div class="form-group row">
+
+                                    <label class="col-sm-2 col-form-label">Código <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipCodigo"></i></span></label>
+                                    <ng-template #tipCodigo>Identificación única para tu parámetro de ensayo
+                                    </ng-template>
+
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" formControlName="codigo"
+                                            [(ngModel)]="item.codigo" placeholder="Código">
+
+                                        <div
+                                            *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                                            <div class="messages text-danger"
+                                                *ngIf="form.controls.nombre.errors?.required">
+                                                Campo Requerido
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Nombre <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipNombre"></i></span></label>
+                                    <ng-template #tipNombre>Nombre del parámetro</ng-template>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" formControlName="nombre"
+                                            [(ngModel)]="item.nombre" placeholder="Nombre parámetro">
+
+                                        <div
+                                            *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                                            <div class="messages text-danger"
+                                                *ngIf="form.controls.nombre.errors?.required">
+                                                Campo Requerido
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Unidades <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipUnidades"></i></span></label>
+                                    <ng-template #tipUnidades>Unidades de medición (unidad, ml, ppm etc.)</ng-template>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" formControlName="unidad"
+                                            placeholder="Unidades de medición" [(ngModel)]="item.unidad">
+
+                                        <div
+                                            *ngIf="form.controls.unidad.invalid && (form.controls.unidad.dirty || form.controls.unidad.touched)">
+                                            <div class="messages text-danger"
+                                                *ngIf="form.controls.unidad.errors?.required">
+                                                Campo Requerido
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="!user.analista && !user.infofinanciera" class="form-group row">
+                                    <label class="col-sm-2 col-form-label"
+                                        *ngIf="!user.analista && !user.infofinanciera">Valor ensayo <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipCodigo"></i></span></label>
+                                    <ng-template #tipCodigo>Valor cobrado por ensayo </ng-template>
+                                    <div class="col-sm-4" *ngIf="!user.analista && !user.infofinanciera">
+                                        <input type="number" class="form-control" formControlName="valor_unit"
+                                            placeholder="Precio de venta" [(ngModel)]="item.valor_unit">
+                                    </div>
+                                </div>
+                                <br>
+                                <h5>Información opcional</h5>
+                                <br>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Método <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipMetodo"></i></span></label>
+                                    <ng-template #tipMetodo>Método de ensayo o norma técnica asociada</ng-template>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" formControlName="metodo"
+                                            [(ngModel)]="item.metodo" placeholder="Método de ensayo">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Técnica analítica <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipTecnica"></i></span></label>
+                                    <ng-template #tipTecnica>Técnica de análisis utilizada en tu ensayo </ng-template>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" formControlName="tecnica_analitica"
+                                            placeholder="Técnica de análisis" [(ngModel)]="item.tecnica_analitica">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Información adicional <span><i
+                                                class="fa fa-question-circle-o text-help icon-small"
+                                                [ngbTooltip]="tipDescripcion"></i></span></label>
+                                    <ng-template #tipDescripcion>Información adicional del parámetro de ensayo
+                                    </ng-template>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control" formControlName="descripcion" rows="3" cols="5"
+                                            placeholder="Información adicional del parámetro de ensayo"
+                                            [(ngModel)]="item.descripcion"></textarea>
+                                    </div>
+                                </div>
+                                <div *ngIf="campo1 || campo2 || campo3 || campo4 || campo5" class="">
+
+                                    <h5>Campos adicionales</h5>
+                                    <div class="form-group" *ngIf="campo1">
+                                        <Label>{{configuraciones[0]['titulo1']}}</Label>
+                                        <input type="text" class="form-control" formControlName="variable1anexo"
+                                            [(ngModel)]="item.variable1anexo"
+                                            placeholder="{{configuraciones[0]['titulo1']}}">
+                                    </div>
+                                    <div class="form-group" *ngIf="campo2">
+                                        <Label>{{configuraciones[0]['titulo2']}}</Label>
+                                        <input type="text" class="form-control" formControlName="variable2anexo"
+                                            [(ngModel)]="item.variable2anexo"
+                                            placeholder="{{configuraciones[0]['titulo2']}}">
+                                    </div>
+                                    <div class="form-group" *ngIf="campo3">
+                                        <Label>{{configuraciones[0]['titulo3']}}</Label>
+                                        <input type="text" class="form-control" formControlName="variable3anexo"
+                                            [(ngModel)]="item.variable3anexo"
+                                            placeholder="{{configuraciones[0]['titulo3']}}">
+                                    </div>
+                                    <div class="form-group" *ngIf="campo4">
+                                        <Label>{{configuraciones[0]['titulo4']}}</Label>
+                                        <input type="text" class="form-control" formControlName="variable4anexo"
+                                            [(ngModel)]="item.variable4anexo"
+                                            placeholder="{{configuraciones[0]['titulo4']}}">
+                                    </div>
+                                    <div class="form-group" *ngIf="campo5">
+                                        <Label>{{configuraciones[0]['titulo5']}}</Label>
+                                        <input type="text" class="form-control" formControlName="variable5anexo"
+                                            [(ngModel)]="item.variable5anexo"
+                                            placeholder="{{configuraciones[0]['titulo5']}}">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- end of card-body -->
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+        <div class="card">
+            <div class="card-body text-right">
+                <div class="btn-group floar-rigth">
+
+                    <button (click)="guardar($event)" class="btn btn-primary md-" [disabled]="!form.valid"><i
+                            class="icofont icofont-save "></i>Crear Parámetro</button>
+                    <button (click)="closeMyModalbtn($event)" class="btn btn-danger "><i
+                            class="icofont icofont-ui-close"></i>
+                        Cerrar!</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+            class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>
+<app-modal-animation [modalID]="'configuracion-parametros'" [modalClass]="'md-configuracion-parametros md-large'">
+    <perfect-scrollbar class="overflow-container py-5" [style.width]="'100%'" [style.height]="'70vh'">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Configuración de párametros</h4>
+                </div>
+                <div class="col-12">
+                    <form class="mt-5" [formGroup]="formconfig" (ngSubmit)="guardarConfiguracion()">
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable1'"
+                                        id="valor1">
+                                    <label class="form-check-label" for="valor1">
+                                        Activar Valor 1
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo1'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable2'"
+                                        id="valor2">
+                                    <label class="form-check-label" for="valor2">
+                                        Activar Valor 2
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo2'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable3'"
+                                        id="valor3">
+                                    <label class="form-check-label" for="valor3">
+                                        Activar Valor 3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo3'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable4'"
+                                        id="valor4">
+                                    <label class="form-check-label" for="valor4">
+                                        Activar Valor 4
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo4'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable5'"
+                                        id="valor5">
+                                    <label class="form-check-label" for="valor5">
+                                        Activar Valor 5
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo5'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variableTecnica'"
+                                        id="variableTecnica">
+                                    <label class="form-check-label" for="variableTecnica">
+                                        Activar Técnica Analítica
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success d-inline-block" type="submit">Guardar configuración</button>
+                            <button class="btn btn-danger d-inline-block" type="buton" (click)="closeModalMasivo('configuracion-parametros')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <button (click)="closeModalMasivo('configuracion-parametros')" aria-label="Close" class="md-close-btn"><i
+        class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<app-modal-animation [modalID]="'configuracion-parametros-edit'"[modalClass]="'md-configuracion-parametros-edit md-large'">
+    <perfect-scrollbar class="overflow-container py-5" [style.width]="'100%'" [style.height]="'70vh'">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Configuración de párametros</h4>
+                </div>
+                <div class="col-12">
+                    <form class="mt-5" [formGroup]="formconfigEdit" (ngSubmit)="editarConfiguracion()">
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable1'">
+                                    <label class="form-check-label" for="valor1">
+                                        Activar Valor 1
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo1'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable2'">
+                                    <label class="form-check-label" for="valor2">
+                                        Activar Valor 2
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo2'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable3'">
+                                    <label class="form-check-label" for="valor3">
+                                        Activar Valor 3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo3'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable4'">
+                                    <label class="form-check-label" for="valor4">
+                                        Activar Valor 4
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo4'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variable5'">
+                                    <label class="form-check-label" for="valor5">
+                                        Activar Valor 5
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" [formControlName]="'titulo5'" placeholder="Nombre">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" [formControlName]="'variableTecnica'"
+                                        id="variableTecnica">
+                                    <label class="form-check-label" for="variableTecnica">
+                                        Activar Técnica Analítica
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success d-inline-block" type="submit">Guardar configuración</button>
+                            <button class="btn btn-danger d-inline-block" type="buton" (click)="closeModalMasivo('configuracion-parametros-edit')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <button (click)="closeModalMasivo('configuracion-parametros-edit')" aria-label="Close" class="md-close-btn"><i
+        class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<!-- BLOQUE CUENTA NO ACTIVA -->
+<div *ngIf="!user.cuentaActiva" class="page-body">
+    <h1 class="text-success">Cuenta creada</h1>
+    <div class="card">
+        <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+            <div class="col-md-12 p-lg-12 mx-auto my-5">
+                <h1 class="display-4 font-weight-normal">Tu cuenta estará activa dentro de poco</h1>
+                <p class="lead font-weight-normal">Se há creado tu cuenta con exito, en breve nos pondremos en contacto
+                    para ayudarte a empezar tu experiencia</p>
+                <a class="btn btn-outline-secondary" href="mailto:preguntas@labcontrol.co">Tienes preguntas,
+                    escribenos</a>
+            </div>
+            <div class="product-device shadow-sm d-none d-md-block"></div>
+            <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+        </div>
+    </div>
+</div>
+
+<app-modal-animation [modalID]="'usuarios-masivos'" [modalClass]="'md-usuarios-masivos md-large'">
+    <h2 class="text-center py-3 my-3">Carga de usuarios masiva</h2>
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+        <div class="container my-5">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <input type="text" (paste)="copypaste($event)" class="form-control" placeholder="Pega tus datos">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped table-bordere">
+                        <thead>
+                            <tr>
+                                <td *ngFor="let td of cabeceras">{{td}}</td>
+                                <td>Acciones</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let items of datoCopypaste; let identificador = index">
+                                <td *ngFor="let item of items; let i = index">
+                                    <input type="text" class="form-control" value="{{item}}"
+                                        id="campo-{{i}}-{{identificador}}" name="campo-{{i}}-{{identificador}}">
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-info" (click)="editar(identificador)">Editar</button>
+                                        <button class="btn btn-danger"
+                                            (click)="eliminar(identificador)">Eliminar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-success" (click)="formMasivo()"> enviar</button>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+</app-modal-animation>

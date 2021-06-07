@@ -1,0 +1,164 @@
+<div class="pcoded-main-container">
+    <div class="pcoded-inner-content p-0">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div>
+                <!-- Page-body start -->
+                <div class="page-body">
+                    <div class="container-fluid">
+                        <h1 class="text-gray">Condiciones Ambientales</h1>
+                        <br>
+                        <div class="row">
+                            <div class="col-12 text-right mb-3">
+                                <button type="button" class="btn btn-success" (click)="openModal('modal-generico-agregar-condicion-ambiental')">Agregar Nueva Condición Ambiental</button>
+                            </div>
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-6">
+                                                    <p class="m-0"> <span class="icofont icofont-globe d-inline-block"> </span> Condiciones ambientales</p>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" placeholder="Buscar Condiciones Ambientales" (keyup)="buscarCondiciones($event);">
+                                                        <div class="input-group-append" (click)="cargarCondicionesAmbientales(0)">
+                                                            <span class="input-group-text mt-0" id="basic-addon2">
+                                                                <i class="icofont icofont-close-line"></i>
+                                                            </span>
+                                                          </div>
+                                                      </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <ngx-datatable 
+                                                class="data-table" 
+                                                [rows]="condicionesAmbientalesListado"
+                                                [columns]="columns"
+                                                [columnMode]="'force'"
+                                                [headerHeight]="50" 
+                                                [footerHeight]="50" 
+                                                [rowHeight]="'auto'" 
+                                                [scrollbarH]="true">
+                                                <ngx-datatable-column name="{{columns[0].name}}">
+                                                    <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                                        <span *ngIf="!row['edit']">{{row['name']}}</span>
+                                                        <input type="text" *ngIf="row['edit']" class="form-control" name="codigo"
+                                                            [(ngModel)]="row.name" placeholder="{{columns[0].name}}">
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[1].name}}">
+                                                    <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                                        <span class="text-success" *ngIf="row['estado']">CUMPLE</span>
+                                                        <span class="text-danger" *ngIf="!row['estado']">NO CUMPLE</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[2].name}}">
+                                                    <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                                        <span  >{{ row['ultimoIngreso'] | date }}</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[3].name}}">
+                                                    <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                                        <span *ngIf="!row['edit']">{{row['unidad']}}</span>
+                                                        <input type="text" *ngIf="row['edit']" class="form-control" name="codigo"
+                                                            [(ngModel)]="row.unidad" placeholder="{{columns[3].name}}">
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[4].name}}">
+                                                    <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                                        <span *ngIf="!row['edit']">{{row['limite_superior']}}</span>
+                                                        <input type="text" *ngIf="row['edit']" class="form-control" name="codigo"
+                                                            [(ngModel)]="row.limite_superior" placeholder="{{columns[4].name}}">
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[5].name}}">
+                                                    <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                                                        <span *ngIf="!row['edit']">{{row['limite_inferior']}}</span>
+                                                        <input type="text" *ngIf="row['edit']" class="form-control" name="codigo"
+                                                            [(ngModel)]="row.limite_inferior" placeholder="{{columns[5].name}}">
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[6].name}}">
+                                                    <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        
+                                                        <div class="btn-group btn-group-sm" style="float: none;">
+                                                            <a [routerLink]="[ 'ver', row['_id'] ]" class="btn btn-info">
+                                                                <span class="icofont icofont-link-alt"></span>
+                                                            </a>
+                                                            <button 
+                                                                type="button" 
+                                                                *ngIf="!row['edit']"
+                                                                class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                                (click)="row['edit']=true">
+                                                                <span class="icofont icofont-ui-edit"></span>
+                                                            </button>
+                                                            <button 
+                                                                class="btn btn-danger" 
+                                                                (click)="delete(row['_id'])">
+                                                                <span class="icofont icofont-ui-delete"></span>
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                *ngIf="row['edit']"
+                                                                class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                                (click)="editar(row)">
+                                                                    <span class="icofont icofont-ui-edit"></span>
+                                                            </button>
+                                                        </div>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                            </ngx-datatable>
+                                        </div>
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                              <li class="page-item"><button class="page-link" (click)="cargarCondicionesAmbientales(cantidadListado - 30)" [disabled]="!estado">Anterior</button></li>
+                                              <li class="page-item"><button class="page-link" (click)="cargarCondicionesAmbientales(cantidadListado + 30)" [disabled]="!continue">Siguiente</button></li>
+                                            </ul>
+                                          </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-general title="Ingresar nuevo registro de condiciones ambientales" [modalID]="'modal-generico-agregar-condicion-ambiental'" [modalClass]="'md-modal-generico-agregar-condicion-ambiental modal-lx'">
+    <form [formGroup]="formCondicionesAmbientales" method="post" (ngSubmit)="guardarForm();">
+        <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" [formControlName]="'name'" id="name" class="form-control" placeholder="Nombre">
+        </div>
+        <div class="form-group">
+            <label for="metodos_de_ensayo">Métodos de Ensayo:</label>
+            <ng-select [ngClass]="'ng-select'" [formControlName]="'metodos_de_ensayo'" [options]="parametrosList" [multiple]="true"></ng-select>
+            <!-- <select id="metodos_de_ensayo" [formControlName]="'metodos_de_ensayo'" class="form-control" multiple>
+              <option *ngFor="let parametro of parametrosList" value="{{ parametro?.nombre }}">{{ parametro?.nombre }}</option>
+            </select> -->
+        </div>
+        <div class="form-group">
+            <label for="unidad">Unidad:</label>
+            <input type="text" [formControlName]="'unidad'" id="unidad" class="form-control" placeholder="°C, %...">
+        </div>
+        <div class="form-group">
+            <label for="limite_superior">Límite superior:</label>
+            <input type="number" [formControlName]="'limite_superior'" id="limite_superior" class="form-control" placeholder="Límite superior">
+        </div>
+        <div class="form-group">
+            <label for="limite_inferior">Límite inferior:</label>
+            <input type="number" [formControlName]="'limite_inferior'" id="limite_inferior" class="form-control" placeholder="Límite inferior">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-danger" (click)="closeModal('modal-generico-agregar-condicion-ambiental')">Cancelar</button>
+        </div>
+    </form>
+</app-modal-general>

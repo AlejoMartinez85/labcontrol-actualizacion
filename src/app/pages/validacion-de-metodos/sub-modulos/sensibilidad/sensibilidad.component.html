@@ -1,0 +1,152 @@
+<div class="card-header">
+    <div class="conatiner-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h6 class="m-0">Sensibilidad</h6>
+            </div>
+            <div class="col-12 col-lg-2 text-right">
+                <button class="btn btn-danger" (click)="EliminarLinealidad()">
+          <span class="icofont icofont-ui-delete"></span>
+        </button>
+                <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+          <span class="icofont icofont-ui-edit"></span>
+        </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <form [formGroup]="formaLinealidad">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="">Unidades: </label>
+                                    <input type="text" *ngIf="edit" [formControlName]="'unidad'" class="form-control" placeholder="Unidades">
+                                    <span for="" *ngIf="!edit">{{ArrLinealidad['unidad']}}</span>
+                                </div>
+                            </div>
+                            <div class="col-12" style="margin-bottom: 2.5%;">
+                                <div class="input-group m-0">
+                                    <input type="text" (paste)="data2($event,'parametro1')" class="form-control" placeholder="Pega tus datos" *ngIf="edit">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <ul *ngIf="edit" class="list-group" [formArrayName]="'parametros1'">
+                                    <li class="list-group-item p-0">
+                                        <input type="text" value="Referencia (x)" class="form-control">
+                                    </li>
+                                    <li class="list-group-item p-0">
+                                        <!-- <input type="text" (paste)="data2($event,'parametro1')" class="form-control"
+                      placeholder="Pega tus datos"> -->
+                                    </li>
+                                    <li class="list-group-item p-0" *ngFor="let item of parametro1.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                        <div class="input-group m-0 campomodific">
+                                            <div class="input-group-prepend ">
+                                                <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex)">
+                          <span class="icofont icofont-plus-circle"></span>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" [formControlName]="'parametro1'" (paste)="paste($event, pointIndex)">
+                                            <div class="input-group-prepend btn-danger">
+                                                <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'parametro1')">
+                          <span class="icofont icofont-ui-delete"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <app-tabla-arrays *ngIf="!edit" [array]="ArrLinealidad['areras']" [nombre]='"Referencia (x)"'>
+                                </app-tabla-arrays>
+                            </div>
+                            <div class="col">
+
+                                <ul *ngIf="edit" class="list-group" [formArrayName]="'parametros2'">
+                                    <li class="list-group-item p-0">
+                                        <input type="text" value="Candidato (y)" class="form-control">
+                                    </li>
+                                    <li class="list-group-item p-0">
+                                        <!-- <input type="text" (paste)="data2($event,'parametro2')" class="form-control"
+                      placeholder="Pega tus datos"> -->
+                                    </li>
+                                    <li class="list-group-item p-0" *ngFor="let item of parametro2.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                        <div class="input-group m-0 campomodific">
+                                            <div class="input-group-prepend ">
+                                                <span class="input-group-text " id="basic-addon1" style="background: #9FA5AA;">
+                          <span class="icofont icofont-plus-ircle"></span>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" [formControlName]="'parametro2'">
+                                            <div class="input-group-prepend btn-danger">
+                                                <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'parametro2')">
+                          <span class="icofont icofont-ui-delete"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <app-tabla-arrays *ngIf="!edit" [array]="ArrLinealidad['concentraciones']" [nombre]='"Candidato (y)"'>
+                                </app-tabla-arrays>
+                            </div>
+                        </div>
+                        <div class="row mt-3" *ngIf="intervalodetrabajoInput && guardaLinealidad">
+                            <div class="col">
+                                <form [formGroup]="fomintervalosLinealidad">
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <label>Intervalo Minimo</label>
+                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'min'" placeholder="Intervalo Minimo">
+                                            <p *ngIf="!edit">{{ArrLinealidad['intervaloMinimo']}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <label>Intervalo Maximo</label>
+                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'max'" placeholder="Intervalo Maximo">
+                                            <p *ngIf="!edit">{{ArrLinealidad['intervaloMaximo']}}</p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <button class="btn btn-success" (click)="generar()" id="btn-Sensibilidad">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card text-white bg-primary border-primary mb-3">
+                    <div class="card-header">Gráfica Linealidad</div>
+                    <div class="card-body bg-white text-dark">
+                        <div id="chartSensibilidad"></div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h6>Pendiente</h6>
+                                    {{pendienteLinealidad | number: '1.1-3'}}
+                                </div>
+                                <div class="col-4">
+                                    <h6>Intercepto</h6>
+                                    {{interceptoLinealidad | number: '1.1-3'}}
+                                </div>
+                                <div class="col-4">
+                                    <h6>R^2</h6>
+                                    {{RquadradoLinealidad | number: '1.1-3'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="guardaLinealidad">
+                <div class="text-right">
+                    <button class="btn btn-success" (click)="guardarLinealidad()" *ngIf="edit">Guardar / Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

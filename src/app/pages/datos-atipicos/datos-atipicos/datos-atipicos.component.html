@@ -1,0 +1,115 @@
+<div class="pcoded-main-container">
+  <div class="pcoded-inner-content p-0">
+      <!-- Main-body start -->
+      <div class="main-body">
+          <div>
+              <!-- Page-body start -->
+              <div class="page-body">
+                  <div class="container-fluid">
+                      <h1 class="text-gray">Datos Atípicos</h1>
+                      <br>
+                      <div class="row">
+                          <div class="col-12 text-right mb-3">
+                              <button type="button" class="btn btn-success" [routerLink]="['crear-matrix']">Crear nueva matriz de datos atípicos</button>
+                          </div>
+                          <div class="col-12">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                        <ngx-datatable 
+                                        class="data-table" 
+                                        [rows]="datosAtipicos"
+                                        [columns]="columns"
+                                        [columnMode]="'force'"
+                                        [headerHeight]="50" 
+                                        [footerHeight]="50" 
+                                        [rowHeight]="'auto'" 
+                                        [limit]="100" 
+                                        [scrollbarH]="true">
+                                            <ngx-datatable-column name="{{columns[0].name}}">
+                                                <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['nombre']}}</span>
+                                                    <input type="text" *ngIf="row['edit']" class="form-control" name="nombre"
+                                                        [(ngModel)]="row.nombre" placeholder="{{columns[0].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[1].name}}">
+                                                <ng-template let-row="row" let-value="niverConfianza" ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['niverConfianza']}} %</span>
+                                                    <select *ngIf="row['edit']" class="form-control" name="niverConfianza"
+                                                    [(ngModel)]="row.niverConfianza">
+                                                        <option value="{{row['niverConfianza']}}">{{row['niverConfianza']}}</option>
+                                                        <option value="95">95%</option>
+                                                        <option value="90">90%</option>
+                                                        <option value="92.5">92.5%</option>
+                                                        <option value="97.5">97.5%</option>
+                                                    </select>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[2].name}}">
+                                                <ng-template let-row="row" let-value="promedio" ngx-datatable-cell-template>
+                                                    <span  >{{ row['promedio'] | number: '1.0-3' }}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[3].name}}">
+                                                <ng-template let-row="row" let-value="desviacion" ngx-datatable-cell-template>
+                                                    <span  >{{ row['desviacion'] | number: '1.0-3' }}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[4].name}}">
+                                                <ng-template let-row="row" let-value="Gmin" ngx-datatable-cell-template>
+                                                    <span  >{{ row['Gmin'] | number: '1.0-3' }}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[5].name}}">
+                                                <ng-template let-row="row" let-value="Gmax" ngx-datatable-cell-template>
+                                                    <span  >{{ row['Gmax'] | number: '1.0-3' }}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[6].name}}">
+                                                <ng-template let-row="row" let-value="Gcrit" ngx-datatable-cell-template>
+                                                    <span  >{{ row['Gcrit'] | number: '1.0-3' }}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[6].name}}">
+                                                <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                    
+                                                    <div class="btn-group btn-group-sm" style="float: none;">
+                                                        <a [routerLink]="[ 'ver', row['_id'] ]" class="btn btn-info">
+                                                            <span class="icofont icofont-link-alt"></span>
+                                                        </a>
+                                                        <button 
+                                                            type="button" 
+                                                            *ngIf="!row['edit']"
+                                                            class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                            (click)="row['edit']=true">
+                                                            <span class="icofont icofont-ui-edit"></span>
+                                                        </button>
+                                                        <button 
+                                                            class="btn btn-danger" 
+                                                            (click)="eliminar(row['_id'])">
+                                                            <span class="icofont icofont-ui-delete"></span>
+                                                        </button>
+                                                        <button 
+                                                            type="button" 
+                                                            *ngIf="row['edit']"
+                                                            class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                            (click)="editar(row)">
+                                                                <span class="icofont icofont-ui-edit"></span>
+                                                        </button>
+                                                    </div>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                        </ngx-datatable>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<app-preloader *ngIf="preloader"></app-preloader>

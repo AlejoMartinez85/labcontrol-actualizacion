@@ -1,0 +1,172 @@
+<div class="card">
+  <div class="card-header">
+    <h4> Muestra #{{ Muestra['codigo']}}</h4>
+  </div>
+  <div class="card-body">
+    <div class="consiner-fluid">
+      <div class="row">
+        <div class="col-12 col-lg-4">
+          <img [src]="Muestra['imagen_perfil']" style="max-Width: 250px;" class="img-responsive img-fluid" alt="">
+        </div>
+        <div class="col-12 col-lg-4">
+          <ul class="list-group mt-3">
+            <li class="list-group-item"><strong>Código:</strong> {{ Muestra['codigo']}}</li>
+            <li class="list-group-item"><strong>Descripción:</strong> {{Muestra['descripcion']}}</li>
+            <li class="list-group-item"><strong>Fecha de Ingreso:</strong> {{Muestra['fecha_ingreso']}} </li>
+            <li class="list-group-item"><strong>Observaciones:</strong> {{Muestra['observaciones']}} </li>
+          </ul>
+          <ul class="list-group mt-3">
+            <li class="list-group-item"><strong>Listado de archivos</strong></li>
+            <li class="list-group-item" *ngFor="let archivo of Muestra['archivos_adjuntos']">
+              <a [href]="archivo?.url" download="true"><small>{{ archivo?.nombre }}</small></a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-4 mt-3">
+          <h6>codigo QR</h6>
+          <qrcode [qrdata]="myAngularxQrCode" [size]="100" class="imagen-qr" #qr></qrcode>
+          <button class="btn btn-success mt-3" (click)="imprimir(qr)">Imprimir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 mb-3">
+          <button class="btn btn-warning" (click)="traeSolicitudes()">Mostrar Solicitudes Relacionadas</button>
+        </div>
+        <div class="col-12 mt-3" *ngIf="ensayosCargados">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Código</td>
+                <td>Cliente</td>
+                <td>Estado</td>
+                <td>Ver</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ensayo of Ensayos; let i = index">
+                <td>{{ i + 1}}</td>
+                <td>{{ensayo?.codigo}}</td>
+                <td>{{ensayo?.nombreCliente}}</td>
+                <td ><span class="label font-weight-bold" [ngClass]="{'label-success': ensayo?.estado == 'Reportado' || ensayo?.estado == 'Completado'  , 'label-warning': ensayo?.estado == 'En Proceso' , 'label-info': ensayo?.estado == 'Esperando Confirmación', 'label-primary': ensayo?.estado == 'En Reporte'}">{{ensayo?.estado}}</span></td>
+                <td>
+                  <button (click)="editarEnsayo(ensayo)" class="btn btn-primary"><span class="icofont icofont-ui-edit"></span></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-animation [modalID]="'effect-3'" #modaladd [modalClass]="'md-effect-3 md-large'">
+  <div class="row col-12">
+    <div class="col-1" *ngIf=" !ensayo || !ensayo?._id"></div>
+    <div class="col-1" *ngIf="ensayo && ensayo?._id">
+
+        <div ngbDropdown class="dropdown-primary">
+          <button ngbDropdownToggle class="btn waves-effect waves-light " type="button"></button>
+          <div ngbDropdownMenu>
+            <a class="dropdown-item waves-light waves-effect" *ngIf="!user.infofinanciera" href="javascript:" (click)="verInfoPagos()">Información de pago</a>
+            <a class="dropdown-item waves-light waves-effect" href="javascript:" (click)="eliminar(ensayo?._id)">Eliminar</a>
+          </div>
+        </div>
+    </div>
+  <div class="col-10 text-center"><h3>Información solicitud de ensayo {{ensayo?.codigo}}</h3></div>
+    <div class="col-1"></div>
+  </div>
+  <div>
+
+    <!-- INICIO TABS PASO 1 2 Y 3 -->
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+      <div class="row">
+
+        <div class="col-lg-12">
+          <!-- Inicio barra de logica de progreso muestra estado segun etapa y muestra icono -->
+          <div class="col-lg-12 d-flex justify-content-around">
+            <div class="col-lg-4 text-center"> 
+              <span *ngIf="ensayo&&(ensayo?.estado == 'Esperando Confirmación' || ensayo?.estado == 'Cotización' || ensayo?.estado == 'Aprobado')" class="label font-weight-bold" [ngClass]="{'label-primary': ensayo?.estado == 'Esperando Confirmación', 'label-warning': ensayo?.estado == 'Cotización', 'label-success': ensayo?.estado == 'Aprobado'}">{{ensayo?.estado}}</span>
+              <span *ngIf="ensayo&&(ensayo?.estado != 'Esperando Confirmación' && ensayo?.estado != 'Cotización' && ensayo?.estado != 'Aprobado')" class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+            </div>
+            <div class="col-lg-4 text-center">
+              <span *ngIf="ensayo&&(ensayo?.estado == 'En Proceso' || ensayo?.estado == 'Completado')" class="label font-weight-bold" [ngClass]="{'label-warning': ensayo?.estado == 'En Proceso', 'label-success': ensayo?.estado == 'Completado'}">{{ensayo?.estado}}</span>
+              <span *ngIf="ensayo&&(ensayo?.estado == 'En Reporte' || ensayo?.estado == 'Reportado')" class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+            </div>
+            <div class="col-lg-4 text-center">
+              <span *ngIf="ensayo&&(ensayo?.estado == 'En Reporte')" class="label font-weight-bold" [ngClass]="{'label-primary': ensayo?.estado == 'En Reporte', 'label-success': ensayo?.estado == 'Reportado'}">{{ensayo?.estado}}</span>
+              <span *ngIf="ensayo&&(ensayo?.estado == 'Reportado')" class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+            </div>
+          </div>
+          <!-- cambio: Se hizo una nuva logica para mostrar iconos de finalizado una vez que se vaya avanzando en el proceso de la solicitud -->
+          <div class="md-tabs">
+            <ngb-tabset (tabChange)="beforeChangeEnsayo($event)" #tabsetadmin="ngbTabset">
+              <ngb-tab *ngIf="!user.analista" id="solicitudTab">
+                <span class="label-primary">{{ensayo?.estado}}</span> 
+                <ng-template ngbTabTitle><i class="icofont icofont-clock-time"> </i> Paso 1: Solicitar ensayos</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="card-body" *ngIf="ensayo">
+                      <app-solicitud [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-solicitud>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab id="resultadoTab">
+                <ng-template ngbTabTitle><i class="fa fa-flask"></i> Paso 2: Registrar resultados
+                </ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15" *ngIf="ensayo">
+                    <app-orden [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-orden>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab *ngIf="!user?.analista" id="reporteTab">
+                <ng-template ngbTabTitle><i class="icofont icofont-file-alt"></i>Paso 3: Realizar informe de resultados
+                </ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15" *ngIf="ensayo">
+                    <div class="card-body">
+                      <app-pago [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-pago>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+                <ngb-tab *ngIf="ensayo&&ensayo?._id && !user?.infofinanciera"  id="pagosTab">
+                  <ng-template ngbTabTitle >
+                    <!-- <i class="icofont icofont-bill-alt"></i><small>Info pagos</small> -->
+                    <!-- cambio: Se escondio tab de pagos para facilitar comprension de proceso de dejo dentro de toggle button -->
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div [@fadeInOutTranslate]  *ngIf="ensayo">
+                      <div class="card-body">
+                        <app-enayoresultado [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-enayoresultado>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+          </div>
+        </div>
+        <div class="col-lg-12" *ngIf="ensayo &&ensayo?._id!=undefined">
+          <app-comentarios [ensayo_id]="ensayo?._id" [tipo]="tipocomentario"></app-comentarios>
+        </div>
+      </div>
+    </perfect-scrollbar>
+
+
+
+  </div>
+
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+      
+
+</app-modal-animation>

@@ -1,0 +1,288 @@
+<div class="card-header">
+  <div class="conatiner-fluid">
+    <div class="row">
+      <div class="col-12 col-lg-10"> 
+        <h6 class="m-0">Precisión</h6>
+      </div>
+      <div class="col-12 col-lg-2 text-right">
+        <button *ngIf="permisosLocal.eliminar" class="btn btn-danger" (click)="EliminarPresicion()">
+          <span class="icofont icofont-ui-delete"></span>
+        </button>
+        <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+          <span class="icofont icofont-ui-edit"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card-body">
+  <form [formGroup]="formaPrecision">
+    <div class="form-group row" *ngIf="edit">
+      <div class="col">
+        <input type="checkbox" [checked]="presision" (change)="usaMatrisBlancos(presision, 'presision');">
+        <label class="form-check-label" for="exampleRadios2">
+          Usar banco de muestras
+        </label>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="banco_muestras && presision && edit">
+      <label for="">Matriz</label>
+      <select [formControlName]="'matriz'" id="" class="form-control">
+        <option value="">Seleccione Una matriz</option>
+        <option *ngIf="matrizBk1" value="Bk1">Bk1</option>
+        <option *ngIf="matrizBk2" value="Bk2">Bk2</option>
+        <option *ngIf="matrizBk3" value="Bk3">Bk3</option>
+        <option *ngIf="matrizBk4" value="Bk4">Bk4</option>
+        <option *ngIf="matrizBk5" value="Bk5">Bk5</option>
+        <option *ngIf="matrizEb" value="Eb">Eb</option>
+        <option *ngIf="matrizEm" value="Em">Em</option>
+        <option *ngIf="matrizEa" value="Ea">Ea</option>
+        <option *ngIf="matrizM1" value="M1">M1</option>
+        <option *ngIf="matrizM2" value="M2">M2</option>
+        <option *ngIf="matrizM3" value="M3">M3</option>
+        <option *ngIf="matrizM1Ab" value="M1Ab">M1Ab</option>
+        <option *ngIf="matrizM1Aa" value="M1Aa">M1Aa</option>
+        <option *ngIf="matrizM2Ab" value="M2Ab">M2Ab</option>
+        <option *ngIf="matrizM2Aa" value="M2Aa">M2Aa</option>
+        <option *ngIf="matrizM3Ab" value="M3Ab">M3Ab</option>
+        <option *ngIf="matrizM3Aa" value="M3Aa">M3Aa</option>
+      </select>
+    </div>
+    <div class="form-group" *ngIf="!presision">
+      <ul *ngIf="edit" class="list-group" [formArrayName]="'arrsPresicion'">
+        <li class="list-group-item">Método de Referencia</li>
+        <li class="list-group-item p-0 ajusteTam">
+          <input type="text" (paste)="data2($event,'arrPresicion')" class="form-control"
+            placeholder="Pega tus datos">
+        </li>
+        <li class="list-group-item p-0" *ngFor="let item of arrPresicion.controls; let pointIndex=index"
+          [formGroupName]="pointIndex">
+          <div class="input-group m-0 campomodific">
+            <input type="text" class="form-control" [formControlName]="'arrPresicion'">
+            <div class="input-group-prepend btn-danger">
+              <span class="input-group-text btn-danger" id="basic-addon1"
+                (click)="removeDato(pointIndex, 'arrPresicion')">
+                <span class="icofont icofont-ui-delete"></span>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <app-tabla-arrays *ngIf="!edit" [array]="ArrPresision['matriz']" [nombre]='"Método de Referencia"'></app-tabla-arrays>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-success" id="btn-presision" *ngIf="edit"
+        (click)="llenadoDeArrayCalculos(formaPrecision, 'Precision')">Calcular</button>
+      <button class="btn btn-success" *ngIf="btnPresision && edit"
+        (click)="guardaPresision()">Guardar /Editar</button>
+    </div>
+  </form>
+  <div class="constainer-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h6>Precisión en términos de % CV</h6>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroBlancos >= 1">
+        <!-- <div class="col-4 mb-3" *ngIf="promedios && numeroBlancos >= 1"></div> -->
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Bk1</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVbks1 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroBlancos >= 2">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Bk2</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVbks2 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroBlancos >= 3">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Bk3</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVbks3 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroBlancos >= 4">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Bk4</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVbks4 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroBlancos >= 5">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Bk5</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVbks5 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="Ebajo">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Eb</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVEbs | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="Emedio">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Em</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVEms | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="EAlto">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV Ea</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVEas | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroMuestras >= 1">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M1</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs1 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroMuestras >= 2">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M2</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs2 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="numeroMuestras >= 3">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M3</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs3 | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="muestra1Ab">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M1Ab</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs1Ab | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="muestra1Aa">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M1Aa</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs1Aa | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="muestra2Ab">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M2Ab</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs2Ab | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="muestra2Aa">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M2Aa</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs2Aa | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="muestra3Ab">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M3Ab</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs3Ab | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4 mb-3" *ngIf="muestra3Aa">
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <h6>%CV M3Aa</h6>
+          </li>
+          <li class="list-group-item">
+            {{ CVMs3Aa | percent: '1.1-4'}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h6>Calculos Precisión</h6>
+      </div>
+      <div class="col-12 col-3" *ngIf="presicion_repetitibilidad">
+        <ul class="list-group">
+          <li class="list-group-item">{{ PresicionSr | number: '1.1-3' }}</li>
+        </ul>
+      </div>
+      <div class="col-12 col-3" *ngIf="presicion_producivilidad">
+        <ul class="list-group">
+          <li class="list-group-item">{{ PresicionSi | number: '1.1-3' }}</li>
+        </ul>
+      </div>
+      <div class="col-12 col-3" *ngIf="presicion_producivilidad">
+        <ul class="list-group">
+          <li class="list-group-item">{{ PresicionSI | number: '1.1-3' }}</li>
+        </ul>
+      </div>
+      <div class="col-12 col-3" *ngIf="presicion_repetitibilidad">
+        <ul class="list-group">
+          <li class="list-group-item">{{ Presicionrsr | number: '1.1-3' }}</li>
+        </ul>
+      </div>
+      <div class="col-12 col-3" *ngIf="presicion_producivilidad">
+        <ul class="list-group">
+          <li class="list-group-item">{{ PresicionrsI | number: '1.1-3' }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,406 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="conatiner-fluid">
+                    <div class="row">
+                        <div class="col-12 col-sm">
+                            <h4 class="m-0 link" (click)="help('1')">Precisión</h4>
+                        </div>
+                        <div class="col-12 col-sm-auto">
+                            <button *ngIf="permisosLocal.editar" class="btn btn-sm btn-primary" (click)="showEditEvent()">
+                <span class="icofont icofont-ui-edit"></span>
+              </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form *ngIf="form" (ngSubmit)="onSubmit()" [formGroup]="form">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label [hidden]="!showEdit"  for="" class="link" (click)="help('5')">Unidades:</label>
+                                    <input [hidden]="!showEdit" class="form-control col-4" type="text" formControlName="unidad">
+                                    <!-- <span [hidden]="!showEdit">{{ form?.controls?.unidad?.value }}</span> -->
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="" class="link" (click)="help('5')">Analistas:</label>
+                                        <input [hidden]="!showEdit" class="form-control" type="number" formControlName="analysts" (change)="prepareMatrix()">
+                                        <span [hidden]="showEdit">{{ form?.controls?.analysts?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="" class="link" (click)="help('6')">Replicas:</label>
+                                        <input [hidden]="!showEdit" class="form-control" type="number" formControlName="replicas" (change)="prepareMatrix()">
+                                        <span [hidden]="showEdit">{{ form?.controls?.replicas?.value }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Start matrix -->
+                            <div class="w-100" [ngClass]="{'table-responsive': showEdit }">
+                                <div class="row" [ngClass]="{'flex-nowrap': showEdit }" formArrayName="matrix">
+                                    <div class="col-4 my-2" *ngFor="let A of maskA; let idx = index;">
+                                        <ul class="list-group" [formGroupName]="idx">
+                                            <li class="list-group-item">
+                                                <div class="form-group m-0">
+                                                    <input [hidden]="!showEdit" type="text" class="form-control" formControlName="name">
+                                                    <span [hidden]="showEdit">{{ matrixArray?.controls[idx]?.controls?.name?.value }}</span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item" *ngFor="let R of maskR; let jdx = index;">
+                                                <div class="form-group m-0 d-flex justify-content-between">
+                                                    <input [hidden]="!showEdit" type="number" class="form-control" formControlName="{{ jdx + 1 }}" (paste)="pasteInfo($event, idx, jdx + 1)">
+                                                    <span [hidden]="showEdit">{{ matrixArray?.controls[idx]?.controls[jdx+1].value }}</span><span style="color: darkgrey; float: right;" >&nbsp;{{ form?.controls?.unidad?.value }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End matrix -->
+                            <button [hidden]="!showEdit" class="btn btn-success" type="submit" [disabled]="!form.valid">
+                Calcular
+              </button>
+                        </form>
+                    </div>
+
+                    <div *ngIf="loader" class="col-12 my-2">
+                        <ngb-progressbar type="primary" [value]="100" [striped]="true" [animated]="true"><i></i></ngb-progressbar>
+                    </div>
+
+                    <!-- Result -->
+                    <ng-container *ngIf="accuracy._id != undefined">
+                        <div class="col-12 mt-3">
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    Anova
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><strong>Grupo</strong></div>
+                                                <div class="col-12 col-sm">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-2"><strong class="mr-1 link" (click)="help('12')">DF</strong></div>
+                                                        <div class="col-12 col-sm-2"><strong class="mr-1 link" (click)="help('8')">SS</strong></div>
+                                                        <div class="col-12 col-sm-2"><strong class="mr-1 link" (click)="help('9')">MS</strong></div>
+                                                        <div class="col-12 col-sm-2"><strong class="mr-1 link" (click)="help('10')">F</strong></div>
+                                                        <div class="col-12 col-sm-2"><strong class="mr-1 link" (click)="help('11')">P. Value</strong></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><strong>Entre grupos</strong></div>
+                                                <div class="col-12 col-sm">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.treatment?.DF }}">{{ accuracy?.anova?.treatment?.DF | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.treatment?.SS }}">{{ accuracy?.anova?.treatment?.SS | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.treatment?.MS }}">{{ accuracy?.anova?.treatment?.MS | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.treatment?.F }}">{{ accuracy?.anova?.treatment?.F | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.treatment?.PV }}">{{ accuracy?.anova?.treatment?.PV | number:'1.0-4' }}</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><strong>Intra grupo</strong></div>
+                                                <div class="col-12 col-sm">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{accuracy?.anova?.residual?.DF}}">{{ accuracy?.anova?.residual?.DF | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{accuracy?.anova?.residual?.SS}}">{{ accuracy?.anova?.residual?.SS | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{accuracy?.anova?.residual?.MS}}">{{ accuracy?.anova?.residual?.MS | number:'1.0-4' }}</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><strong>Total</strong></div>
+                                                <div class="col-12 col-sm">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.total?.DF }}">{{ accuracy?.anova?.total?.DF | number:'1.0-4' }}</span></div>
+                                                        <div class="col-12 col-sm-2"><span ngbTooltip="{{ accuracy?.anova?.total?.SS }}">{{ accuracy?.anova?.total?.SS | number:'1.0-4' }}</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    Resultado
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 col-sm"><strong class="mr-1">Desviación estándar de repetibilidad:</strong><span ngbTooltip="{{ accuracy?.repeatabilityStandardDeviation}}">{{ accuracy?.repeatabilityStandardDeviation | number:'1.0-4'}}</span></div>
+                                        <div class="col-12 col-sm"><strong class="mr-1">Desviación estándar entre grupo:</strong><span ngbTooltip="{{ accuracy?.standardDeviationBetweenGroups }}">{{ accuracy?.standardDeviationBetweenGroups | number:'1.0-4'}}</span></div>
+                                        <div [hidden]="!validacion['presicion_producivilidad']" class="col-12 col-sm"><strong class="mr-1">Desviación estandar de reproducibilidad:</strong><span ngbTooltip="{{ accuracy?.reproducibilityStandardDeviation }}">{{ accuracy?.reproducibilityStandardDeviation | number:'1.0-4'}}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                    <!-- Result -->
+                </div>
+            </div>
+
+            <!-- START HELP BLOCK -->
+            <div *ngIf="helperActive == true" class="row container">
+                <br>
+                <div class="d-flex justify-content-between col-12">
+                    <h5>Explicación</h5>
+                    <div>
+                        <button (click)="helperActive = false" aria-label="Close" class="md-close-btn exit link"><i class="icofont icofont-ui-close"></i></button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <!-- HELP MESSAGE #3 -->
+                <div class="container" *ngIf="helper == '1'">
+                    <h6>Precisión</h6>
+                    <p class="justify">
+                        Es una medida de que tan cerca están los resultados entre sí. Por lo general, se expresa mediante parámetros estadísticos que describen la propagación de los resultados, típicamente desviación estándar calculada a partir de mediciones repetidas de materiales
+                        adecuados. Es común dividir las medidas de precisión en repetibilidad y reproducibilidad con aras de separar las dos principales fuentes de variación
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014.
+          </small></small>
+                    </p>
+                </div>
+                <!-- END HELP MESSAGE #2 -->
+
+                <!-- HELP MESSAGE #2 -->
+                <div class="container" *ngIf="helper == '2'">
+                    <h6>Precisión – Repetibilidad</h6>
+                    <p class="justify">
+                        La repetibilidad supone que tan repetibles son los resultados esto se hace haciendo repeticiones de medidas bajo las mismas condiciones, usualmente por el mismo analista utilizando el mismo equipo en un periodo corto de tiempo. También es conocida como
+                        Variación de Equipo EV, en este caso puntual dado que no es posible definir patrones para hacer mediciones repetidas se toman medidas consecutivas bajo las condiciones establecidas, en este caso la torre de calibración
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014.
+            <br>
+            [2]	«MEASUREMENT SYSTEMS ANALYSIS», p. 241.
+            
+          </small></small>
+
+                    </p>
+                </div>
+                <!-- END HELP MESSAGE #2 -->
+
+                <!-- HELP MESSAGE #3 -->
+                <div class="container" *ngIf="helper == '3'">
+                    <h6>Precisión – Precisión Intermedia</h6>
+                    <p class="justify">
+                        Precisión obtenida dentro del laboratorio por diferentes analistas, diferentes equipos, días distintos con la misma muestra homogénea. También es conocida como Variación del Evaluador (Appraiser Variation) AV.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+          [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014.
+          </small></small>
+
+                    </p>
+                </div>
+                <!-- END HELP MESSAGE #3 -->
+
+                <!-- HELP MESSAGE #4 -->
+                <div class="container" *ngIf="helper == '4'">
+                    <h6>ANOVA</h6>
+                    <p class="justify">
+
+                        El análisis de varianza (ANOVA) es una técnica estadística que permite aislar y estimar variaciones dentro de conjuntos de datos. Para ello deben estar bien especificados las fuentes de variación que van a ser analizadas dentro del método. Por ejemplo,
+                        diferentes analistas, muestras o patrones. Adicionalmente la ANOVA permite realizar un diagnóstico del desempeño del método e identificar cuales fuentes aportan más a la variación de los resultados.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]		S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+            <br>
+            [2]	«MEASUREMENT SYSTEMS ANALYSIS», p. 241.
+          </small></small>
+
+                    </p>
+                </div>
+                <!-- END HELP MESSAGE #4 -->
+
+                <!-- HELP MESSAGE #5 -->
+                <div class="container" *ngIf="helper == '5'">
+                    <h6>Analista</h6>
+                    <p class="justify">
+                        Se refiere a la persona que realiza el análisis, es común que se incluyan múltiples analistas en los análisis ANOVA esto con aras de tener en cuenta los errores aleatorios que afecten al método
+                        <br>
+                        <br>
+                    </p>
+                </div>
+                <!-- END HELP MESSAGE #5 -->
+
+                <!-- HELP MESSAGE #6 -->
+                <div class="container" *ngIf="helper == '6'">
+                    <h6>Réplicas</h6>
+                    <p class="justify">
+                        Se refiere a las repeticiones del mismo experimento sin cambiar ninguna de las variables, este factor se observan los posibles errores sistemáticos que afecten al método.
+                        <br>
+                        <br>
+                    </p>
+                </div>
+                <!-- END HELP MESSAGE #6 -->
+
+                <!-- HELP MESSAGE #7 -->
+                <div class="container" *ngIf="helper == '7'">
+                    <h6>Muestras</h6>
+                    <p class="justify">
+                        Muestra la calidad de la estimación por medio de mínimos cuadrados ordinarios. Es la medida de la dependencia lineal de dos variables, en este caso el método referencia y el método candidato.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]	S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+          </small></small>
+
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #7 -->
+
+                <!-- HELP MESSAGE #8 -->
+                <div class="container" *ngIf="helper == '8'">
+                    <h6>SS Suma de Cuadrados</h6>
+                    <p class="justify">
+                        Los términos de suma de cuadrados se calculan sumando una serie de términos de error al cuadrado. En el caso del término de suma de cuadrados dentro del grupo, nos interesan las diferencias entre los puntos de datos individuales y la media del grupo al
+                        que pertenecen. Para el término de suma total de cuadrados, lo que interesa es la diferencia entre los puntos de datos individuales y la media de todos los datos (la "gran media"). El término de suma de cuadrados entre grupos es
+                        la diferencia entre la suma total de cuadrados y la suma de cuadrados dentro del grupo.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]		S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+            <br>
+            [2]	«MEASUREMENT SYSTEMS ANALYSIS», p. 241.
+          </small></small>
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #8 -->
+
+                <!-- HELP MESSAGE #9 -->
+                <div class="container" *ngIf="helper == '9'">
+                    <h6>MS Cuadrado Medio</h6>
+                    <p class="justify">
+                        Los cuadrados medios son los términos clave en ANOVA clásico. Son variaciones, calculadas dividiendo la suma de cuadrados entre grupos y dentro de los grupos por el número apropiado de grados de libertad.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]	S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+          </small></small>
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #9 -->
+
+                <!-- HELP MESSAGE #10 -->
+                <div class="container" *ngIf="helper == '10'">
+                    <h6>Estadístico F</h6>
+                    <p class="justify">
+                        Los cuadrados medios se comparan mediante un estadístico F, en donde la hipótesis nula es que todas las medias son iguales. El valor F es calculado para cada fuente de varianza suele ser el cuadrado medio de esa fuente de varianza dividido por el cuadrado
+                        medio residual.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]	S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+          </small></small>
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #10 -->
+
+                <!-- HELP MESSAGE #11 -->
+                <div class="container" *ngIf="helper == '11'">
+                    <h6>P value</h6>
+                    <p class="justify">
+                        Es el nivel significancia de dicha variable. Si se da un valor p menor que el nivel de significancia elegido (usualmente 0.05) indica que el efecto es significativo.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]	S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+          </small></small>
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #11 -->
+
+                <!-- HELP MESSAGE #12 -->
+                <div class="container" *ngIf="helper == '12'">
+                    <h6>df Grados de libertad</h6>
+                    <p class="justify">
+                        Los grados de libertan muestran la dimensión de grupo de datos independientes entre sí incluyendo la media del mismo grupo.
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]	S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+          </small></small>
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #12 -->
+
+                <!-- HELP MESSAGE #13 -->
+                <div class="container" *ngIf="helper == '13'">
+                    <h6>ndc</h6>
+                    <p class="justify">
+                        El número de clasificaciones o categorías que se pueden distinguir de manera confiable determinada por la resolución efectiva del sistema del sistema de medición (nivel de confianza del 97%)
+                        <br>
+                        <br>
+                        <small>
+          <small>
+            [1]	«MEASUREMENT SYSTEMS ANALYSIS», p. 241.
+          </small></small>
+                    </p>
+                </div>
+                <!-- HELP MESSAGE #13 -->
+
+
+                <br>
+            </div>
+            <!-- END HELP BLOCK -->
+
+            <!-- RESULTS -->
+            <div *ngIf="accuracy?.anova?.treatment?.PV != 0" class="container-fluid my-3">
+                <h5 class="my-3">Análisis de resultados</h5>
+                <p *ngIf="accuracy?.anova?.treatment?.PV < 0.05 ">
+                    P-value
+                    < 0.05 <br>
+                        El P-value es menor a 0.05 esto quiere decir que hay diferencias significativas entre los resultados producidos por diferentes analistas y dicha desviación estándar es de {{ accuracy?.standardDeviationBetweenGroups | number:'1.0-4'}}.
+                        <p *ngIf="accuracy?.anova?.treatment?.PV > 0.05 && accuracy?.standardDeviationBetweenGroups == 0">
+                            Pvalue > 0.05 & Desviación estándar entre grupo = 0
+                            <br> El P-value es mayor a 0.05 esto quiere decir que no hay diferencias significativas entre los resultados producidos por diferentes analistas y que la variación del método es causada principalmente a errores aleatorios.
+                            Adicionalmente la varianza de repetibilidad es cero lo cual es consistente dado que el efecto no es estadísticamente significativo.</p>
+                        <p *ngIf="accuracy?.anova?.treatment?.PV > 0.05 && accuracy?.standardDeviationBetweenGroups != 0">
+                            P-value > 0.05 & Desviación estándar entre grupo diferente de 0
+                            <br> El P-value es mayor a 0.05 esto quiere decir que no hay diferencias significativas entre los resultados producidos por diferentes analistas y que la variación del método es causada principalmente a errores aleatorios.
+                        </p>
+            </div>
+            <!-- RESULTS -->
+        </div>
+    </div>
+
+
+</div>

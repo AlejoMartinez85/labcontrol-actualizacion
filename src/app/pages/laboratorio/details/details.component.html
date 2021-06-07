@@ -1,0 +1,689 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-header-text">Información del Laboratorio</h5>
+          <button id="edit-btn" type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right"
+            (click)="toggleEditProfile()">
+            <i class="icofont {{ editProfileIcon }}"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="view-info" *ngIf="editProfile">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="general-info">
+                  <div class="row">
+                    <div class="col-lg-12 col-xl-6">
+                      <div class="table-responsive">
+                        <table class="table m-0">
+                          <tbody>
+                            <tr>
+                              <th scope="row">Nombre</th>
+                              <td>{{cliente?.nombre}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Tipo Identificación</th>
+                              <td>{{cliente?.tid}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Numero de Identificación</th>
+                              <td>{{cliente?.nid}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Contacto</th>
+                              <td>{{cliente?.nombre_contacto}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">E-mail</th>
+                              <td>{{cliente?.email_contacto}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- end of table col-lg-6 -->
+                    <div class="col-lg-12 col-xl-6">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <th scope="row">Dirección</th>
+                              <td>{{cliente?.direccion}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Ciudad</th>
+                              <td>{{cliente?.ciudad}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Departamento</th>
+                              <td>{{cliente?.departamento}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Telefonos</th>
+                              <td><ul>
+                                <li *ngFor="let telefono of cliente?.telefonos;index as i;">
+                                  {{telefono.display}}
+                                </li>
+                              </ul></td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Descripción</th>
+                              <td>{{cliente?.descripcion}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- end of table col-lg-6 -->
+                  </div>
+                  <!-- end of row -->
+                </div>
+                <!-- end of general info -->
+              </div>
+              <!-- end of col-lg-12 -->
+            </div>
+            <!-- end of row -->
+          </div>
+          <!-- end of view-info -->
+          <div class="edit-info" *ngIf="!editProfile">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="general-info">
+
+                  <form [formGroup]="form" class="row">
+                    <div class="col-lg-6">
+                      <div class="table-responsive">
+
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="nombre"
+                                    [(ngModel)]="cliente.nombre" placeholder="Nombre">
+                                </div>
+                                <div
+                                  *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                                  <div class="messages text-danger" *ngIf="form.controls.nombre.errors?.required">
+                                    Campo Requerido
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+
+                                  <select name="tipoidentificacion" formControlName="tid"
+                                    placeholder="Tipo de identificación" class="form-control form-control-primary"
+                                    [(ngModel)]="cliente.tid">
+                                    <option value="">Tipo de identificacion</option>
+                                    <option value="NIT">NIT</option>
+                                    <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
+                                    <option value="Cédula de extranjería">Cédula de extranjería</option>
+                                    <option value="Tarjeta de identidad">Tarjeta de identidad</option>
+                                    <option value="Registro Civil">Registro Civil</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+
+
+                                  </select>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="nid"
+                                    [(ngModel)]="cliente.nid" placeholder="Numero de Identificación">
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="nombre_contacto"
+                                    [(ngModel)]="cliente.nombre_contacto" placeholder="Contacto">
+                                </div>
+                                <div
+                                  *ngIf="form.controls.nombre_contacto.invalid && (form.controls.nombre_contacto.dirty || form.controls.nombre_contacto.touched)">
+                                  <div class="messages text-danger"
+                                    *ngIf="form.controls.nombre_contacto.errors?.required">
+                                    Campo Requerido
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="email_contacto"
+                                    [(ngModel)]="cliente.email_contacto" placeholder="E-mail">
+                                </div>
+                                <div
+                                  *ngIf="form.controls.email_contacto.invalid && (form.controls.email_contacto.dirty || form.controls.email_contacto.touched)">
+                                  <div class="messages text-danger"
+                                    *ngIf="form.controls.email_contacto.errors?.required">
+                                    Campo Requerido
+                                  </div>
+                                </div>
+                              </td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+                    <!-- end of table col-lg-6 -->
+                    <div class="col-lg-6">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="direccion"
+                                    [(ngModel)]="cliente.direccion" placeholder="Dirección">
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="ciudad"
+                                    [(ngModel)]="cliente.ciudad" placeholder="Ciudad">
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <input type="text" class="form-control" formControlName="departamento"
+                                    [(ngModel)]="cliente.departamento" placeholder="Departamento">
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+
+                                  <tag-input [ngClass]="'tag-select'" theme='bootstrap' formControlName="telefonos"
+                                    [placeholder]="'Telefonos'" [(ngModel)]="cliente.telefonos" [addOnBlur]="true"
+                                    [clearOnBlur]="true" secondaryPlaceholder="Telefonos" >
+                                    <tag-input-dropdown [autocompleteItems]="autocompleteItems" [appendToBody]="false">
+                                    </tag-input-dropdown>
+                                  </tag-input>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="input-group">
+                                  <span class="input-group-prepend"><label class="input-group-text"> <i
+                                        class="icofont icofont-user"></i></label></span>
+                                  <textarea type="text" class="form-control" formControlName="descripcion"
+                                    [(ngModel)]="cliente.descripcion" placeholder="Descripción"></textarea>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- end of table col-lg-6 -->
+
+                  <!-- end of row -->
+                  <div class="text-center">
+                    <button (click)="cactualizarItem()" class="btn btn-primary waves-effect waves-light m-r-20"
+                      [disabled]="!form.valid"><i class="icofont icofont-save"></i>Guardar</button>
+                    <a href="javascript:;" id="edit-cancel" class="btn btn-default waves-effect"
+                      (click)="toggleEditProfile()">Cancelar</a>
+                  </div>
+                </div>
+                <!-- end of edit info -->
+              </div>
+              <!-- end of col-lg-12 -->
+            </div>
+            <!-- end of row -->
+          </div>
+          <!-- end of edit-info -->
+        </div>
+        <!-- end of card-body -->
+      </div>
+    </div>
+
+    <!-- order-card start -->
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-blue order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Cotizaciones</h6>
+          <h2 class="text-right"><i
+              class="ti-shopping-cart f-left"></i><span>${{indicadores?.enespera[0]?.total|number: '1.0-0'}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.enespera[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-yellow order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Pedidos en proceso</h6>
+          <h2 class="text-right"><i
+              class="ti-reload f-left"></i><span>${{indicadores?.proceso[0]?.total|number: '1.0-0'}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.proceso[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-green order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Nuevos pedidos completados</h6>
+          <h2 class="text-right"><i
+              class="ti-wallet f-left"></i><span>${{indicadores?.finalizados[0]?.total|number: '1.0-0'}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{indicadores?.finalizados[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    <!-- order-card end -->
+
+
+    <!-- tabs card start -->
+    <div class="col-sm-12">
+      <app-card [title]="'Información de ensayos'" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <div class="md-tabs">
+          <ngb-tabset (tabChange)="beforeChange($event)">
+            <ngb-tab id="tab-pendientes">
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Cotizaciones</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="ensayos" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Orden">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Laboratorio">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['tercero']?.nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row['muestras'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span [ngClass]="{'label-success': row.estado=='Aprobado','label-warning': row.estado=='Cotización'
+                          ,'label-primary': row.estado=='Esperando Confirmación','label-danger': row.estado=='Cancelado'}" class="label" >{{row['estado']}}</span>
+  
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="tab-proceso">
+              <ng-template ngbTabTitle><i class="icofont icofont-key"></i> En proceso</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="ensayos" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Orden">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Laboratorio">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['tercero']?.nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row['muestras'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span [ngClass]="{'label-warning': row.estado=='En Proceso','label-success': row.estado=='Completado'
+                          ,'label-danger': row.estado=='Detenido'}" class="label">{{row['estado']}}
+                         {{row.totalmuestras?.realizadas}}/{{row.totalmuestras?.total}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="tab-finalizado">
+              <ng-template ngbTabTitle><i class="icofont icofont-check-alt"></i> Terminados</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="ensayos" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Orden">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Laboratorio">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['tercero']?.nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row['muestras'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span [ngClass]="{'label-primary': row.estado=='En Reporte','label-success': row.estado=='Reportado'}" class="label">{{row['estado']}}</span>
+
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div>
+    <!-- order-card start -->
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-blue order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Total pedidos vigentes por pagar</h6>
+          <h2 class="text-right"><i
+              class="ti-shopping-cart f-left"></i><span>{{pagos?.nopagosVigentes[0]?.total|currency}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{pagos?.nopagosVigentes[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-yellow order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Total pedidos vencidos por pagar</h6>
+          <h2 class="text-right"><i
+              class="ti-reload f-left"></i><span>{{pagos?.nopagosVencidos[0]?.total|currency}}</span></h2>
+          <p class="m-b-0">Total ensayos<span class="f-right">{{pagos?.nopagosVencidos[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <app-card [title]="'Información de pagos'" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <div class="md-tabs">
+          <ngb-tabset>
+            <ngb-tab id="tab-nopago">
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Realizados No Pagos</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="pagos?.nopago" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Orden">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['cliente'].nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row['muestras'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['estado']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row)">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="tab-pago">
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Realizado Pagos</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="pagos?.pagados" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                      <ngx-datatable-column name="Codigo Orden">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['cliente'].nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row['muestras'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['estado']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div>
+    <!-- tabs card end -->
+
+    <div class="col-lg-12">
+      <app-actividad>
+
+      </app-actividad>
+    </div>
+  </div>
+</div>

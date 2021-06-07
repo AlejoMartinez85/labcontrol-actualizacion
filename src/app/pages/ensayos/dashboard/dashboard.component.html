@@ -1,0 +1,7 @@
+<div *ngIf="user.tercero.tipo==1">
+  <app-laboratorio></app-laboratorio>
+</div>
+
+<div *ngIf="user.tercero.tipo==2 && (!user.analista && !user.recepcionM)">
+  <app-admin></app-admin>
+</div>

@@ -1,0 +1,138 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-12 col-lg-12">
+      <app-card [cardOptionBlock]="true">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12 col-lg-8">
+              <h1 class="mb-0">Listado de Restricciones</h1>
+            </div>
+            <div class="col-12 col-lg-4 text-right">
+              <button class="btn btn-success" (click)="openMyModal('crear-restriccion')">Crear una Restricción</button>
+            </div>
+            <div class="col-12">
+              <hr>
+            </div>
+            <div class="col-12">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Tipo</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Usuario</th>
+                    <th>Ver Por Usuario</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let restriccion of ListadoRestricciones; let i = index">
+                    <td>{{ i+1 }}</td>
+                    <td>{{ restriccion?.tipo }}</td>
+                    <td>{{ restriccion?.nombre_contacto }}</td>
+                    <td>{{ restriccion?.cantidad }}</td>
+                    <td>{{restriccion.tercero.nombre}}</td>
+                    <td>
+                      <a class="btn btn-success" [routerLink]="[ 'user', restriccion.tercero._id ]">
+                        <span class="icofont icofont-eye"></span>
+                      </a>
+                        </td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-warning" (click)="edit(restriccion._id)"><span
+                            class="icofont icofont-ui-edit"></span></button>
+                        <button type="button" class="btn btn-danger" (click)="delete(restriccion._id)"><span
+                            class="icofont icofont-ui-delete"></span></button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>
+<app-modal-animation [modalID]="'crear-restriccion'" #modaladd [modalClass]="'md-crear-restriccion md-large'">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="mb-0">Crear Restricciones</h1>
+      </div>
+      <div class="col-12">
+        <perfect-scrollbar class="overflow-container py-3 " [style.width]="'100%'" [style.height]="'50vh'">
+          <form [formGroup]="formRestricciones" (ngSubmit)="guardarRestriccion('create')">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre">
+            </div>
+            <div class="form-group">
+              <select class="form-control" formControlName="tipo">
+                <option value="">Selecciona Una Opción</option>
+                <option value="{{tipo}}" *ngFor="let tipo of tipos">{{tipo}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="number" class="form-control" placeholder="Cantidad" formControlName="cantidad">
+            </div>
+            <div class="form-group">
+              <select class="form-control" formControlName="tercero">
+                <option value="">Selecciona Una Opción</option>
+                <option *ngFor="let usuario of usuarios" value="{{usuario.tercero}}">{{usuario.name}} - {{usuario.email}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="closeMyModal('crear-restriccion')">Cancelar</button>
+              </div>
+            </div>
+          </form>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </div>
+  <button (click)="closeMyModal('crear-restriccion')" aria-label="Close" class="md-close-btn"><i
+    class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<app-modal-animation [modalID]="'edit-restriccion'" [modalClass]="'md-crear-restriccion md-large'">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="mb-0">Editar Restricciones {{NewRestriccion.nombre}}</h1>
+      </div>
+      <div class="col-12">
+        <perfect-scrollbar class="overflow-container pt-5 pb-3" [style.width]="'100%'" [style.height]="'50vh'">
+          <form [formGroup]="formRestriccionesEdit" (ngSubmit)="guardarRestriccion('edit')">
+            <div class="form-group">
+              <input type="hidden" [(ngModel)]="NewRestriccion._id" formControlName="_id">
+              <input type="text" class="form-control" placeholder="Nombre" [(ngModel)]="NewRestriccion.nombre" formControlName="nombre">
+            </div>
+            <div class="form-group">
+              <select class="form-control" formControlName="tipo"[(ngModel)]="NewRestriccion.tipo">
+                <option value="">Selecciona Una Opción</option>
+                <option *ngFor="let tipo of tipos" [selected]="NewRestriccion?.tipo" >{{tipo}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="number" class="form-control" placeholder="Cantidad" formControlName="cantidad" [(ngModel)]="NewRestriccion.cantidad">
+            </div>
+            <div class="form-group">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="closeMyModal('edit-restriccion')">Cancelar</button>
+              </div>
+            </div>
+          </form>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </div>
+  <button (click)="closeMyModal('edit-restriccion')" aria-label="Close" class="md-close-btn"><i
+    class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<app-preloader *ngIf="preloader"></app-preloader>

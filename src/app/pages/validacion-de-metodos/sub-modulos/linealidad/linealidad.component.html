@@ -1,0 +1,279 @@
+<div class="card-header">
+    <div class="conatiner-fluid">
+        <div class="row">
+
+            <div class="col-12 col-lg-10">
+                <h4 class="m-0 link" (click)="help('1')">Linealidad</h4>
+            </div>
+            <div class="col-12 col-lg-2 text-right">
+                <button *ngIf="permisosLocal.eliminar" class="btn btn-danger" (click)="EliminarLinealidad()">
+          <span class="icofont icofont-ui-delete"></span>
+        </button>
+                <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+          <span class="icofont icofont-ui-edit"></span>
+        </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="card-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="my-3">
+                    <h6>Valores experimentales</h6>
+                </div>
+                <form [formGroup]="formaLinealidad">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="">Unidades: </label>
+                                    <input *ngIf="edit" type="text" class="form-control" [formControlName]="'unidad'">
+                                    <span *ngIf="!edit">{{ArrLinealidad.unidad}}</span>
+                                </div>
+                            </div>
+                            <div class="col">
+
+                                <ul *ngIf="edit" class="list-group" [formArrayName]="'parametros1'">
+                                    <li (click)="help('2')" class="list-group-item p-0">
+                                        <input type="text" value="Referencia (x)" class="form-control">
+                                    </li>
+                                    <li class="list-group-item p-0">
+                                        <input type="text" (paste)="data2($event,'parametro1')" class="form-control" placeholder="Pega tus datos">
+                                    </li>
+
+                                    <li class="list-group-item p-0" *ngFor="let item of parametro1.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                        <div class="input-group m-0 campomodific">
+                                            <div class="input-group-prepend ">
+                                                <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex)">
+                          <span class="icofont icofont-plus-circle"></span>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" [formControlName]="'parametro1'" (paste)="paste($event, pointIndex, 'parametro1')">
+                                            <div class="input-group-prepend btn-danger">
+                                                <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'parametro1')">
+                          <span class="icofont icofont-ui-delete"></span>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div (click)="help('2')">
+                                    <app-tabla-arrays *ngIf="!edit" class="link" [array]="ArrLinealidad['concentraciones']" [nombre]='"ref (x)"'>
+                                    </app-tabla-arrays>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <ul *ngIf="edit" class="list-group" [formArrayName]="'parametros2'">
+                                    <li (click)="help('3')" class="list-group-item p-0">
+                                        <input type="text" value="Candidato (y)" class="form-control">
+                                    </li>
+                                    <li class="list-group-item p-0">
+                                        <input type="text" (paste)="data2($event,'parametro2')" class="form-control" placeholder="Pega tus datos">
+                                    </li>
+                                    <li class="list-group-item p-0" *ngFor="let item of parametro2.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                        <div class="input-group m-0 campomodific">
+                                            <div class="input-group-prepend ">
+                                                <span class="input-group-text " id="basic-addon1" style="background: #9FA5AA;">
+                          <span class="icofont icofont-plus-ircle"></span>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" [formControlName]="'parametro2'" (paste)="paste($event, pointIndex, 'parametro2')">
+                                            <div class="input-group-prepend btn-danger">
+                                                <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'parametro2')">
+                          <span class="icofont icofont-ui-delete"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div (click)="help('3')">
+                                    <app-tabla-arrays *ngIf="!edit" class="link" [array]="ArrLinealidad['areras']" [nombre]='"Referencia (y)"'>
+                                    </app-tabla-arrays>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <button class="btn btn-success" (click)="generar()" id="btn-linealidad">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <div class="card text-white bg-primary border-primary mb-3">
+                    <div class="card-header">Gráfica Linealidad</div>
+                    <div class="card-body bg-white text-dark">
+                        <div id="chart"></div>
+                        <div>
+                            <h6 (click)="help('4')">Ecuación regresión lineal</h6>
+                            <h6>y={{pendienteLinealidad | number: '1.1-3'}}x+{{interceptoLinealidad | number: '1.1-3'}}</h6>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-sm-12 col-lg-12 d-flex justify-content-between">
+                <div class="container-fluid my-3">
+                    <h5 class="my-3">Resultados</h5>
+                    <div class="row">
+                        <div (click)="help('6')" class="col-4">
+                            <h6>Pendiente</h6>
+                            {{pendienteLinealidad | number: '1.1-3'}}
+                        </div>
+                        <div (click)="help('5')" class="col-4">
+                            <h6>Intercepto</h6>
+                            {{interceptoLinealidad | number: '1.1-3'}}
+                        </div>
+                        <div (click)="help('7')" class="col-4">
+                            <h6>R<sup>2</sup></h6>
+                            {{RquadradoLinealidad | number: '1.1-3'}}
+                        </div>
+                    </div>
+                </div>
+                <!-- START HELP BLOCK -->
+                <div *ngIf="helperActive == true" class="row">
+                    <br>
+                    <div class="d-flex justify-content-between col-12">
+                        <h5>Explicación</h5>
+                        <div>
+                            <button (click)="helperActive = false" aria-label="Close" class="md-close-btn exit link"><i class="icofont icofont-ui-close"></i></button>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="container" *ngIf="helper == '1'">
+                        <h6>Linealidad</h6>
+                        <p class="justify">
+                            Es la capacidad dentro de un rango definido de obtener resultados directos o proporcionales a la respuesta del analito. Esta relación debe ser definida por una transformación matemática de función de primer grado del tipo y= mx+b, esta relación es conocida
+                            como función o curva de calibración.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+                [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014. <br>
+                [2]	The United States pharmacopeia; The national formulary. Rockville: United States pharmacopeia convention, 2007.
+              </small></small>
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '2'">
+                        <h6>Método de referencia</h6>
+                        <p class="justify">
+                            Es un método o practica que posee pequeñas inexactitudes estimadas en relación con su uso. La precisión de este método ha sido verificada a través de comparación directa con un material de referencia primero o un método definitivo.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+                [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+                <br>
+                [2]	IUPAC, Compendium of analytical nomenclature: definitive rules 1977, 1. ed. Oxford: Pergamon Press, 1978.
+                
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '3'">
+                        <h6>Método candidato</h6>
+                        <p class="justify">
+
+                            Es el método que está siendo evaluado dentro del proceso de validación. <br>
+                            <br>
+                            <small>
+              <small>
+              [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '4'">
+                        <h6>Regresión Lineal</h6>
+                        <p class="justify">
+
+                            Es la relación entre las lecturas del método de referencia y el método candidato, esto mediante una relación del tipo y= mx+b.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+              [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '5'">
+                        <h6>Intercepto</h6>
+                        <p class="justify">
+                            Es el punto donde se intersecta la recta con eje x.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+              [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '6'">
+                        <h6>Pendiente</h6>
+                        <p class="justify">
+                            Es la diferencia entre un cambio en el eje y dividida por un cambio en el eje x
+                            <br>
+                            <br>
+                            <small>
+              <small>
+              [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '7'">
+                        <h6>R<sup>2</sup> Coeficiente de correlación</h6>
+                        <p class="justify">
+                            Muestra la calidad de la estimación por medio de mínimos cuadrados ordinarios. Es la medida de la dependencia lineal de dos variables, en este caso el método referencia y el método candidato.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+                [1]	S. L. R. Ellison, T. J. Farrant, y V. Barwick, Practical statistics for the analytical scientist: a bench guide, 2nd ed. Cambridge, UK: RSC Publishing, 2009.
+              </small></small>
+
+                        </p>
+                    </div>
+                    <br>
+                </div>
+                <!-- END HELP BLOCK -->
+            </div>
+            <!-- Results -->
+            <div class="container-fluid my-3">
+                <h5 class="my-3">Análisis de resultados</h5>
+                <p *ngIf="RquadradoLinealidad > 0.99">
+                    Si R2>=0.99 Un cambio en mensurando debe ser detectado de la misma manera por método de referencia y por el candidato. Al graficar las respuestas a diferentes niveles para el método referencia en la coordenada x, y las respuestas para el método candidato
+                    en la y. Se obtiene una relación entre estos. Esta relación sigue un comportamiento lineal dado que su coeficiente de correlación es superior a 0.99</p>
+
+                <p *ngIf="RquadradoLinealidad > 0.9 && RquadradoLinealidad < 0.99">
+                    Si 0.9>=R2>0.99 Un cambio en mensurando debe ser detectado de la misma manera por método de referencia y por el candidato. Al graficar las respuestas a diferentes niveles para el método referencia en la coordenada x, y las respuestas para el método candidato
+                    en la y. Se obtiene una relación entre estos. Esta relación tiene un comportamiento lineal, aunque no es posible asegurarlo con certeza dado que el R2 no es mayor a 0.99, se recomienda analizar datos atípicos.</p>
+                <p *ngIf="RquadradoLinealidad < 0.9">
+                    Si R2
+                    <=0.9 Un cambio en mensurando debe ser detectado de la misma manera por método de referencia y por el candidato. Al graficar las respuestas a diferentes niveles para el método referencia en la coordenada x, y las respuestas para el método candidato en
+                        la y. Se obtiene una relación entre estos. Esta relación no se cumple dado que el R2 no es superior a 0.99 </p>
+
+
+            </div>
+            <!-- Results -->
+
+            <div class="col-12" *ngIf="guardaLinealidad">
+                <div class="text-right">
+                    <button class="btn btn-success" (click)="guardarLinealidad()" *ngIf="edit">Guardar / Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

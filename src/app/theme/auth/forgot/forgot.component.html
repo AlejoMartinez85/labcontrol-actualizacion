@@ -1,0 +1,110 @@
+<simple-notifications [options]="options"></simple-notifications>
+<section class="login p-fixed d-flex text-center bg-primary common-img-bg">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- Authentication card start -->
+        <div class="login-card card-block auth-body mr-auto ml-auto">
+          <form class="md-float-material" *ngIf="!perdirPassword " (ngSubmit)="enviarrecordar()"  [formGroup]="form">
+            <div class="text-center">
+              <a href="https://labcontrol.co/"><img src="assets/images/logos/labcontrol-logo.png" style="width: 350px;" alt="labcontrol"></a>
+            </div>
+            <div class="auth-box">
+              <div class="row m-b-20">
+                <div class="col-md-12">
+                  <h3 class="text-left">Recupera tu contraseña</h3>
+                </div>
+              </div>
+              <p class="text-inverse b-b-default text-right">Volver al <a [routerLink]="['/auth/login/simple']">Login.</a></p>
+              <div class="input-group">
+                <input class="form-control" placeholder="Ingresa tu email" formControlName="email" [(ngModel)]="email">
+                <span class="md-line"></span>{{form.Submit}}
+                <div
+                      *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched||formSubmit)">
+                      <div class="messages text-danger" *ngIf="form.controls.email.errors?.required">
+                        Campo Requerido
+                      </div>
+                    </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Recuperar contraseña</button>
+                </div>
+              </div>
+              <hr/>
+              <div class="row">
+                <div class="col-md-10">
+                  <p class="text-inverse text-left m-b-0">Gracias por utilizar Labcontrol.</p>
+                  <p class="text-inverse text-left"><b>Labcontrol</b></p>
+                </div>
+                <div class="col-md-2">
+                  <img src="assets/images/auth/Logo-small-bottom.png" alt="Gradient Able">
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- end of form -->
+          <div class="card" *ngIf="perdirPassword ">
+            <div class="card-header">
+              <h5 class="card-header-text">Cambiar Contraseña</h5>
+            </div>
+            <div class="card-body">
+              <form class="md-float-material" (ngSubmit)="cambiarpassword()" [formGroup]="myForm">
+
+
+
+                <div class="row">
+                  <div class="input-group">
+                    <input type="email" class="form-control" placeholder="email" formControlName="email"
+                      id="email" name="email" [(ngModel)]="email" >
+                    <span class="md-line"></span><br>
+                    <div class="messages text-danger error" *ngIf="myForm.controls.email.errors?.required&& isValidFormSubmitted!=null && !isValidFormSubmitted">Campo
+                      Requerido</div>
+                  </div>
+                  <div class="row m-t-30" *ngIf="!usuario">
+                    <div class="col-md-12">
+    
+                      <button type="button" (click)="cargardatos($event)" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Validar Correo Electronico</button>
+                    </div>
+                  </div>
+                  <div class="input-group" *ngIf="usuario">
+                    <input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
+                      id="password" name="password" [(ngModel)]="newpassword">
+                    <span class="md-line"></span><br>
+                    <div class="messages text-danger error" *ngIf="myForm.controls.password.errors?.required&& isValidFormSubmitted!=null && !isValidFormSubmitted">Campo
+                      Requerido</div>
+                  </div>
+                  <div class="input-group" *ngIf="usuario">
+                    <input type="password" class="form-control" placeholder="Confirmar Contraseña" name="rpassword"
+                      id="rpassword" formControlName="rpassword">
+                    <span class="md-line"></span>
+                    <br>
+
+                    <p class="messages text-danger" *ngIf="myForm.controls.rpassword.errors?.required&& isValidFormSubmitted!=null && !isValidFormSubmitted">Campo
+                      Requerido</p>
+
+                    <p class="messages text-danger" *ngIf="myForm.controls.rpassword.errors?.equalTo&&myForm.controls.password.touched">&nbsp;
+                      El password no coincide.</p>
+
+                  </div>
+                  <div class="row m-t-30" *ngIf="usuario">
+                      <div class="col-md-12">
+      
+                        <button type="submit"  class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Cambiar Contraseña</button>
+                      </div>
+                    </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- Authentication card end -->
+      </div>
+      <!-- end of col-sm-12 -->
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end of container-fluid -->
+</section>

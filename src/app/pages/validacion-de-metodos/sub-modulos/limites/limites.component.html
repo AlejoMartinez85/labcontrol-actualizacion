@@ -1,0 +1,259 @@
+<div class="card-header">
+    <div class="conatiner-fluid">
+        <div class="row">
+            <div class="col-10">
+                <h4 class="m-0 link">Limite de detección y cuantificación</h4>
+            </div>
+            <div class="col-2 text-right">
+                <button *ngIf="permisosLocal.eliminar" class="btn btn-danger" (click)="EliminarLimites()">
+          <span class="icofont icofont-ui-delete"></span>
+        </button>
+                <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+          <span class="icofont icofont-ui-edit"></span>
+        </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <form [formGroup]="formaLimiteDeteccionCuantificacion">
+        <div *ngIf="edit" class="form-group">
+            <label (click)="help('3')" class="link" for="">Los resultados se corrigen por el blanco durante el uso de rutina del
+        método</label>
+            <div *ngIf="edit" class="form-check">
+                <input type="radio" class="form-check-input" [formControlName]="'usaBlanco'" (click)="usaBlanco('Si');" value="Si" checked>
+                <label (click)="help('3')" class="form-check-label link">
+          Sí
+        </label>
+            </div>
+            <div *ngIf="edit" class="form-check">
+                <input type="radio" class="form-check-input" [formControlName]="'usaBlanco'" (click)="usaBlanco('No');" value="No">
+                <label class="form-check-label" for="exampleRadios2">
+          No
+        </label>
+            </div>
+            <div *ngIf="!edit">
+                <p>{{ArrLOD_LOQ['usaBlanco']}}</p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col" *ngIf="NB">
+                <label for="">Número de observaciones de blanco</label>
+                <input *ngIf="edit" type="number" class="form-control" [formControlName]="'nb'" min="1">
+                <p *ngIf="!edit">{{ArrLOD_LOQ['nb']}}</p>
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-between">
+            <div class="col-lg-4 mr-3">
+                <!-- Array limite de detección -->
+                <h6 (click)="help('4')" class="link">Datos Límites de <span>detección</span> <span>y cuantificación</span></h6>
+                <div class="form-group row" *ngIf="!limiteTecion">
+                    <div class="col">
+                        <ul *ngIf="edit" class="list-group" [formArrayName]="'arrs1'">
+                            <li (click)="help('4')" class="list-group-item p-0 link">
+                                <input type="text" value="Experimento de Cero" class="form-control">
+                            </li>
+                            <li class="list-group-item p-0">
+                                <input type="text" (paste)="data2($event,'arr1')" class="form-control" placeholder="Pega tus datos">
+                            </li>
+                            <li class="list-group-item p-0" *ngFor="let item of arr1.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                <div class="input-group m-0 campomodific">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex)">
+                      <span class="icofont icofont-plus-circle"></span>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" [formControlName]="'arr1'">
+                                    <div class="input-group-prepend btn-danger">
+                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'arr1')">
+                      <span class="icofont icofont-ui-delete"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div [ngClass]="{'content': contentTable, 'nocontet': !contentTable}">
+                            <app-tabla-arrays *ngIf="!edit" [array]="ArrLOD_LOQ['Matriz']" [nombre]='"Experimento de Cero"'></app-tabla-arrays>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-success" (click)="content()">{{contentTable? 'cargar mas' : 'cargar menos'}}</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Array limite de detección -->
+            </div>
+            <div class="col-lg-8">
+
+                <div class="form-group">
+                    <label class="link" for="">Unidades</label>
+                    <input *ngIf="edit" type="text" class="form-control col-6" [formControlName]="'unidad'">
+                    <p *ngIf="!edit">{{ArrLOD_LOQ['unidad']}}</p>
+                </div>
+                <div class="form-group">
+                    <label (click)="help('5')" class="link" for="">Factor Límite de Detección</label>
+                    <input *ngIf="edit" type="text" class="form-control col-6" [formControlName]="'factorLimiteDetencion'">
+                    <p *ngIf="!edit">{{ArrLOD_LOQ['factorLimiteDetencion']}}</p>
+                </div>
+                <div class="form-group ">
+                    <label (click)="help('6')" class="link" for="">Factor Límite de Cuantificación</label>
+                    <input *ngIf="edit" type="text" class="form-control col-6" [formControlName]="'factorLimiteCuantificacion'">
+                    <p *ngIf="!edit">{{ArrLOD_LOQ['factorLimiteCuantificacion']}}</p>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" id="btn-LOD_LOQ" *ngIf="edit" (click)="llenadoDeArrayCalculos(formaLimiteDeteccionCuantificacion,'LOD_LOQ')">Calcular</button>
+                    <button class="btn btn-success" *ngIf="btnLOD_LOQ && edit" (click)="guardarLOD_LOQ()" (click)="edicion()">guardar</button>
+                </div>
+                <!-- START LIMITS -->
+                <div class="form-group">
+                    <div class="">
+                        <div class="col-12" *ngIf="limite_deteccion">
+                            <ul class="list-group">
+                                <li (click)="help('1')" class="list-group-item bg-primary">
+                                    <strong class="link">Límite de Detección</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span> {{fLdeteccion | number: '1.1-3'}} </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <br>
+                        <div class="col-12" *ngIf="limite_cuantificacion">
+                            <ul class="list-group">
+                                <li (click)="help('2')" class="list-group-item bg-primary">
+                                    <strong class="link">Límite de Cuantificación</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span> {{fLquantificacion | number: '1.1-3'}} </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- END LIMITS -->
+
+                <!-- START HELP BLOCK -->
+
+                <div *ngIf="helperActive == true" class="row">
+                    <br>
+                    <div class="d-flex justify-content-between col-12">
+                        <h5>Explicación</h5>
+                        <div>
+                            <button (click)="helperActive = false" aria-label="Close" class="md-close-btn exit link"><i class="icofont icofont-ui-close"></i></button>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="container" *ngIf="helper == '1'">
+                        <h6>Límite de detección</h6>
+                        <p class="justify">
+                            Es la concentración más baja de analito presente en la muestra, que puede ser detectada utilizando un procedimiento de medida. Este es calculado fijando probabilidades de obtener falsos positivos α y falsos negativos β. Esto acompañado con un experimento
+                            de cero en donde se evalúa la respuesta del método en concentraciones sin analito. <br>
+                            <br>
+                            <small>
+              <small>
+              [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014. <br>
+              [2]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '2'">
+                        <h6>Límite de cuantificación</h6>
+                        <p class="justify">
+
+                            Es el mínimo nivel de analito que puede ser determinado con una certeza especifica. La habilidad de cuantificar es expresada en términos de la señal del analito o valor verdadero el cual producirá estimados con una desviación estándar relativa determinada.
+                            Dicho límite también puede ser calculado mediante un experimento de cero o a una baja concentración de analito. <br>
+                            <br>
+                            <small>
+              <small>
+              [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014. <br>
+              [2]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '3'">
+                        <h6>Corrección por blanco</h6>
+                        <p class="justify">
+
+                            Durante el proceso rutinario de análisis se analiza una muestra sin presencia de analito, la respuesta dado por el método se usa para corregir mediciones de muestras con analito.<br>
+                            <br>
+                            <small>
+              <small>
+              [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014.
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '4'">
+                        <h6>Experimento de cero</h6>
+                        <p class="justify">
+
+                            Es un experimento en donde se evalúa la respuesta del método a concentraciones muy bajas o sin presencia de analito. <br>
+                            <br>
+                            <small>
+              <small>
+              [1] 		CITAC, The fitness for purpose of analytical methods: a laboratory guide to method validation and related topics. 2014.
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '5'">
+                        <h6>Factor de límite de detección</h6>
+                        <p class="justify">
+
+                            Con el experimento de cero se determina las respuestas del método a concentraciones muy bajas o nulas del analito. Obteniendo la desviación estándar de este experimento y escalándolo por un factor que represente las probabilidades de obtener fasos negativos
+                            α y falsos positivos β. <br><br> Con probabilidades de α=β=0.05 , con un estadístico t de infinitos grados de libertad se obtiene 1.65s. <br><br> Al incluir las dos probabilidades se obtiene k_D
+                            s=1.65s+1.65s=3.30s. Este valor se conoce como el factor de límite de detección el cual usualmente se aproxima a 3 obteniendo una expresión para el límite de detección de LOD=3s.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+              [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <div class="container" *ngIf="helper == '6'">
+                        <h6>Factor de límite de cuantificación</h6>
+                        <p class="justify">
+
+                            El límite de cuantificación se calcula basándose en la desviación estándar a niveles bajos (experimento de cero) multiplicada por un factor k_Q. Mediante la relación LOQ=k_Q s_Q. Siendo s_Q la desviación estándar en el límite. Generalmente el cálculo
+                            del límite del cuantificación suele basarse en el límite de detección LOD, mediante la relación LOQ=k_Q LOQ.<br>
+                            <br> El factor k_Q el cual es un factor obtenido mediante un estadístico t con un nivel de significancia especifica e infinitos grados de libertad. De la misma manera se modela con α=β=0.05. Obteniendo un valor de k_Q=3.30.
+                            Con dicho valor la expresión completa para el límite de detección es LOQ=k_Q k_D s=3.30 (3.30s)=10.89s. En donde s es la desviación estándar corregida por la cantidad de datos en un experimento de cero o una baja concentración
+                            de analito. Usualmente el valor del factor k_Q se aproxima a 10 obteniendo una expresión para el límite de cuantificación de LOQ=10s.
+                            <br>
+                            <br>
+                            <small>
+              <small>
+              [1]	L. A. CURRIE, «NOMENCLATURE IN EVALUATION OF ANALYTICAL METHODS INCLUDING DETECTION AND QUANTIFICATION CAPABILITIES»
+              </small></small>
+
+                        </p>
+                    </div>
+                    <br>
+                </div>
+                <!-- END HELP BLOCK -->
+                <br>
+                <div *ngIf="(fLdeteccion || fLquantificacion) != null">
+                    <h5>Análisis de resultados</h5>
+                    <br>
+                    <p><strong>Límite de detección - LOD</strong> <br> Es la concentración más baja de analito presente en la muestra que puede ser detectada utilizando un procedimiento de medición, con un nivel de confianza del 95% . Dicho límite es
+                        <span>{{fLdeteccion | number: '1.1-3'}} </span>
+                    </p>
+                    <br>
+                    <p>
+                        <strong>Límite de cuantificación - LOQ</strong> <br> Es el mínimo nivel de analito que puede ser determinado con una certeza del 95%. Dicho límite es <span>{{fLquantificacion | number: '1.1-3'}}</span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </form>
+
+</div>

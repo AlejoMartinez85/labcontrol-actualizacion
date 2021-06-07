@@ -1,0 +1,526 @@
+<div class="card noprint ">
+  <div class="card-header" *ngIf="!ensayo['subidaPdfManual']">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- GUSTAVO NO FUNCIONA BIEN -->
+        <!-- <div class="col-12">
+          <div class="form-group mb-0">
+            <label for="estructuraCheck">
+              <input 
+                class="border-checkbox"
+                type="checkbox"
+                id="estructuraCheck"
+                [(ngModel)]="ensayo.Estructura"
+                [checked]="ensayo.Estructura"
+                (change)='changueEstructura($event)'>
+                 Usar una estructura Del sistema
+            </label>
+          </div>
+        </div> -->
+        <div class="col-12 col-lg-10">
+          <div class="form-group mb-0" *ngIf="!ensayo.Estructura">
+            <select class="form-control" #mySelect id="estructura" (change)='onOptionsSelected(mySelect.value)'>
+              <option value="">Selecciona una estructura de informe</option>
+              <option value="{{estructura._id}}" *ngFor="let estructura of estructuras">{{ estructura.nombre }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-lg-2">
+          <button id="edit-btn" type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right"
+            (click)="toggleEditProfile()">
+            <i class="icofont {{ editProfileIcon }}"></i>
+          </button>
+          <button id="edit-btn" *ngIf="editProfile" type="button"
+            class="btn btn-sm btn-primary waves-effect waves-light f-right" (click)="cactualizarensayo()">
+            <i class="icofont icofont-diskette"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div *ngIf="!ensayo['subidaPdfManual'];">
+    <div class="card-body">
+      <div class="row">
+        <ng-container *ngIf="ensayo.Estructura">
+          <div class="col-lg-12 text-center">
+            <h3>INFORME DE RESULTADOS No. {{ensayo.reporte?.codigoinforme}}</h3>
+          </div>
+          <div class="col-lg-12 ">
+            <div class="row">
+              <div class="col-lg-6 border">
+                <p class="font-weight-bold text-center">INFORMACIÓN DEL CLIENTE</p>
+                <div class="row ">
+                  <p class="col-4">Cliente: </p>
+                  <p> {{ensayo.cliente?.nombre}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">{{ensayo.cliente?.tid}}: </p>
+                  <p>{{ensayo.cliente?.nid}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Contacto: </p>
+                  <p>{{ensayo.cliente?.nombre_contacto}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">E-mail: </p>
+                  <p>{{ensayo.cliente?.email_contacto}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Dirección:</p>
+                  <p>{{ensayo.cliente?.direccion}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Telefono: </p>
+
+                  <ul>
+                    <li *ngFor="let telefono of ensayo.cliente?.telefonos;index as i;">
+                      {{telefono.display}}
+                    </li>
+                  </ul>
+
+                </div>
+                <div class="row ">
+                  <p class="col-4">Ciudad: </p>
+                  <p>{{ensayo.cliente?.ciudad}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Departamento</p>
+                  <p>{{ensayo.cliente?.departamento}}</p>
+                </div>
+              </div>
+              <div class="col-lg-6 border">
+                <p class="font-weight-bold text-center">INFORMACIÓN DE LA MUESTRA</p>
+                <div class="row ">
+                  <p class="col-4">Proyecto: </p>
+                  <p> </p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Remisión No:</p>
+                  <p>{{ensayo.codigoOrden}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Matriz </p>
+                  <p></p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Tipo de muestreo</p>
+                  <p></p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Procedencia</p>
+                  <p></p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Responsable muestreo</p>
+                  <p>{{ensayo.tercero?.nombre}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Fecha recepción</p>
+                  <p>{{ensayo.fsolicitud| date:'dd/MM/yyyy'}}</p>
+                </div>
+                <div class="row ">
+                  <p class="col-4">Fecha de análisis</p>
+                  <p>{{ensayo.fEnsayo| date:'dd/MMM/yyyy'}} al {{ensayo.fCompletado| date:'dd/MMM/yyyy'}} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!ensayo.Estructura">
+
+          <div class="col-lg-12 " *ngIf="!editProfile">
+            <div [innerHTML]="ensayo.encReporte|safeHtml"></div>
+
+          </div>
+          <!--encabezado -->
+          <div class="col-lg-12 " *ngIf="editProfile">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">Insertar variables</label>
+              <div class="col-sm-6">
+                <select name="select" (change)="addVariable($event,'myckeditor') " class="form-control">
+                  <option value="">Seleccione </option>
+                  <option value="Codigo Informe">Código Informe</option>
+                  <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                  <option value="Cliente nombre">Nombre Cliente</option>
+                  <option value="Cliente Telefono">Teléfono Cliente</option>
+                  <option value="Cliente Numero de Identificacion">Número de Identificación Cliente </option>
+                  <option value="Cliente Contacto">Contacto Cliente</option>
+                  <option value="Cliente Direccion">Dirección Cliente</option>
+                  <option value="Cliente Ciudad">Ciudad Cliente</option>
+                  <option value="Cliente Departamento">Departamento Cliente</option>
+                  <option value="Fecha solicitud">Fecha solicitud</option>
+                  <option value="Fecha Ensayo">Fecha Ensayo</option>
+                  <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                  <option value="Fecha recepcion">Fecha recepción</option>
+                  <option value="Fecha de analisis">Fecha de análisis</option>
+                  <option value="Firma Imagen">Firma Electronica</option>
+                  <option value="Firma el informe">Nombre persona que firma</option>
+                  <option value="Cargo">Cargo</option>
+                  <option value="Fecha publicacion Informe">Fecha publicación Informe</option>
+                  <option value="Telefono Responsable">Teléfono Responsable</option>
+                  <option value="Email Responsable">Email Responsable</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <button class="btn btn-primary waves-effect waves-light" (click)="openMyModal('effect','myckeditor')"><i
+                    class="fa fa-image"></i>Insertar imagen</button>
+              </div>
+            </div>
+            <ckeditor [(ngModel)]="ensayo.encReporte" [config]="ckeconfig" #myckeditor></ckeditor>
+          </div>
+          <!--end encabezado -->
+        </ng-container>
+        <div class="col-lg-12 text-center mt-2">
+          <h4>RESULTADOS </h4>
+          <!-- <button *ngIf="editProfile && !ensayo.editarBody" class="btn btn-primary waves-effect waves-light"
+            (click)="editResultado()"><i class="icofont icofont-edit"></i>Editar Resultado</button> -->
+          <!-- <button *ngIf="editProfile" class="btn btn-primary waves-effect waves-light"
+            (click)="editResultado()"><i class="icofont icofont-edit"></i>Editar Resultado</button> -->
+        </div>
+        <div *ngIf="cargando">
+          <p class="text-center"><strong>Cargando...</strong></p>
+        </div>
+
+        <div *ngIf="!cargando" class="col-lg-12 "
+          [ngClass]=" ensayo?.reporte?.ver ||user?.tercero?._id== ensayo?.tercero? '' : 'textunfocus'">
+          <!--reporte-->
+          <div class=" table-border-style">
+            <div class="form-group row" *ngIf="ensayo.editarBody && editProfile">
+              <label class="col-sm-3 col-form-label">Insertar variables</label>
+              <div class="col-sm-5">
+                <select name="select" (change)="addVariable($event,'editorResult') " class="form-control">
+                  <option value="">Seleccione </option>
+                  <option value="Codigo Informe">Código Informe</option>
+                  <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                  <option value="Cliente nombre">Nombre Cliente</option>
+                  <option value="Cliente Telefono">Teléfono Cliente</option>
+                  <option value="Cliente Numero de Identificacion">Número de Identificación Cliente </option>
+                  <option value="Cliente Contacto">Contacto Cliente</option>
+                  <option value="Cliente Direccion">Dirección Cliente</option>
+                  <option value="Cliente Ciudad">Ciudad Cliente</option>
+                  <option value="Cliente Departamento">Departamento Cliente</option>
+                  <option value="Fecha solicitud">Fecha solicitud</option>
+                  <option value="Fecha Ensayo">Fecha Ensayo</option>
+                  <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                  <option value="Fecha recepcion">Fecha recepción</option>
+                  <option value="Fecha de analisis">Fecha de análisis</option>
+                  <option value="Firma Imagen">Firma Electronica</option>
+                  <option value="Firma el informe">Nombre persona que firma</option>
+                  <option value="Cargo">Cargo</option>
+                  <option value="Fecha publicacion Informe">Fecha publicación Informe</option>
+                  <option value="Telefono Responsable">Teléfono Responsable</option>
+                  <option value="Email Responsable">Email Responsable</option>
+                </select>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn btn-primary waves-effect waves-light"
+                  (click)="openMyModal('effect','editorResult')"><i class="fa fa-image"></i>Insertar imagen</button>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn btn-warning waves-effect waves-light" (click)="verOriginal()"><i
+                    class="fa fa-close"></i>Ver Original</button>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="ensayo.editarBody && editProfile">
+              <div class="col-sm-12">
+                <ckeditor [(ngModel)]="ensayo.bodyReporte" [config]="ckeconfig" #editorResult></ckeditor>
+              </div>
+            </div>
+            <!--fin reporte-->
+
+            <div #tableResult id="tableresult" *ngIf="!ensayo.editarBody">
+              <div class="table-responsive" *ngFor="let muestraMaster of muestrasMaster;index as i;">
+                <div *ngIf="!cargando" class="col-lg-12"
+                  [ngClass]=" ensayo?.reporte?.ver ||user?.tercero?._id== ensayo?.tercero? '' : 'textunfocus'">
+                  <div class=" table-border-style">
+                    <div class="resolucion" >
+                      <table class="table table-borderless">
+                        <thead>
+                          <tr>
+                            <th>Parámetro</th>
+                            <th>Método</th>
+                            <th *ngIf="variableTecnica">técnica analítica</th>
+                            <th>Unidad</th>
+                            <th *ngIf="campo1">{{columns[0]}}</th>
+                            <th *ngIf="campo2">{{columns[1]}}</th>
+                            <th *ngIf="campo3">{{columns[2]}}</th>
+                            <th *ngIf="campo4">{{columns[3]}}</th>
+                            <th *ngIf="campo5">{{columns[4]}}</th>
+                            <th class="text-center" *ngFor="let muestra of muestraMaster;index as j;">
+                              {{muestra.codigo}} <small class="d-block">{{muestra.fecha_ingreso}} </small>
+                              <small class="d-block text-center">{{muestra.descripcion}}</small>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let parametro of ensayo.parametros;index as k;">
+                            <td>{{parametro.parametro.nombre}}</td>
+                            <td>{{parametro.parametro.metodo}}</td>
+                            <td *ngIf="variableTecnica">{{parametro.parametro.tecnica_analitica}}</td>
+                            <td>{{parametro.parametro.unidad}}</td>
+                            <td *ngIf="campo1">{{parametro.parametro.variable1anexo}}</td>
+                            <td *ngIf="campo2">{{parametro.parametro.variable2anexo}}</td>
+                            <td *ngIf="campo3">{{parametro.parametro.variable3anexo}}</td>
+                            <td *ngIf="campo4">{{parametro.parametro.variable4anexo}}</td>
+                            <td *ngIf="campo5">{{parametro.parametro.variable5anexo}}</td>
+
+                            <td class="text-center" *ngFor="let muestra of parametro.muestrasMaster[i];index as l;">
+                              {{muestra.seleccionado?muestra.valor:''}}
+                            </td>
+
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="table-responsive" *ngIf="ensayo.editarBody && !editProfile">
+                    <div [innerHTML]="ensayo.bodyReporte|safeHtml"></div>
+                  </div>
+                </div>
+                <div class=" table-border-style" hidden>
+                  <div class="table-responsive">
+                    <table class="table table-borderless" id="excel-table">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Parámetro</th>
+                          <th>Método</th>
+                          <th>técnica analítica</th>
+                          <th>Unidad</th>
+                          <th *ngFor="let muestra of muestras;index as i;">
+                            {{muestra.codigo}}<small class="d-block">{{muestra.fecha_ingreso}} </small>
+                            <small class="d-block text-center">{{muestra.descripcion}}</small>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let parametro of ensayo.parametros;index as i;">
+                          <td>{{i+1}}</td>
+                          <td>{{parametro.parametro.nombre}}</td>
+                          <td>{{parametro.parametro.metodo}}</td>
+                          <td>{{parametro.parametro.tecnica_analitica}}</td>
+                          <td>{{parametro.parametro.unidad}}</td>
+
+                          <td *ngFor="let muestra of parametro.muestras;index as j;">
+                            {{muestra.valor | numeroPasteComaToPunto}}
+                          </td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 " *ngIf="!editProfile && ensayo.bodyReporte">
+              <div [innerHTML]="ensayo.bodyReporte|safeHtml"></div>
+
+            </div>
+            <!-- GUSTAVO ESTO NO ESTA MOSTRANDOSE BIEN -->
+            <!-- <ng-container *ngIf="!ensayo.Estructura">
+            <div class="col-lg-12 text-center mt-2">
+              <h4>OBSERVACIONES</h4>
+            </div>
+            <div class="col-lg-12 text-center mt-2 "
+              [ngClass]=" ensayo?.reporte?.ver ||user?.tercero?._id== ensayo?.tercero? '' : 'textunfocus'">
+              {{ensayo.descripcioninforme}}
+            </div>
+
+            <div class="col-lg-12  mt-2">
+              <div class="row ">
+                <div class="col-12"> <img *ngIf="ensayo.reporte&&ensayo.reporte.usufirma.firma"
+                    [style.width.px]="ensayo.reporte?.usufirma?.firmaWidth"
+                    [style.height.px]="ensayo.reporte?.usufirma?.firmaHeight" style="border-bottom: 2px solid #000000;"
+                    [src]="ensayo.reporte?.usufirma?.firma" />
+
+                </div>
+
+                <p class="col-12">Firmado por: {{ensayo.reporte?.usufirma?.name}} </p>
+                <p class="col-12">Email: {{ensayo.reporte?.usufirma?.email}} </p>
+
+
+              </div>
+
+            </div>
+          </ng-container> -->
+            <!--pie de pagina -->
+            <div class="col-lg-12  mt-2">
+              <ng-container *ngIf="!ensayo.Estructura">
+
+                <div class="col-lg-12 " *ngIf="!editProfile">
+                  <div [innerHTML]="ensayo.pieReporte|safeHtml"></div>
+
+                </div>
+
+                <div class="col-lg-12 " *ngIf="editProfile">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Insertar variables</label>
+                    <div class="col-sm-6">
+                      <select name="select" (change)="addVariable($event,'editorPie') " class="form-control">
+                        <option value="">Seleccione </option>
+                        <option value="Codigo Informe">Código Informe</option>
+                        <option value="Codigo Referencia">Código Referencia solicitud de ensayo</option>
+                        <option value="Cliente nombre">Nombre Cliente</option>
+                        <option value="Cliente Telefono">Teléfono Cliente</option>
+                        <option value="Cliente Numero de Identificacion">Número de Identificación Cliente </option>
+                        <option value="Cliente Contacto">Contacto Cliente</option>
+                        <option value="Cliente Direccion">Dirección Cliente</option>
+                        <option value="Cliente Ciudad">Ciudad Cliente</option>
+                        <option value="Cliente Departamento">Departamento Cliente</option>
+                        <option value="Fecha solicitud">Fecha solicitud</option>
+                        <option value="Fecha Ensayo">Fecha Ensayo</option>
+                        <option value="Fecha Estimada de Entrega">Fecha Estimada de Entrega</option>
+                        <option value="Fecha recepcion">Fecha recepción</option>
+                        <option value="Fecha de analisis">Fecha de análisis</option>
+                        <option value="Firma Imagen">Firma Electronica</option>
+                        <option value="Firma el informe">Nombre persona que firma</option>
+                        <option value="Cargo">Cargo</option>
+                        <option value="Fecha publicacion Informe">Fecha publicación Informe</option>
+                        <option value="Telefono Responsable">Teléfono Responsable</option>
+                        <option value="Email Responsable">Email Responsable</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-3">
+                      <button class="btn btn-primary waves-effect waves-light"
+                        (click)="openMyModal('effect','editorPie')"><i class="fa fa-image"></i>Insertar
+                        imagen</button>
+                    </div>
+                  </div>
+                  <ckeditor [(ngModel)]="ensayo.pieReporte" [config]="ckeconfig" #editorPie></ckeditor>
+                </div>
+              </ng-container>
+              <!--pie de pagina -->
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="ensayo['subidaPdfManual'];">
+          <div class="col-lg-12 text-center">
+            <h3>INFORME DE RESULTADOS No. {{ensayo.reporte?.codigoinforme}}</h3>
+          </div>
+          <div class="col-12 mt-3">
+            <pdf-viewer [src]="ensayo['urlPdf']" [show-all]="true" [page]="1" [ngStyle]="estilos"></pdf-viewer>
+          </div>
+        </div>
+        <div class="col-lg-12  mt-2">
+          <div class="alert alert-danger noprint" *ngIf="!ensayo?.reporte?.ver">
+            <button type="button" class="close" appRemoveAlert>
+              <i class="icofont icofont-close-line-circled"></i>
+            </button>
+            <strong>Alerta!</strong> No se ha autorizado ver el reporte.
+          </div>
+        </div>
+        <div class="col-12 card noprint" *ngIf="ensayo?.reporte?.ver && print==true">
+          <div class="panel panel-primary">
+            <div class="panel-heading bg-primary">Archivos adjuntos y anexos</div>
+            <div class="panel-body">
+
+            </div>
+            <table class="table table-hover" *ngIf="ensayo.archivos!=undefined && ensayo.archivos.length>0 ">
+              <tbody>
+                <ng-container *ngFor="let archivo of ensayo.archivos;index as j;">
+                  <tr *ngIf="archivo.tipo=='reporte'">
+                    <td>
+                      <a target="_blank" class="ng-binding"
+                        href="{{apiurl}}upload/files_client/{{archivo.filename}}?name={{archivo.originalname}}"
+                        download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                    </td>
+
+
+                  </tr>
+
+                </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <!-- <div class="card noprint" *ngIf="ensayo?.reporte?.ver && print==false || !ensayo?.reporte?.ver">
+          <div class="card-body text-right">
+            <button *ngIf="!ensayo['subidaPdfManual']" class="btn btn-success " (click)="exportexcel()">Descargar
+              Excel</button>
+          </div>
+        </div> -->
+        <div class="card noprint" *ngIf="ensayo?.reporte?.ver && print==true">
+          <div class="card-body text-right">
+            <div class="btn-group float-rigth">
+              <a routerLink="/" class="btn btn-danger"><i class="icofont icofont-undo"></i>Volver</a>
+              <a (click)="imprimir($event)" class="btn btn-primary "><i class="icofont icofont-printer"></i>Imprimir
+                Reporte</a>
+              <!-- <a (click)="download($event)" *ngIf="!ensayo['subidaPdfManual']" class="btn btn-success "><i
+            class="icofont icofont-download"></i>Descargar
+          Reporte</a> -->
+              <a *ngIf="ensayo['subidaPdfManual']" class="btn btn-success "
+                href="{{ensayo.urlPdf}}?name=Reporte-{{ensayo.reporte?.codigoinforme}}.pdf"><i
+                  class="icofont icofont-download"></i>Descargar
+                Reporte</a>
+              <button *ngIf="!ensayo['subidaPdfManual']" class="btn btn-success " (click)="exportexcel()">Descargar
+                Excel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- GALERIA DE IMAGENES A INSERTAR -->
+        <app-modal-animation [modalID]="'effect'" #modaladd [modalClass]="'md-effect md-large'">
+          <div class="row col-12">
+            <div class="col-12 text-center">
+              <h3>Galeria de Imagenes</h3>
+            </div>
+          </div>
+          <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+            <div class="card">
+              <div class="card-body text-left">
+                <div class="row">
+                  <div class="col-lg-12 col-xl-12 mb-2">
+                    <label class="custom-file ">
+                      <label class="custom-file">
+                        <input type="file" ng2FileSelect [uploader]="uploader"
+                          class="custom-file-input outline-primary">
+                        <i class="fa fa-upload  fa-3x text-info"><span class="text-info">Subir nuevas
+                            imagenes</span></i>
+                      </label>
+                      <p class="mt-2">
+                        <ngb-progressbar type="primary" [value]="uploader.progress"></ngb-progressbar>
+                      </p>
+                    </label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngFor="let imagen of cliente.imagenes;index as i;" class="col-lg-3 col-xl-3 ">
+                    <div class="card list-view-media">
+                      <div class="card-block text-center">
+                        <img src="{{apiurl}}upload/files_client/{{imagen.filename}}?name={{imagen.originalname}}"
+                          alt="img" class="img-fluid img-150">
+                        <h6>{{imagen.originalname}}</h6>
+                        <p class="text-muted m-b-15"><small
+                            class="d-block">{{imagen.mimetype|uppercase}}-{{imagen.size/1000|number}}KB</small></p>
+                        <div class="card-footer row">
+                          <button class="btn" (click)="insertarImagen(imagen)" [ngbTooltip]="tipInsertar"><i
+                              class="fa fa-plus-square"></i></button>
+                          <ng-template #tipInsertar>Insertar imagen</ng-template>
+                          <button class="btn" (click)="delimagen(imagen)" [ngbTooltip]="tipEliminar"><i
+                              class="icofont icofont-delete-alt"></i></button>
+                          <ng-template #tipEliminar>Eliminar imagen</ng-template>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+          </perfect-scrollbar>
+          <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+              class="icofont icofont-ui-close"></i></button>
+
+
+        </app-modal-animation>
+
+        <app-preloader *ngIf="preloader"></app-preloader>

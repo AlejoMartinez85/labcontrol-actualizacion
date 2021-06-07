@@ -1,0 +1,141 @@
+<h3>Información de pagos</h3>
+
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Información referente a pagos </h4>
+
+  </div>
+  <div *ngIf="!user.infofinanciera" class="card-body">
+    <form [formGroup]="form">
+
+      <div class="col-12 d-flex justify-content-around">
+      <div class="col-6">
+        <!-- Número factura -->
+        <div class="form-group row">
+          <label class="col-6 col-form-label">Número factura</label>
+          <div class="col-6">
+          <input type="text" class="form-control" formControlName="numerofactura" [(ngModel)]="ensayo.numerofactura"
+            placeholder="Número factura">
+        </div>
+        </div>
+        <!-- Fecha vencimiento -->
+        <div class="form-group row">
+          <label class="col-6 col-form-label">Fecha Vencimiento </label>
+          <div class="col-6">
+
+            <input type="date" class="form-control" formControlName="fVencimiento" [(ngModel)]="ensayo.fVencimiento"
+              placeholder="Fecha Vencimiento">
+
+            <div
+              *ngIf="form.controls.fVencimiento.invalid && (form.controls.fVencimiento.dirty || form.controls.fVencimiento.touched|| submited)">
+              <div class="messages text-danger" *ngIf="form.controls.fVencimiento.errors?.required">
+                Campo Requerido
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+
+        <!-- Fecha radicado -->
+        <!-- <div class="form-group row">
+          <label class="col-6 col-form-label">Fecha Radicado</label>
+          <div class="col-6">
+
+            <input type="date" class="form-control" formControlName="fFacturado" [(ngModel)]="ensayo.fFacturado"
+              placeholder="Fecha Facturado">
+
+            <div
+              *ngIf="form.controls.fFacturado.invalid && (form.controls.fFacturado.dirty || form.controls.fFacturado.touched|| submited)">
+              <div class="messages text-danger" *ngIf="form.controls.fFacturado.errors?.required">
+                Campo Requerido
+              </div>
+            </div>
+
+
+          </div>
+        </div> -->
+        <!-- Checkbox radicado -->
+        <div class="col-12">
+          <div class="border-checkbox-section">
+            <div class="border-checkbox-group border-checkbox-group-primary">
+              <input class="border-checkbox" type="checkbox" id="checkbox_isradicado" [(ngModel)]="ensayo.isradicado"
+                name="checkbox_isradicado" (change)="fradicado($event)" formControlName="isradicado">
+              <label class="border-checkbox-label" for="checkbox_isradicado">Factura radicada</label>
+              <div *ngIf="radicado" class="d-flex"><p class="mr-2">el </p><input  type="date" class="form-control" placeholder="Fecha Radicado" formControlName="fFacturado" [(ngModel)]="ensayo.fFacturado"></div>
+              
+            </div>
+          </div>
+        </div>
+        <!-- checkbox es pago -->
+        <div class="col-12">
+          <div class="border-checkbox-section">
+            <div class="border-checkbox-group border-checkbox-group-primary">
+              <input class="border-checkbox" type="checkbox" id="checkbox_ispago" [(ngModel)]="ensayo.ispago"
+                name="checkbox_ispago" (change)="pago($event)" formControlName="ispago">
+              <label class="border-checkbox-label" for="checkbox_ispago">Pago realizado</label>
+              <div *ngIf="paga" class="d-flex"><p class="mr-2">el </p><input  type="date" class="form-control" placeholder="Fecha Pago" formControlName="fpago" [(ngModel)]="ensayo.fpago"></div>
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="col-6">
+        <!-- valor facturado -->
+        <div class="form-group row">
+          <label class="col-6 col-form-label">Valor Facturado</label>
+          <div class="col-6">
+            <h6 class="text-primary">{{ensayo.total|currency : 'USD' : 'symbol' : '1.0-0'}}</h6>
+          </div>
+        </div>
+        <!-- Vigencia -->
+        <div class="form-group row" *ngIf="ensayo.estadoPago == 'Pendiente'">
+          <label class="col-sm-6 col-form-label">Vigencia</label>
+          <div class="col-sm-6">
+            <h6 class="" [ngClass]="{'text-success': calcularVigencia()>=3,'text-warning': calcularVigencia()>=0 && calcularVigencia()<3,'text-danger': calcularVigencia()<0 }">{{calcularVigencia()}} dias</h6>
+          </div>
+        </div>
+        <!-- pago -->
+        <div class="form-group row" *ngIf="ensayo.estadoPago == 'Pagado'">
+          <label class="col-sm-6 col-form-label">Fecha de pago</label>
+          <div class="col-sm-6">
+            <h6 class=" text-success">{{ensayo.fpago | date: 'dd/MM/yyyy'}}</h6>
+          </div>
+        </div>
+      </div>
+      
+
+      </div>
+      <div class="col-12 container">
+        <div class="form-group">
+        <label class="col-12 col-form-label">Observaciones</label>
+        <div class="col-sm-12">
+          <textarea class="form-control" formControlName="descripcionpago" rows="5" cols="5" placeholder="Observaciones"
+            [(ngModel)]="ensayo.descripcionpago"></textarea>
+        </div>
+      </div>
+    </div>
+      
+
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+
+
+<app-cargar-archivos [ensayo]="ensayo" (uploadfile)="uploadfile($event)" ></app-cargar-archivos>
+
+<div class="card">
+  <div class="card-body text-right">
+    <div class="btn-group floar-rigth">
+
+      <button (click)="guardarEnsayo($event,1)" type="button" class="btn btn-primary md-"><i
+          class="icofont icofont-save"></i>Guardar
+        Cambios</button>
+      <button (click)="closeMyModal($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+        Cerrar!</button>
+    </div>
+  </div>
+</div>

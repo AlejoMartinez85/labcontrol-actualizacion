@@ -1,0 +1,406 @@
+<div *ngIf="user.cuentaActiva" class="page-body">
+  <div class="d-flex justify-content-between">
+  <h1 class="text-gray">Recepción de Muestras</h1>
+  <i class="fa-2x fa fa-question-circle-o text-gray text-help" (click)="openMyModal('video')"></i>
+  </div>
+  <br>
+  <div class="row">
+    <!-- order-card start -->
+
+
+    <div class="col-sm-12">
+      <app-card [cardOptionBlock]="true">
+        <button type="button" class="btn btn-info font-weight-bold" popoverTitle=" Crear una solicitud de ensayo"
+          placement="bottom" (click)="openMyModal('effect-3')">
+          <i class="fa fa-plus"></i> Crear una solicitud de ensayo</button>
+      </app-card>
+    </div>
+
+    <!-- tabs card start -->
+    <div class="col-sm-12">
+      <app-card [title]="" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <h4>Información Solicitudes de ensayo</h4>
+        <!-- cambio: Se pone nuevo titulo se cambia titulo de card antes 'Información de ensayos' ahora '' se pone un titulo-->
+        <div class="md-tabs">
+          <ngb-tabset (tabChange)="beforeChange($event)">
+            <ngb-tab id="tab-pendientes">
+              <ng-template ngbTabTitle><i class="icofont icofont-clock-time"></i> <span class="font-weight-bold">
+                  Solicitudes en espera</span></ng-template>
+              <!-- cambio: Se puso etiqueta span y negrilla para hacer mas grande titulo tab -->
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="row">
+                    <div class="col-12 col-lg-6"></div>
+                    <div class="col-12 col-lg-6">
+                      <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar Ensayos en proceso"
+                          (keyup)="buscadorpasodossolicitudes($event);">
+                        <div class="input-group-append" (click)="tabdata()">
+                          <span class="input-group-text" id="basic-addon2">
+                            <i class="icofont icofont-close-line"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-12">
+                    <!-- Se cambio table-responsive por col-12 para mejorar distribucion columnas -->
+
+                    <ngx-datatable class="data-table" [rows]="ensayos" [columns]="columns" [columnMode]="'force'"
+                      [headerHeight]="50" [footerHeight]="50" [rowHeight]="50" [scrollbarH]="true" [limit]="10">
+                      <ngx-datatable-column name="Codigo Referencia">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['codigo']}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Cliente">
+                        <ng-template let-row="row" let-value="cliente" ngx-datatable-cell-template>
+                          <span>{{row['cliente'].nombre}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Fecha Cotización">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['fsolicitud']|date:'dd/MM/yyyy'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Muestras">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span> {{row.muestras?.length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="# Parametros">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['parametros'].length}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Valor Facturado" maxWidth="120"
+                        *ngIf="!user.analista && !user.infofinanciera">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span>{{row['total']|currency : 'USD' : 'symbol' : '1.0-0'}}</span>
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                          <span [ngClass]="{'label-success': row.estado=='Aprobado','label-warning': row.estado=='Cotización'
+                        ,'label-info': row.estado=='Esperando Confirmación','label-danger': row.estado=='Cancelado'}"
+                            class="label font-weight-bold ">{{row['estado']}}</span>
+
+
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="" maxWidth="50">
+                        <ng-template let-row="row" maxWidth="50" let-value="nombre" ngx-datatable-cell-template>
+
+                          <div class="btn-group btn-group-sm" style="float: none;">
+                            <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                              (click)="editarEnsayo(row,'')">
+                              <span class="icofont icofont-ui-edit"></span>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div>
+
+    <div class="col-12 col-lg-12">
+      <app-card [cardOptionBlock]="true">
+        <button class="btn btn-info font-weight-bold" popowerTitle="Crear una Muestra" placement="bottom"
+          (click)="openMyModal2('create-muestra')">
+          <i class="fa fa-plus"></i> Crear una Muestra
+        </button>
+        <a class="btn btn-info font-weight-bold" href="https://scaner-lab-control.stackblitz.io">
+          <i class="fa fa-plus"></i> Escanear Código QR
+        </a>
+      </app-card>
+    </div>
+
+    <div class="col-12 col-lg-12">
+
+      <app-card [title]="" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-6">
+              <h4 style="font-weight: 500;" class="text-gray">Listado de Muestras</h4>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" placeholder="Buscar Muestras" class="form-control" (keyup)="buscarMuestra($event)">
+                  <div class="input-group-append" (click)="cargarMuestras(0)">
+                    <span class="input-group-text" id="basic-addon2">
+                      <i class="icofont icofont-close-line"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive mb-3">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr class="text-center">
+                <td scope="col">
+                  Código Muestra
+                </td>
+                <td scope="col">
+                  Descripción Muestra
+                </td>
+                <td scope="col">
+                  Observaciones
+                </td>
+                <td scope="col">
+                  Fecha Ingreso
+                </td>
+                <td scope="col"></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let Muestra of Muestras">
+                <td>{{ Muestra?.codigo }}</td>
+                <td>{{ Muestra?.descripcion }}</td>
+                <td>{{ Muestra?.observaciones }}</td>
+                <td>{{ Muestra?.fecha_ingreso}}</td>
+                <td>
+                  <div class="btn-group btn-group-sm" style="float: none;">
+                    <a class="btn btn-info" [routerLink]="[ '../muestra', Muestra?._id ]">
+                      <span class="icofont icofont-eye"></span>
+                    </a>
+                    <a class="btn btn-warning" [routerLink]="[ '../edit-muestra', Muestra?._id ]">
+                      <span class="icofont icofont-pencil"></span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><button class="page-link" (click)="cargarMuestras(desde - 50)" [disabled]="!estado">Anterior</button></li>
+            <li class="page-item"><button class="page-link" (click)="cargarMuestras(desde + 50)" [disabled]="!continue">Siguiente lote de Muestras</button></li>
+          </ul>
+        </nav>
+      </app-card>
+
+    </div>
+    <div class="col-lg-12">
+      <app-actividad [tipoComentario]="'Muestras'">
+
+      </app-actividad>
+    </div>
+
+  </div>
+</div>
+<app-modal-animation [modalID]="'effect-3'" #modaladd [modalClass]="'md-effect-3 md-large'">
+  <div *ngIf="user.cuentaActiva">
+    <div class="row col-12">
+      <div class="col-1" *ngIf=" !ensayo || !ensayo._id"></div>
+      <div class="col-1" *ngIf="ensayo && ensayo._id">
+
+        <div ngbDropdown class="dropdown-primary">
+          <button ngbDropdownToggle class="btn waves-effect waves-light " type="button"></button>
+          <div ngbDropdownMenu>
+            <a class="dropdown-item waves-light waves-effect" href="javascript:" (click)="verInfoPagos()">Información de
+              pago</a>
+            <a class="dropdown-item waves-light waves-effect" href="javascript:" (click)="eliminar()">Eliminar</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-10 text-center">
+        <h3>Información solicitud de ensayo {{ensayo?.codigo}}</h3>
+      </div>
+      <div class="col-1"></div>
+    </div>
+    <div>
+
+
+      <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+        <div class="row">
+
+          <div class="col-lg-12">
+            <!-- Inicio barra de logica de progreso muestra estado segun etapa y muestra icono -->
+            <div class="col-lg-12 d-flex justify-content-around">
+              <div class="col-lg-4 text-center">
+                <span
+                  *ngIf="ensayo?.estado == 'Esperando Confirmación' || ensayo?.estado == 'Cotización' || ensayo?.estado == 'Aprobado'"
+                  class="label font-weight-bold"
+                  [ngClass]="{'label-primary': ensayo?.estado == 'Esperando Confirmación', 'label-warning': ensayo?.estado == 'Cotización', 'label-success': ensayo?.estado == 'Aprobado'}">{{ensayo.estado}}</span>
+                <span
+                  *ngIf="ensayo?.estado != 'Esperando Confirmación' && ensayo?.estado != 'Cotización' && ensayo?.estado != 'Aprobado'"
+                  class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+              </div>
+              <div class="col-lg-4 text-center">
+                <span *ngIf="ensayo?.estado == 'En Proceso' || ensayo?.estado == 'Completado'"
+                  class="label font-weight-bold"
+                  [ngClass]="{'label-warning': ensayo?.estado == 'En Proceso', 'label-success': ensayo?.estado == 'Completado'}">{{ensayo.estado}}</span>
+                <span *ngIf="ensayo?.estado == 'En Reporte' || ensayo?.estado == 'Reportado'"
+                  class="text-success font-weight-bold"><i class="fa fa-check-circle-o fa-2x"></i></span>
+              </div>
+              <div class="col-lg-4 text-center">
+                <span *ngIf="ensayo?.estado == 'En Reporte'" class="label font-weight-bold"
+                  [ngClass]="{'label-primary': ensayo?.estado == 'En Reporte', 'label-success': ensayo?.estado == 'Reportado'}">{{ensayo.estado}}</span>
+                <span *ngIf="ensayo?.estado == 'Reportado'" class="text-success font-weight-bold"><i
+                    class="fa fa-check-circle-o fa-2x"></i></span>
+              </div>
+            </div>
+            <!-- cambio: Se hizo una nuva logica para mostrar iconos de finalizado una vez que se vaya avanzando en el proceso de la solicitud -->
+            <div class="md-tabs">
+              <ngb-tabset (tabChange)="beforeChangeEnsayo($event)" #tabsetadmin="ngbTabset">
+                <ngb-tab id="solicitudTab">
+                  <span class="label-primary">{{ensayo.estado}}</span>
+                  <ng-template ngbTabTitle><i class="icofont icofont-clock-time"> </i> Paso 1: Solicitar ensayos
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div [@fadeInOutTranslate] class="m-t-15">
+                      <div class="card-body" *ngIf="ensayo">
+                        <app-solicitud [ensayo]="ensayo" (reloaddata)="reloaddata($event)"></app-solicitud>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+              </ngb-tabset>
+            </div>
+          </div>
+          <div class="col-lg-12" *ngIf="ensayo &&ensayo._id!=undefined">
+            <app-comentarios [ensayo_id]="ensayo?._id" [tipo]="tipocomentario"></app-comentarios>
+          </div>
+        </div>
+      </perfect-scrollbar>
+
+
+
+    </div>
+  </div>
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+
+</app-modal-animation>
+
+<app-modal-animation [modalID]="'create-muestra'" #modalCrearMuestra [modalClass]="'md-create-muestra md-large'">
+  <div class="container-fluid pb-0">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center">Nueva Muestra</h1>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+    <div class="container-fluid pb-0">
+      <form [formGroup]="formaMuestras" (ngSubmit)="guardaMuestra()">
+        <div class="row">
+          <div class="col-12 col-lg-4">
+            <h6 class="text-center">Selecciona una imagen</h6>
+
+            <label for="imagen">
+              <img [src]="imagePath" alt="" class="img-fluid cursor-pioter">
+            </label>
+            <input type="file" id="imagen" class="hidden" ng2FileSelect [uploader]="uploader">
+          </div>
+          <div class="col-12 col-lg-8">
+            <div class="form-group">
+              <label for="codigo">Código</label>
+              <input type="text" id="codigo" [formControlName]="'codigo'" class="form-control" placeholder="Código"
+                aria-describedby="codigo">
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripción</label>
+              <input type="text" id="descripcion" [formControlName]="'descripcion'" class="form-control"
+                placeholder="Descripción" aria-describedby="descripcion">
+            </div>
+            <div class="form-group">
+              <label for="fecha_ingreso">Fecha de ingreso</label>
+              <input type="date" name="" id="fecha_ingreso" [formControlName]="'fecha_ingreso'" class="form-control"
+                placeholder="Fecha de ingreso" aria-describedby="fecha_ingreso">
+            </div>
+            <div class="form-group">
+              <label for="observaciones">Observaciones</label>
+              <textarea name="" class="form-control" [formControlName]="'observaciones'" id="observaciones" cols="30"
+                rows="3" placeholder="Observaciones"></textarea>
+            </div>
+            <div class="form-group">
+              <app-cargar-archivos [muestraTitulo]="'Cargar archivos'" [tituloarchivosCargados]="'Archivos cargados'"
+                [info]="''" [ensayo]="ensayo" [informacionbaner]="''" (uploadfile)="uploadfile1($event)">
+              </app-cargar-archivos>
+            </div>
+            <div class="form-group">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="submit" class="btn btn-success d-inline-block">Guardar Muestra</button>
+                <button type="button" class="btn btn-danger d-inline-block"
+                  (click)="closeMyModal2('create-muestra')">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </perfect-scrollbar>
+</app-modal-animation>
+
+<!-- INCIO MODAL AYUDA -->
+<app-modal-animation [modalID]="'video'" #modaladd2 [modalClass]="'md-large'">
+  <div class="modal-header">
+    <h1 class="modal-title mx-auto">Videos de ayuda</h1>
+  </div>
+  <div class="modal-body">
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-8 mx-auto">
+            <div >
+              <h3>¿ Como ingresar muestras ?</h3>
+            </div>
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src="https://www.youtube.com/embed/AJnuLqY4R9w?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin=https://youtubeembedcode.com"><div><small><a href="https://youtubeembedcode.com/es/">youtubeembedcode es</a></small></div><div><small><a href="https://mibew.org/">afforadablle targeted web traffic</a></small></div></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <div class="modal-footer ">
+    <button (click)="closeMyModalAyuda('video')" aria-label="Close" class="md-close-btn">
+      <i class="icofont icofont-ui-close"></i>
+    </button>
+    <button (click)="closeMyModalAyuda('video')" class="btn btn-danger float-right ">
+      <i class="icofont icofont-ui-close"></i> Salir
+    </button>
+  </div>
+</app-modal-animation>
+<!-- FIN MODAL AYUDA -->
+
+<!-- BLOQUE CUENTA NO ACTIVA -->
+<div *ngIf="!user.cuentaActiva" class="page-body">
+  <h1 class="text-success">Cuenta creada</h1>
+  <div class="card">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+      <div class="col-md-12 p-lg-12 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Tu cuenta estará activa dentro de poco</h1>
+        <p class="lead font-weight-normal">Se há creado tu cuenta con exito, en breve nos pondremos en contacto para
+          ayudarte a empezar tu experiencia</p>
+        <a class="btn btn-outline-secondary" href="mailto:preguntas@labcontrol.co">Tienes preguntas, escribenos</a>
+      </div>
+      <div class="product-device shadow-sm d-none d-md-block"></div>
+      <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    </div>
+  </div>
+</div>

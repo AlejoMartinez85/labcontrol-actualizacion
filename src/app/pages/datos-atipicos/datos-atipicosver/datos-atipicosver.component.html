@@ -1,0 +1,171 @@
+<div class="pcoded-main-container">
+	<div class="pcoded-inner-content p-0">
+		<!-- Main-body start -->
+		<div class="main-body">
+			<div>
+				<!-- Page-body start -->
+				<div class="page-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-12 col-md-6">
+								<div class="card">
+									<div class="card-body">
+										<p>Información general</p>
+										<div class="form-group">
+											<label for="">{{ datoAtipico?.nombre }}</label>
+										</div>
+										<div class="form-group">
+											<label for="">Nivel de confianza: {{ datoAtipico?.niverConfianza }}%</label>
+										</div>
+										<hr>
+										<div class="form-group">
+											<label for="">{{ tituloListado }}</label>
+										</div>
+										<ngx-datatable 
+                                        class="data-table" 
+                                        [rows]="valoresDatoAtipico"
+                                        [columns]="columns"
+                                        [columnMode]="'force'"
+                                        [headerHeight]="50" 
+                                        [footerHeight]="50" 
+                                        [rowHeight]="'auto'" 
+                                        [limit]="100" 
+										[scrollbarH]="true">
+											<ngx-datatable-column name="Valor">
+												<ng-template let-row="row" let-value="valor" ngx-datatable-cell-template>
+													<span *ngIf="!row['edit']">{{row['valor']}}</span>
+													<input type="text" *ngIf="row['edit']" class="form-control" name="valor"
+														[(ngModel)]="row.valor" placeholder="{{columns[0].name}}">
+												</ng-template>
+											</ngx-datatable-column>
+											<ngx-datatable-column name="Opciones">
+												<ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+					
+													<div class="btn-group btn-group-sm" style="float: none;">
+														<button 
+															type="button" 
+															*ngIf="!row['edit']"
+															class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+															(click)="row['edit']=true">
+															<span class="icofont icofont-ui-edit"></span>
+														</button>
+														<button 
+															*ngIf="eliminar"
+															class="btn btn-danger" 
+															(click)="deleteDato(row['_id'])">
+															<span class="icofont icofont-ui-delete"></span>
+														</button>
+														<button 
+															type="button" 
+															*ngIf="row['edit']"
+															class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+															(click)="editarDato(row)">
+																<span class="icofont icofont-ui-edit"></span>
+														</button>
+													</div>
+												</ng-template>
+											</ngx-datatable-column>
+										</ngx-datatable>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-md-6">
+								<div class="card">
+									<div class="card-body">
+										<!-- <h6>Resultados</h6>
+										<p class="bg-success p-3 w-75 alerta-notificacion text-center"
+											*ngIf="successValorAtipico">No se detectan valores atípicos</p>
+										<p class="bg-danger p-3 w-75 alerta-notificacion text-center"
+											*ngIf="errorValorAtipico">Valor Atípico: {{valorAtipico}}</p> -->
+										<h6>Interpretación:</h6>
+										<p class="text-justific">Existe suficiente evidencia estadistica para asegurar
+											con una confianza del {{datoAtipico?.niverConfianza}}% que no se encuentran
+											valores
+											atipicos en la matriz Muestra 1</p>
+										<h6>Estadísticos de interés</h6>
+										<table class="table table-bordered">
+											<tr>
+												<td>Promedio:</td>
+												<td>{{ datoAtipico?.promedio }}</td>
+											</tr>
+											<tr>
+												<td>Desviación</td>
+												<td>{{ datoAtipico?.desviacion }}</td>
+											</tr>
+											<tr>
+												<td>n</td>
+												<td>{{ datoAtipico?.n }}</td>
+											</tr>
+											<tr>
+												<td>Gmin</td>
+												<td>{{ datoAtipico?.Gmin | number : '1.2-2'}}</td>
+											</tr>
+											<tr>
+												<td>Gmax</td>
+												<td> {{ datoAtipico?.Gmax | number : '1.2-2'}} </td>
+											</tr>
+											<tr>
+												<td>Gcrit</td>
+												<td> {{datoAtipico?.Gcrit}} </td>
+											</tr>
+										</table>
+										<div class="form-group">
+											<button class="btn btn-success" (click)="openModal('modal-generico-agregar-datos')">Agregar mas Datos</button>
+											<button class="btn btn-success" (click)="calcular()">Re calcular</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<app-preloader *ngIf="preloader"></app-preloader>
+
+<app-modal-general title="Agregar Datos" [modalID]="'modal-generico-agregar-datos'" [modalClass]="'md-modal-generico-agregar-datos modal-lx'">
+	<div class="form-group">
+		<label for="">Copia y pega los datos a evaluar en el campo utilizando puntos para los decimales Ej:</label>
+		<input type="text"(paste)="data($event)" class="form-control">
+	</div>
+    <table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<td>#</td>
+				<td>Valor</td>
+				<td>Opciones</td>
+			</tr>
+		</thead>
+		<tbody *ngIf="ValoresNew.length > 0">
+			<tr *ngFor="let item of ValoresNew; let i = index;">
+				<td>{{i+1}}</td>
+				<td>
+					{{ item }}
+				</td>
+				<td>
+					<button class="btn btn-danger"
+						(click)="removeValor(item)">
+						<span class="icofont icofont-ui-delete"></span>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="form-group row">
+		<div class="col-4">
+			<input type="number" #newDato class="form-control py-2 mt-1">
+		</div>
+		<div class="col-8">
+			<button type="button" class="btn btn-success"
+				(click)="addValorCampo(newDato)">Agregar Fila</button>
+			<button 
+				type="button" 
+				class="btn btn-primary"
+				(click)="guardar()">
+			Guardar</button>
+		</div>
+	</div>
+</app-modal-general>

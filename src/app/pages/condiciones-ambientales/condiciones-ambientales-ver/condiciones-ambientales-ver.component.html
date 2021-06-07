@@ -1,0 +1,409 @@
+<div class="pcoded-main-container">
+    <div class="pcoded-inner-content">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div>
+                <!-- Page-body start -->
+                <div class="page-body">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-12 col-lg-6">
+                                <h1>{{ condicionList?.name }}</h1>
+                            </div>
+                            <div class="col-12 col-lg-6 text-right">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-success"
+                                        (click)="openModal('modal-generico-ingresar-observaciones')">Agregar
+                                        Datos</button>
+                                    <button type="button" class="btn btn-info"
+                                        (click)="openModal('datos-masivos')">Datos Masivos</button>
+                                    <button type="button" class="btn btn-warning" (click)="editCondition()">Editar
+                                        Condición</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Datos generales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Nombre:</td>
+                                                    <td> {{ condicionList?.name }} </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Estado:</td>
+                                                    <td>
+                                                        <span class="text-success"
+                                                            *ngIf="condicionList?.estado">CUMPLE</span>
+                                                        <span class="text-danger" *ngIf="!condicionList?.estado">NO
+                                                            CUMPLE</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ultimo ingreso:</td>
+                                                    <td>{{ condicionList?.ultimoIngreso | date }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Unidad:</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fecha de creación:</td>
+                                                    <td>{{ condicionList?.fechaCreacion | date }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Estadísticas de datos experimentales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estadística</td>
+                                                    <td>Valor</td>
+                                                    <td>Unidad</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Promedio</td>
+                                                    <td>{{ condicionList?.promedio }}</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Desviación</td>
+                                                    <td>{{ condicionList?.desviacion }}</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Máximo</td>
+                                                    <td>{{ condicionList?.max }}</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mínimo </td>
+                                                    <td>{{ condicionList?.min }}</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Metodos Asociados</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" *ngFor="let metodo of metodosList">
+                                                {{metodo?.nombre }}
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Límites de control</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estadística</td>
+                                                    <td>Valor</td>
+                                                    <td>Unidad</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Límite Superior</td>
+                                                    <td>{{ condicionList?.limite_superior }}</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Límite Inferior</td>
+                                                    <td>{{ condicionList?.limite_inferior }}</td>
+                                                    <td>{{ condicionList?.unidad }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Condiciones Ambientales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <div id="chart"></div>
+                                        <div id="chart-line2"></div>
+                                        <div id="chart-line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" *ngIf="alertasLimites">
+                                <div class="card text-white bg-danger border-danger mb-3">
+                                    <div class="card-header">Alerta Límites Condiciones Ambientales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ul>
+                                            <li *ngFor="let item of datosList;  let i = index;">
+                                                <span *ngIf="item?.valor > condicionList?.limite_superior">El dato
+                                                    {{i+1}} Es mayor al Limite superior especificado
+                                                    {{condicionList?.limite_superior}}</span>
+                                                <span *ngIf="item?.valor < condicionList?.limite_inferior">El dato
+                                                    {{i+1}} Es menor al Limite Inferior especificado
+                                                    {{condicionList?.limite_inferior}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Datos</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ngx-datatable class="data-table" [rows]="datosList" [columns]="columns"
+                                            [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                                            [rowHeight]="'auto'" [limit]="100" [scrollbarH]="true">
+                                            <ngx-datatable-column name="{{columns[0].name}}">
+                                                <ng-template let-row="row" let-value="fecha"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['fecha'] | date}}</span>
+                                                    <input type="datetime-local" *ngIf="row['edit']" class="form-control"
+                                                        name="fecha" [(ngModel)]="row['fecha']"
+                                                        placeholder="{{columns[0].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[1].name}}">
+                                                <ng-template let-row="row" let-value="ejecutor"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['ejecutor'] }}</span>
+                                                    <input type="text" *ngIf="row['edit']" class="form-control"
+                                                        name="ejecutor" [(ngModel)]="row.ejecutor"
+                                                        placeholder="{{columns[1].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[2].name}}">
+                                                <ng-template let-row="row" let-value="valor"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['valor'] }}</span>
+                                                    <input type="number" *ngIf="row['edit']" class="form-control"
+                                                        name="valor" [(ngModel)]="row.valor"
+                                                        placeholder="{{columns[2].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[3].name}}">
+                                                <ng-template let-row="row" let-value="nombre"
+                                                    ngx-datatable-cell-template>
+                                                    <button type="button" class="btn btn-info"
+                                                        (click)="modalComentarios(row['_id'])">
+                                                        <span class="icofont icofont-comment"
+                                                            *ngIf="row['comentario'] === ''"></span>
+                                                        <span class="icofont icofont-speech-comments"
+                                                            *ngIf="row['comentario'] != ''"></span>
+                                                    </button>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[4].name}}">
+                                                <ng-template let-row="row" let-value="nombre"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="row['valor'] > condicionList?.limite_superior">Es mayor
+                                                        al Limite superior especificado
+                                                        {{condicionList?.limite_superior}}</span>
+                                                    <span *ngIf="row['valor'] < condicionList?.limite_inferior">Es menor
+                                                        al Limite Inferior especificado
+                                                        {{condicionList?.limite_inferior}}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[5].name}}">
+                                                <ng-template let-row="row" let-value="nombre"
+                                                    ngx-datatable-cell-template>
+                                                    <button type="button" class="btn btn-danger"
+                                                        (click)="delete(row['_id'])">
+                                                        <span class="icofont icofont-ui-delete"></span>
+                                                    </button>
+                                                    <button type="button" *ngIf="!row['edit']"
+                                                        class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                        (click)="row['edit']=true">
+                                                        <span class="icofont icofont-ui-edit"></span>
+                                                    </button>
+                                                    <button type="button" *ngIf="row['edit']"
+                                                        class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                        (click)="EditarDato(row)">
+                                                        <span class="icofont icofont-ui-edit"></span>
+                                                    </button>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                        </ngx-datatable>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" *ngIf="muestraReglasNelson">
+                                <div class="card text-white bg-warning border-warning mb-3">
+                                    <div class="card-header">Tendencias Estadísticas</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ul>
+                                            <li *ngFor="let item of datosList;  let i = index;">
+                                                <span *ngIf="item?.valor > ucl1">El dato {{i+1}} se encuentra a más de 3
+                                                    desviaciones estándar (UCL) de la media.</span>
+                                            </li>
+                                            <li *ngFor="let item of datosList;  let i = index;">
+                                                <span *ngIf="item?.valor < lcl1">El dato {{i+1}} se encuentra a más de 3
+                                                    desviaciones estándar (LCL) de la media.</span>
+                                            </li>
+                                            <li *ngIf="contadorMayor9 >= 9">9 o más puntos seguidos se encuentran en el
+                                                mismo lado de la media.</li>
+                                            <li *ngIf="datosMayor >= 6">6 o más puntos seguidos presentan un crecimiento
+                                                continuo. </li>
+                                            <li *ngIf="datosMenor >= 6">6 o más puntos seguidos presentan un
+                                                decrecimiento continuo. </li>
+                                            <li *ngIf="datosMayorMenor14 >= 14">14 o más datos consecutivos alternan su
+                                                posición creciendo y decreciendo.</li>
+                                            <li *ngIf="datos15conscutivo >= 15">15 puntos consecutivos se encuentran
+                                                dentro de 1 desviación estándar de la media.</li>
+                                            <li *ngIf="datos8conscutivo >= 8">8 puntos consecutivos se encuentran más
+                                                allá de una desviación estándar de la media en cualquiera de sus
+                                                costados.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de agrar Observaciones -->
+<app-modal-general title="Ingresar observación" [modalID]="'modal-generico-ingresar-observaciones'"
+    [modalClass]="'md-modal-generico-ingresar-observaciones modal-lx'">
+    <form method="post" [formGroup]="formObservaciones" (ngSubmit)="guardarFormObservaciones();">
+        <div class="form-group">
+            <label for="ejecutor">Ejecutor:</label>
+            <input type="text" [formControlName]="'ejecutor'" id="ejecutor" class="form-control"
+                placeholder="Introduzca su Nombre">
+        </div>
+        <div class="form-group">
+            <label for="valor">Valor</label>
+            <input type="number" [formControlName]="'valor'" id="valor" class="form-control" placeholder="Valor">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</app-modal-general>
+<!-- Modal de Comentarios -->
+<app-modal-general title="Comentario" [modalID]="'modal-generico-comentarios'"
+    [modalClass]="'md-modal-generico-comentarios modal-lx'">
+    <form method="post" [formGroup]="formComentarios" (ngSubmit)="guardarFormComentarios();">
+        <div class="form-group">
+            <label for="comentario">Comentario:</label>
+            <textarea [formControlName]="'comentario'" id="comentario" cols="30" class="form-control"
+                rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-danger"
+                (click)="closeModal('modal-generico-comentarios')">Cancelar</button>
+        </div>
+    </form>
+</app-modal-general>
+
+<app-modal-general title="Editar Condición Ambiental" [modalID]="'modal-generico-edit-condition-ambiental'"
+    [modalClass]="'md-modal-generico-edit-condition-ambiental modal-lx'">
+    <form [formGroup]="formEditCondicionAmbiental" (ngSubmit)="editarCondicionAmbiental();">
+        <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" [formControlName]="'name'" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="unidad">Unidad</label>
+            <input type="text" [formControlName]="'unidad'" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="limite_superior">Límite Superior</label>
+            <input type="number" [formControlName]="'limite_superior'" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="limite_inferior">Límite Inferior</label>
+            <input type="number" [formControlName]="'limite_inferior'" class="form-control">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</app-modal-general>
+<app-modal-animation title="Cargar datos Masivos" [modalID]="'datos-masivos'"
+    [modalClass]="'md-datos-masivos md-large'">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8">
+                <h1>Cargar datos Masivos</h1>
+            </div>
+            <div class="col-4">
+                <a target="_blank" class="btn btn-success btn-block"
+                  href=".\assets\files\Archiv_Datos_masivos.xlsx"
+                  download="Archiv_Datos_masivos">Descargar Plantilla</a>
+            </div>
+        </div>
+        <hr>
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <input type="text" (paste)="copypaste($event)" class="form-control"
+                            placeholder="Pega tus datos">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-striped table-bordere">
+                            <thead>
+                                <tr>
+                                    <td *ngFor="let td of cabeceras">{{td}}</td>
+                                    <td>Acciones</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let items of datoCopypaste; let identificador = index">
+                                    <td *ngFor="let item of items; let i = index">
+                                        <input type="text" class="form-control" value="{{item}}"
+                                            id="campo-{{i}}-{{identificador}}" name="campo-{{i}}-{{identificador}}">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-info" (click)="editar(identificador)">Editar</button>
+                                            <button class="btn btn-danger"
+                                                (click)="eliminar(identificador)">Eliminar</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-danger" (click)="closeModal('datos-masivos')">Cerrar</button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success" (click)="formMasivo()"> Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+</app-modal-animation>
+<app-preloader *ngIf="preloader"></app-preloader>

@@ -1,0 +1,884 @@
+<div class="pcoded-main-container">
+    <div class="pcoded-inner-content">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div>
+                <!-- Page-body start -->
+                <div class="page-body">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-12 col-lg-5">
+                                <h1>{{cartaEspesifica?.nombre}}</h1>
+                            </div>
+                            <div class="col-12 col-lg-5 text-right">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-success"
+                                        (click)="openModal('modal-generico-ingresar-observaciones')">Agregar
+                                        Datos</button>
+                                    <button type="button" class="btn btn-info"
+                                        (click)="openModal('datos-masivos')">Datos Masivos</button>
+                                    <button type="button" class="btn btn-warning"
+                                        (click)="modalEditcarta()">Editar</button>
+                                </div>
+                            </div>
+                            <div class="col-2 text-right">
+                                <button (click)="openModal('modal-generico-configuraciones')" class="btn btn-default">
+                                    <span class="icofont icofont-ui-settings"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Datos generales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Nombre:</td>
+                                                    <td>{{cartaEspesifica?.nombre}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Unidad:</td>
+                                                    <td>{{cartaEspesifica?.unidad}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Metodo de Ensayo:</td>
+                                                    <td>{{cartaEspesifica?.methodoEnsallo}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Observaciones:</td>
+                                                    <td>
+                                                        <p class="observaciones">{{cartaEspesifica?.observaciones}}</p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tipo Carta:</td>
+                                                    <td>{{cartaEspesifica?.tipoCarta}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Días:</td>
+                                                    <td>{{cartaEspesifica?.dias * cartaEspesifica?.rangoSleccionado}}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Estadísticas de datos experimentales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estadística</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Promedio estadístico, X̅</td>
+                                                    <td>{{cartaEspesifica?.promedio}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Desviación estándar, σ</td>
+                                                    <td>{{cartaEspesifica?.desviacion}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Rango promedio, R̅</td>
+                                                    <td>{{cartaEspesifica?.rango}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Derviación Rango </td>
+                                                    <td>{{cartaEspesifica?.desviacionRango}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Máximo dato Registrado </td>
+                                                    <td>{{DatosMax}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mínimo Dato registrado </td>
+                                                    <td>{{DatosMin}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Límites estadísticos para la carta de contol de Lecturas
+                                        individuales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estadística</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LSC (Límite Superior de Control)</td>
+                                                    <td>{{cartaEspesifica?.ucl1 | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LSA (Límite Superior de Advertencia)</td>
+                                                    <td>{{cartaEspesifica?.uwl1 | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LIA (Límite Inferior de Advertencia)</td>
+                                                    <td>{{cartaEspesifica?.lwl1 | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LIC (Límite Inferior de Control)</td>
+                                                    <td>{{cartaEspesifica?.lcl1 | number:'1.3-3'}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Límites estadísticos para la carta de control de Rango
+                                        variable</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estadística</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LSC (Límite Superior de Control)</td>
+                                                    <td>{{cartaEspesifica?.ucl2 | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LSA (Límite Superior de Advertencia)</td>
+                                                    <td>{{cartaEspesifica?.uwl2 | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LIA (Límite Inferior de Advertencia)</td>
+                                                    <td>{{cartaEspesifica?.lwl2 | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LIC (Límite Inferior de Control)</td>
+                                                    <td>{{cartaEspesifica?.lcl2 | number:'1.3-3'}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12"
+                                *ngIf="cartaEspesifica?.limiteEsup !== null && cartaEspesifica?.limiteEInf !== null && cartaEspesifica?.limiteEInf !== undefined && cartaEspesifica?.limiteEsup !== undefined">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Indicadores de Capacidad de Procesos</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Estadística</td>
+                                                    <td>Valor</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cp</td>
+                                                    <td>{{Cp | number:'1.3-3'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cpk</td>
+                                                    <td>{{Cpk | number:'1.3-3'}}</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Valor de Cp.</td>
+                                                    <td>Clase de proceso</td>
+                                                    <td>Descripsión</td>
+                                                </tr>
+                                                <tr *ngIf="Cp >= 2">
+                                                    <td>cP >= 2</td>
+                                                    <td>Clase Mundial</td>
+                                                    <td><span class="text-success">Tiene cantidad de seis sigma</span>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="Cp >= 1.33 && Cp < 2">
+                                                    <td>Cp > 1.33</td>
+                                                    <td>1</td>
+                                                    <td><span class="text-success">Adecuado</span></td>
+                                                </tr>
+                                                <tr *ngIf="1 < Cp && Cp < 1.33">
+                                                    <td>1 < Cp < 1.33</td>
+                                                    <td>2</td>
+                                                    <td><span class="text-warning">Parcialmente Adecuado</span></td>
+                                                </tr>
+                                                <tr *ngIf="0.67 <= Cp && Cp < 1">
+                                                    <td>0.67 <= Cp < 1</td>
+                                                    <td>3</td>
+                                                    <td><span class="text-danger">No adecuado para el trabajo. Es
+                                                            necesario un análisis del proceso. Requiere modificaciones
+                                                            serias para alcanzar una calidad setisfactoria. </span></td>
+                                                </tr>
+                                                <tr *ngIf="Cp < 0.67">
+                                                    <td>Cp < 0.67</td>
+                                                    <td>4</td>
+                                                    <td><span class="text-danger">No deacuerdo para el trabajo. Requiere
+                                                            modificaciones muy serias. </span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p class="text-success" *ngIf="Cpk > 1">Valores mayores a 1 de Cpk indican que
+                                            el proceso está fabricando artículos que cumplen con las especificaciones.
+                                        </p>
+                                        <p class="text-warning" *ngIf="Cpk < 1 && Cpk > 0">Valores menores a 1 de Cpk
+                                            indican que el proceso está produciendo artículos fuera de las
+                                            especificaciones.</p>
+                                        <p class="text-danger" *ngIf="Cpk <= 0">Valores de 0 o negativos de Cpk indican
+                                            que la media del proceso está fuera de las especificaciones.</p>
+                                        <hr />
+                                        <!-- <div >
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Gráfica de Cp, Cpk</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><div id="grafica"></div></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div> -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row"
+                            *ngIf="cartaEspesifica?.limiteSup != undefined || cartaEspesifica?.limiteInf != undefined">
+                            <div class="col-12" *ngIf="alertasLimites">
+                                <div class="card text-white bg-danger border-danger mb-3">
+                                    <div class="card-header">Limites Personalizados</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ul>
+                                            <li *ngFor="let item of datos;  let i = index;">
+                                                <span
+                                                    *ngIf="item?.valor > cartaEspesifica?.limiteSup && cartaEspesifica?.limiteSup != undefined">El
+                                                    dato {{i+1}} Es mayor al Limite superior especificado
+                                                    {{cartaEspesifica?.limiteSup}}</span>
+                                                <span
+                                                    *ngIf="item?.valor < cartaEspesifica?.limiteInf && cartaEspesifica?.limiteInf != undefined">El
+                                                    dato {{i+1}} Es menor al Limite Inferior especificado
+                                                    {{cartaEspesifica?.limiteInf}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" *ngIf="muestraReglasNelson">
+                                <div class="card text-white bg-danger border-danger mb-3">
+                                    <div class="card-header">Reglas de Nelson</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ul>
+                                            <li *ngFor="let item of datos;  let i = index;">
+                                                <span *ngIf="item?.valor > cartaEspesifica?.ucl1">El dato {{i+1}} se
+                                                    encuentra a más de 3 desviaciones estándar (LSC) de la media.</span>
+                                            </li>
+                                            <li *ngFor="let item of datos;  let i = index;">
+                                                <span *ngIf="item?.valor < cartaEspesifica?.lcl1">El dato {{i+1}} se
+                                                    encuentra a más de 3 desviaciones estándar (LIC) de la media.</span>
+                                            </li>
+                                            <li *ngIf="val9omas">9 o más puntos seguidos se encuentran en el mismo lado
+                                                de la media.</li>
+                                            <li *ngIf="datosMayor >= 6">6 o más puntos seguidos presentan un crecimiento
+                                                continuo. </li>
+                                            <li *ngIf="datosMenor >= 6">6 o más puntos seguidos presentan un
+                                                decrecimiento continuo. </li>
+                                            <li *ngIf="datosMayorMenor14 >= 14">14 o más datos consecutivos alternan su
+                                                posición creciendo y decreciendo.</li>
+                                            <li *ngIf="datos2conscutivo >= 2">2 de 3 datos consecutivos están más allá
+                                                de los límites de cuidado (2σ) en el mismo costado al lado de la media.
+                                            </li>
+                                            <li *ngIf="datos4conscutivo >= 4">4 de 5 puntos consecutivos se encuentran
+                                                más allá de 1 desviación estándar de la media en la misma dirección.
+                                            </li>
+                                            <li *ngIf="datos15conscutivo >= 15">15 puntos consecutivos se encuentran
+                                                dentro de 1 desviación estándar de la media.</li>
+                                            <li *ngIf="datos8conscutivo >= 8">8 puntos consecutivos se encuentran más
+                                                allá de una desviación estándar de la media en cualquiera de sus
+                                                costados.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" *ngIf="muestraReglasNelsonRango">
+                                <div class="card text-white bg-danger border-danger mb-3">
+                                    <div class="card-header">Carta de control de rangos variables</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ul>
+                                            <li *ngFor="let item of datos;  let i = index;">
+                                                <span *ngIf="item?.rango > cartaEspesifica?.ucl2">El dato {{i+1}} se
+                                                    encuentra a más de 3 desviaciones estándar (UCL) de la media.</span>
+                                            </li>
+                                            <li *ngIf="val9omasRango">9 o más puntos seguidos se encuentran en el mismo
+                                                lado de la media.</li>
+                                            <li *ngIf="datosMayorRango >= 6">6 o más puntos seguidos presentan un
+                                                crecimiento continuo. </li>
+                                            <li *ngIf="datosMenorRango >= 6">6 o más puntos seguidos presentan un
+                                                decrecimiento continuo. </li>
+                                            <li *ngIf="datosMayorMenor14Rango >= 14">14 o más datos consecutivos
+                                                alternan su posición creciendo y decreciendo.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-md-12" *ngIf="cartaEspesifica?.tipoCarta === 'Carta de control exactitud'">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Carta de control valores individuales</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <div id="chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="cartaEspesifica?.tipoCarta !== 'Carta de control exactitud'">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Carta de control valores deduplicados</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <div id="chart2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card text-white bg-primary border-primary mb-3">
+                                    <div class="card-header">Datos</div>
+                                    <div class="card-body bg-white text-dark">
+                                        <ngx-datatable class="data-table" [rows]="datos" [columns]="columns"
+                                            [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                                            [rowHeight]="'auto'" [limit]="100" [scrollbarH]="true">
+                                            <ngx-datatable-column name="{{columns[0].name}}">
+                                                <ng-template let-row="row" let-value="fecha"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['fecha'] | date }}</span>
+                                                    <input type="date" *ngIf="row['edit']" class="form-control"
+                                                        name="fecha" [(ngModel)]="row.fecha"
+                                                        placeholder="{{columns[0].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[1].name}}">
+                                                <ng-template let-row="row" let-value="ejecutor"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['ejecutor'] }}</span>
+                                                    <input type="text" *ngIf="row['edit']" class="form-control"
+                                                        name="ejecutor" [(ngModel)]="row.ejecutor"
+                                                        placeholder="{{columns[1].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[2].name}}">
+                                                <ng-template let-row="row" let-value="valor"
+                                                    ngx-datatable-cell-template>
+                                                    <span *ngIf="!row['edit']">{{row['valor'] }}</span>
+                                                    <input type="text" *ngIf="row['edit']" class="form-control"
+                                                        name="valor" [(ngModel)]="row.valor"
+                                                        placeholder="{{columns[2].name}}">
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[3].name}}">
+                                                <ng-template let-row="row" let-value="rango"
+                                                    ngx-datatable-cell-template>
+                                                    <span>{{row['rango'] }}</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[4].name}}">
+                                                <ng-template let-row="row" let-value="nombre"
+                                                    ngx-datatable-cell-template>
+                                                    <button type="button" class="btn btn-info"
+                                                        (click)="modalComentarios(row['_id'])">
+                                                        <span class="icofont icofont-comment"
+                                                            *ngIf="row['comentarios']!= ''"></span>
+                                                        <span class="icofont icofont-speech-comments"
+                                                            *ngIf="row['comentarios'] === ''"></span>
+                                                    </button>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="{{columns[5].name}}">
+                                                <ng-template let-row="row" let-value="nombre"
+                                                    ngx-datatable-cell-template>
+                                                    <button type="button" class="btn btn-danger"
+                                                        (click)="deleteDato(row['_id'])">
+                                                        <span class="icofont icofont-ui-delete"></span>
+                                                    </button>
+                                                    <button type="button" *ngIf="!row['edit']"
+                                                        class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                        (click)="row['edit']=true">
+                                                        <span class="icofont icofont-ui-edit"></span>
+                                                    </button>
+                                                    <button type="button" *ngIf="row['edit']"
+                                                        class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                        (click)="EditarDato(row)">
+                                                        <span class="icofont icofont-ui-edit"></span>
+                                                    </button>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                        </ngx-datatable>
+                                        <!-- <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Rango</th>
+                                                    <th>Comentarios</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let dato of datos; let i = index;">
+                                                    <td>{{ dato?.c }}</td>
+                                                    <td>{{ dato?.rango }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-info" (click)="modalComentarios(dato?._id)">
+                                                            <span class="icofont icofont-comment" *ngIf="dato?.comentarios != ''"></span>
+                                                            <span class="icofont icofont-speech-comments" *ngIf="dato?.comentarios === ''"></span>
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table> -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-general title="Ingresar observación" [modalID]="'modal-generico-ingresar-observaciones'"
+    [modalClass]="'md-modal-generico-ingresar-observaciones modal-lx'">
+    <form [formGroup]="formDatos" (ngSubmit)="crearDato()">
+        <div class="form-group">
+            <label for="">Ejecutor</label>
+            <input type="text" [formControlName]="'ejecutor'" class="form-control" placeholder="Introduzca su nombre">
+        </div>
+        <div class="form-group">
+            <label for="">Valor</label>
+            <input type="number" [formControlName]="'valor'" class="form-control" placeholder="Valor">
+        </div>
+        <div class="form-group" *ngIf="cartaEspesifica?.tipoCarta === 'Carta de control de duplicados'">
+            <label for="">Valor</label>
+            <input type="number" [formControlName]="'valor2'" class="form-control" placeholder="Valor">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</app-modal-general>
+
+<app-modal-general title="Comentario" [modalID]="'modal-generico-comentario'"
+    [modalClass]="'md-modal-generico-comentario modal-lx'">
+    <form [formGroup]="formDatosComentario" (ngSubmit)="guardarComentario()">
+        <div class="form-group">
+            <label for="">Comentario</label>
+            <textarea [formControlName]="'comentarios'" class="form-control" id="" cols="30" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</app-modal-general>
+<app-modal-general title="Configuración" [modalID]="'modal-generico-configuraciones'"
+    [modalClass]="'md-modal-generico-configuraciones modal-lx'">
+    <form [formGroup]="formAlertasCartas" (ngSubmit)="modalalertas()">
+        <div class="form-group">
+            <label for="">Periodicidad del ingreso de mediciones:</label>
+            <div class="row">
+                <div class="col-8">
+                    <input [formControlName]="'dias'" type="number" class="form-control">
+                </div>
+                <div class="col-4">
+                    <select class="form-control" [formControlName]="'rangoSleccionado'" id="">
+                        <option value="1">Días</option>
+                        <option value="8">Semanas</option>
+                        <option value="30">Meses</option>
+                        <option value="365">Años</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="">Decimales</label>
+            <input type="number" [formControlName]="'decimales'" class="form-control">
+        </div>
+        <div class="form-group row">
+            <div class="col-12">
+                <label for="">Limites de espesificación Cp - Cpk</label>
+            </div>
+            <div class="col">
+                <label for="">Límite Inferior de Espesificación</label>
+                <input type="number" [formControlName]="'limiteEInf'" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Límite Superior de Espesificación</label>
+                <input type="number" [formControlName]="'limiteEsup'" class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12">
+                <label for="">Limites Adicionales</label>
+            </div>
+            <div class="col">
+                <label for="">Límite Inferior</label>
+                <input type="number" [formControlName]="'limiteInferior'" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Límite Superior</label>
+                <input type="number" [formControlName]="'limiteSuperiro'" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="">Reglas de Nelson</label>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Regla</th>
+                        <th>Anomalía</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;1
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">1 punto se encuentra a más de 3 desviaciones estándar (UCL) de la media.
+                            </p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Rule_1_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;2
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">9 o más puntos seguidos se encuentran en el mismo lado de la media.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Rule_2_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;3
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">6 o más puntos seguidos presentan un crecimiento continuo (o
+                                decrecimiento).</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rule_3_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;4
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">14 o más datos consecutivos alternan su posición creciendo y decreciendo.
+                            </p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Rule_4_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;5
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">2 de 3 datos consecutivos están más allá de los límites de cuidado (2σ) en
+                                el mismo costado al lado de la media.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Rule_5_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;6
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">4 de 5 puntos consecutivos se encuentran más allá de 1 desviación estándar
+                                de la media en la misma dirección.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Rule_6_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;7
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">15 puntos consecutivos se encuentran dentro de 1 desviación estándar de la
+                                media.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Rule_7_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;8
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">8 puntos consecutivos se encuentran más allá de una desviación estándar de
+                                la media en cualquiera de sus costados.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/Rule_8_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <label for="">Carta de control de rangos variables</label>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Regla</th>
+                        <th>Anomalía</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;1
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">1 punto se encuentra a más de 3 desviaciones estándar de la media.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Rule_1_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;2
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">9 o más puntos seguidos se encuentran en el mismo lado de la media.</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Rule_2_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;3
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">6 o más puntos seguidos presentan un crecimiento continuo (o
+                                decrecimiento).</p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Rule_3_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    &nbsp;4
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="texto">14 o más datos consecutivos alternan su posición creciendo y decreciendo.
+                            </p>
+                        </td>
+                        <td>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Rule_4_-_Control_Charts_for_Nelson_Rules.svg"
+                                class="img-responsive">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</app-modal-general>
+<app-modal-general title="Editar carta" [modalID]="'modal-generico-editarCarta'"
+    [modalClass]="'md-modal-generico-editarCarta modal-lx'">
+    <form [formGroup]="formaEditCarta" (ngSubmit)="GuardarEdicion()">
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" [formControlName]="'nombre'" id="nombre" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="unidad">Unidad</label>
+            <input type="text" [formControlName]="'unidad'" id="unidad" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">Metodo de ensayo:</label>
+            <select [formControlName]="'methodoEnsallo'" class="form-control" id="">
+                <option *ngFor="let parametro of parametros" value="{{parametro.nombre}}">{{parametro.nombre}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea [formControlName]="'observaciones'" id="observaciones" class="form-control" cols="30"
+                rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="">Tipo de carta de Control</label>
+            <div class="row">
+                <div class="col">
+                    <label for="tipoCarta"><input type="radio" [formControlName]="'tipoCarta'" id="tipoCarta"
+                            value="Carta de control exactitud"> Carta de control exactitud</label>
+                </div>
+                <div class="col">
+                    <label for="tipoCarta2"><input type="radio" [formControlName]="'tipoCarta'" id="tipoCarta2"
+                            value="Carta de control de duplicados"> Carta de control de duplicados</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+    </form>
+</app-modal-general>
+
+<app-modal-animation title="Cargar datos Masivos" [modalID]="'datos-masivos'"
+    [modalClass]="'md-datos-masivos md-large'">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8">
+                <h1>Cargar datos Masivos</h1>
+            </div>
+            <div class="col-4">
+                <a target="_blank" class="btn btn-success btn-block"
+                  href=".\assets\files\Archiv_Datos_masivos.xlsx"
+                  download="Archiv_Datos_masivos">Descargar Plantilla</a>
+            </div>
+        </div>
+        <hr>
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <input type="text" (paste)="copypaste($event)" class="form-control"
+                            placeholder="Pega tus datos">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-striped table-bordere">
+                            <thead>
+                                <tr>
+                                    <td *ngFor="let td of cabeceras">{{td}}</td>
+                                    <td>Acciones</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let items of datoCopypaste; let identificador = index">
+                                    <td *ngFor="let item of items; let i = index">
+                                        <input type="text" class="form-control" value="{{item}}"
+                                            id="campo-{{i}}-{{identificador}}" name="campo-{{i}}-{{identificador}}">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-info" (click)="editar(identificador)">Editar</button>
+                                            <button class="btn btn-danger"
+                                                (click)="eliminar(identificador)">Eliminar</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-danger" (click)="closeModal('datos-masivos')">Cerrar</button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success" (click)="formMasivo()"> Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+</app-modal-animation>

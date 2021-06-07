@@ -1,0 +1,177 @@
+<section class="login p-fixed d-flex text-center bg-primary common-img-bg">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- Authentication card start -->
+        <div class="signup-card card-block auth-body mr-auto ml-auto">
+          <form class="md-float-material" [formGroup]="form" (ngSubmit)="registrar()">
+            <div class="text-center">
+              <a href="https://labcontrol.co/"><img src="assets/images/logos/labcontrol-logo.png" style="width: 350px;" alt="labcontrol"></a>
+            </div>
+            <div class="auth-box">
+              <div class="row m-b-20">
+                <div class="col-md-12">
+                  <h3 class="text-center txt-primary">{{titulo}}</h3>
+                </div>
+              </div>
+              <hr />
+              <div class="form-group row">
+
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" formControlName="nombre" [(ngModel)]="item.nombre"
+                    placeholder="Nombre Laboratorio">
+
+                  <div
+                    *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                    <div class="messages text-danger" *ngIf="form.controls.nombre.errors?.required">
+                      Campo Requerido
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+              <div class="form-group row">
+
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" formControlName="nombre_contacto"
+                    placeholder="Nombre Contacto" [(ngModel)]="item.nombre_contacto">
+
+                  <div
+                    *ngIf="form.controls.nombre_contacto.invalid && (form.controls.nombre_contacto.dirty || form.controls.nombre_contacto.touched)">
+                    <div class="messages text-danger" *ngIf="form.controls.nombre_contacto.errors?.required">
+                      Campo Requerido
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="form-group row">
+
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" formControlName="telefono"
+                    placeholder="Telefono Contacto" [(ngModel)]="item.telefono">
+                </div>
+
+              </div>
+
+              <div class="row m-t-10 m-b-10 text-left">
+
+                <div class="col-sm-12">
+                  <div class="checkbox-fade fade-in-primary">
+                    <label>
+                      <input type="checkbox" >
+                      <span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>
+                      <span class="text-inverse">Quiero usar Control 17025 para el cumplimiento de la ISO/IEC 17025</span>
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+
+              <hr>
+
+              <div class="form-group row">
+
+                <div class="col-sm-12">
+                  <input type="email" class="form-control" formControlName="email_contacto" placeholder="Email login"
+                    [(ngModel)]="item.email_contacto">
+
+                  <div
+                    *ngIf="form.controls.email_contacto.invalid && (form.controls.email_contacto.dirty || form.controls.email_contacto.touched)">
+                    <div class="messages text-danger" *ngIf="form.controls.email_contacto.errors?.required">
+                      Campo Requerido
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="form.controls.email_contacto.invalid && form.controls.email_contacto.errors?.email && form.controls.email_contacto.touched">
+                    <div class="messages text-danger" *ngIf="form.controls.email_contacto.errors?.email">
+                      Tiene que ser un correo
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
+                    [(ngModel)]="item.password">
+                  <div
+                    *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)">
+                    <div class="messages text-danger" *ngIf="form.controls.password.errors?.required">
+                      Requerido
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <input type="password" class="form-control" placeholder="Confirmar contraseña"
+                  [(ngModel)]="item.confirmPassword" formControlName="confirmPassword">
+                  <div *ngIf="form.hasError('notSame')">
+                    <div class="messages text-danger">
+                      La contraseña no coincide
+                    </div>
+                  </div>
+                </div>
+              
+              
+                
+              </div>
+              <div class="row m-t-25 text-left">
+                <div class="col-md-12">
+                  <div class="checkbox-fade fade-in-primary">
+                    <label>
+                      <input type="checkbox" [(ngModel)]="terminos" formControlName="terminos">
+                      <span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>
+                      <span class="text-inverse" style="font-size: 12px;">He leído y acepto los <a href="javascript:" style="font-size: 12px;" >Terminos &amp;
+                          Condiciones.</a></span>
+                    </label>
+                  </div>
+                  <div *ngIf="form.controls.terminos.invalid && (form.controls.terminos.dirty || form.controls.terminos.touched||!form.valid )">
+                  <div class="messages text-danger" *ngIf="form.controls.terminos.errors?.required">
+                    Requerido
+                  </div>
+                </div>
+                </div>
+
+              </div>
+              <div class="row m-t-30">
+                <div class="col-md-12">
+                  <button type="submit"
+                    class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20" >Registrarme ahora</button>
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-md-10">
+                  <!-- <p class="text-inverse text-left m-b-0">Gracias por utilizar nuestra aplicaión.</p> -->
+                  <!-- <p class="text-inverse text-left"><b>Labcontrol</b></p> -->
+                </div>
+                <div class="col-md-2">
+                  <!-- <img src="assets/images/auth/Logo-small-bottom.png" alt="Gradient Able"> -->
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- end of form -->
+        </div>
+        <!-- Authentication card end -->
+      </div>
+      <!-- end of col-sm-12 -->
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end of container-fluid -->
+</section>
+<simple-notifications [options]="options"></simple-notifications>

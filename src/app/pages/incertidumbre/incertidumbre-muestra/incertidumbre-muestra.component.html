@@ -1,0 +1,257 @@
+<div class="card" *ngIf="parametro!=undefined">
+  <div class="card-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <h4 class="card-header-text">Medición {{parametro.nombre}} </h4>
+        </div>
+        <div class="col-12 col-lg-6">
+          <button class="btn btn-info" (click)="modalOpen('carga-masiva')">Carga masiva</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <label class="col-sm-2 col-form-label">Formula</label>
+      <div class="col-sm-4" *ngIf="reload">
+        <app-matheditor [variables]="parametro.variables" [formula]="formulaactual" [editable]="false"
+          (changeFormula)="onChangeFormula($event)" #mathEditor></app-matheditor>
+      </div>
+      <div class="col-sm-6">
+        <label for="checkIncertidumbre">
+          <input type="checkbox" name="" id="checkIncertidumbre" (change)="cambioValor($event)">
+          Mostrar incertidumbre Relativa
+        </label><br>
+        <label class="col-form-label" *ngIf="reload">
+          <span *ngIf="validacionCheck;">
+            Resultado {{parametro.simbolo}}= {{parametroresult?.resultado|number:'1.0-'+evaluardecimal()}}&plusmn;
+            {{((parametroresult?.u) /parametroresult?.resultado) * 100}} {{parametro.unidad}}
+          </span>
+          <div *ngIf="!validacionCheck;">
+            Resultado {{parametro.simbolo}}= {{parametroresult?.resultado|number:'1.0-'+evaluardecimal()}}&plusmn;
+            {{parametroresult?.u|number:'1.0-'+evaluardecimal()}} {{parametro.unidad}}
+          </div>
+        </label><br />
+        <h5 class="text-warning" *ngIf="!reload">...Calculando</h5><br />
+
+
+      </div>
+      <div class="col-sm-6">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Simbolo</th>
+              <th>Valor </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let variable of parametro.variables;index as i;">
+              <td>{{i+1}}</td>
+              <td>
+                {{variable.nombre}}
+              </td>
+              <td>
+                {{variable.simbolo}}
+              </td>
+              <td>
+                <input type="number" class="form-control" name="var_valor{{i}}" placeholder="Valor "
+                  [(ngModel)]="variable.valor" [ngModelOptions]="{standalone: true}" (input)="actualizardatos(false)">
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+      <div class="col-sm-6">
+        <label class="col-form-label">Validaciones</label><br />
+        <ng-container *ngFor="let validacion of parametroresult?.validaciones;index as i;">
+          <div class="alert alert-success" *ngIf="validacion.evaluacion!=''">
+            <button type="button" class="close" appRemoveAlert>
+              <i class="icofont icofont-close-line-circled"></i>
+            </button>
+            <strong>Alerta!</strong> {{validacion.evaluacion}}
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-sm-12   text-right">
+        <div class="btn-group btn-group-sm">
+          <button *ngIf="permisosLocal.crear" (click)="guardar($event)" class="btn btn-primary md-"><i class="icofont icofont-save "></i>Guardar
+            Medición</button>
+          <button *ngIf="cancelarbutton" (click)="cancelar($event)" class="btn btn-danger md-"><i
+              class="icofont icofont-close "></i>Cancelar
+            Medición</button>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+</div>
+<app-card [title]="" [cardOptionBlock]="true">
+  <!-- cambio: se quita title 'Información de párametros'  -->
+  <br>
+  <h4>Listado de mediciones</h4>
+  <br>
+  <ngx-datatable class="data-table" [rows]="ensayos" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+    [rowHeight]="'auto'" [limit]="50">
+    <ngx-datatable-column name="Fecha">
+      <ng-template let-row="row" let-value="fecha" ngx-datatable-cell-template>
+        <div>
+          <span *ngIf="!row['edit']">{{row.fechaRegistro|date:'dd/MM/yyyy hh:mm'}}</span>
+          <input type="datetime-local" *ngIf="row['edit']" class="form-control" name="fecha"
+            [(ngModel)]="row.fechaRegistro">
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="U">
+      <ng-template let-row="row" let-value="u" ngx-datatable-cell-template>
+        <span>{{row?.u|number:'1.0-'+evaluardecimal()}}</span>
+
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Uc">
+      <ng-template let-row="row" let-value="uc" ngx-datatable-cell-template>
+        <span>{{row.uc|number:'1.0-'+evaluardecimal()}}</span>
+
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Resultado">
+      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+        <span>{{row.resultado|number:'1.0-'+evaluardecimal()}}</span>
+
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Variables">
+      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+        <ul class="list-view">
+          <li *ngFor="let variable of row.variables;index as i;">
+            <span> <strong>{{variable.simbolo}}</strong>: {{variable.valor}}</span>
+          </li>
+        </ul>
+
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Validaciones">
+      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+        <ul class="list-view">
+          <li *ngFor="let validacion of row.validaciones;index as i;">
+            <span *ngIf="validacion.evaluacion!=''">{{validacion.evaluacion}}</span>
+          </li>
+        </ul>
+
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Descripción">
+      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+        <span *ngIf="!row['edit']">{{row.descripcion}}</span>
+        <textarea *ngIf="row['edit']" cols="10" rows="3" class="form-control" name="descripcion"
+          [(ngModel)]="row.descripcion"> </textarea>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Acciones">
+      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" *ngIf="!row['edit'] && permisosLocal.editar"
+            class="tabledit-edit-button btn btn-primary waves-effect waves-light" (click)="row['edit']=true">
+            <span class="icofont icofont-ui-edit"></span>
+          </button>
+          <button type="button" *ngIf="row['edit']"
+            class="tabledit-edit-button btn btn-primary waves-effect waves-light" (click)="EditarDato(row)">
+            <span class="icofont icofont-ui-edit"></span>
+          </button>
+          <button type="button" class="btn btn-danger" *ngIf="permisosLocal.eliminar" (click)="eliminarParametroCalibracion(row)">
+            <span class="icofont icofont-ui-delete"></span>
+          </button>
+        </div>
+    
+            <span class="input-group-prepend" title="Parametros medición" (click)="abrirDetalle(row)">
+              <label class="input-group-text"><i class="fa fa-eye"></i></label></span>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</app-card>
+<app-modal-general title="Carga masiva de Mediciones" [modalID]="'carga-masiva'"
+  [modalClass]="'md-carga-masiva modal-lx'">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <input type="text" (paste)="copypaste($event)" class="form-control" placeholder="Pega tus datos">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-striped table-bordere">
+              <thead>
+                <tr>
+                  <td *ngFor="let td of cabeceras">{{td}}</td>
+                  <td>Acciones</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let items of datoCopypaste; let identificador = index">
+                  <td *ngFor="let item of items; let i = index">
+                    <input type="text" class="form-control" value="{{item}}" id="campo-{{i}}-{{identificador}}"
+                      name="campo-{{i}}-{{identificador}}">
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button class="btn btn-info" (click)="editar(identificador)">Editar</button>
+                      <button class="btn btn-danger" (click)="eliminar(identificador)">Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-danger" (click)="closeModal('carga-masiva')">cancelar</button>
+          <button type="button" class="btn btn-success" (click)="formMasivo()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-general>
+
+
+<!-- INCIO MODAL MUESTRA -->
+<app-modal-animation [modalID]="'modalMuestra'" #modalmuestra [modalClass]="'md-large'">
+  <div class="modal-header">
+    <h3 class="modal-title">Detalle Muestra</h3>
+  </div>
+  <div class="modal-body">
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+     <app-incertidumbre-detalle-muestra *ngIf="reload" [parametroresult]="parametroresult"[muestraSeleccionada]="muestraSeleccionada" [validacionCheck]='validacionCheck'></app-incertidumbre-detalle-muestra>
+
+    </perfect-scrollbar>
+  </div>
+  <div class="modal-footer">
+    <button (click)="closeModal('modalMuestra')" aria-label="Close" class="md-close-btn">
+      <i class="icofont icofont-ui-close"></i>
+    </button>
+    <button (click)="closeModal('modalMuestra')" class="btn btn-danger">
+      <i class="icofont icofont-ui-close"></i> Salir
+    </button>
+  </div>
+</app-modal-animation>
+<!-- FIN MODAL MUESTRA -->

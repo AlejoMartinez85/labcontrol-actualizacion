@@ -1,0 +1,1364 @@
+<div class="pcoded-main-container">
+    <div class="pcoded-inner-content p-0">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div>
+                <!-- Page-body start -->
+                <div class="page-body">
+                    <div class="container-fluid">
+                        <h1 class="text-gray">Validación de métodos</h1>
+                        <br>
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <!-- <h6 class="m-0">Validación de métodos</h6> -->
+                                    </div>
+                                    <div class="carr-body">
+                                        <form [formGroup]="formaBancoDeMuestras" (ngSubmit)="calcularForm();">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-12 col-lg-6">
+                                                        <div class="card text-white bg-primary border-primary mb-3">
+                                                            <div class="card-header">Atributos de validación</div>
+                                                            <div class="card-body bg-white text-dark">
+                                                                <ul class="list-group">
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Linealidad'" [(ngModel)]="validacion['linealidad']" title="Linealidad">
+                                                                            <label class="form-check-label">Linealidad</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Sensibilidad'" [(ngModel)]="validacion['sencibilidad']" title="Sensibilidad">
+                                                                            <label class="form-check-label">Sensibilidad</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Limite_de_deteccion'" [(ngModel)]="validacion['limite_deteccion']" title="Limite_de_deteccion">
+                                                                            <label class="form-check-label">Límite de detección</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Limite_de_cuantificacion'" title="Limite_de_cuantificacion" [(ngModel)]="validacion['limite_cuantificacion']">
+                                                                            <label class="form-check-label">Límite de cuantificación</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Exactitud'" title="Exactitud" [(ngModel)]="validacion['exactitud']">
+                                                                            <label class="form-check-label">Exactitud</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Precision_Repetibi'" title="Precision_Repetibi" [(ngModel)]="validacion['presicion_repetitibilidad']" (change)="updateValidation('presicion_repetitibilidad')">
+                                                                            <label class="form-check-label">Precisión- Repetibilidad</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Precision_Reproduc'" title="Precision_Reproduc" [(ngModel)]="validacion['presicion_producivilidad']" (change)="updateValidation('presicion_producivilidad')">
+                                                                            <label class="form-check-label">Precisión- Precisión Intermedia</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Recuperacon_en_matriz'" title="Recuperacon_en_matriz" [(ngModel)]="validacion['recuperacion_matriz']">
+                                                                            <label class="form-check-label">Recuperacón en matriz</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Intervalo_de_trabaj'" title="Intervalo_de_trabaj" [(ngModel)]="validacion['intervalodetrabajo']" (change)="updateValidation('intervalodetrabajo')">
+                                                                            <label class="form-check-label">Intervalo de trabajo</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" [formControlName]="'Robustez'" title="Robustez" [(ngModel)]="validacion['robustez']">
+                                                                            <label class="form-check-label">Robustez</label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox" class="form-check-input mt-0" formControlName="Banco_muestras" title="Banco Muestras" [(ngModel)]="validacion['banco_muestras']">
+                                                                            <label class="form-check-label">Usar Banco de Muestras</label>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-6">
+                                                        <div class="card text-white bg-primary border-primary mb-3">
+                                                            <div class="card-header">Banco de muestras y matrices de ensayo</div>
+                                                            <div class="card-body bg-white text-dark">
+                                                                <div class="form-group">
+                                                                    <label for="nombre">Nombre de Validacion Banco de muestras</label>
+                                                                    <input type="text" [formControlName]="'nombre_banco_muestras'" class="form-control">
+                                                                </div>
+                                                                <div class="form-group" *ngIf="validacion['banco_muestras']">
+                                                                    <label for="cantidad_de_blancos">Cantidad de blancos</label>
+                                                                    <select class="form-control" [formControlName]="'cantidad_de_blancos'" id="cantidad_de_blancos">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group" *ngIf="validacion['banco_muestras']">
+                                                                    <label for="cantidad_de_estandares">Cantidad de estandares</label>
+                                                                    <select class="form-control" [formControlName]="'cantidad_de_estandares'" id="cantidad_de_estandares">
+                                    <option value="0">Bajo</option>
+                                    <option value="1">Medio</option>
+                                    <option value="2">Alto</option>
+                                    <option value="3">Alto-bajo</option>
+                                    <option value="4">Alto-Medio-bajo</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group" *ngIf="validacion['banco_muestras']">
+                                                                    <label for="cantidad_de_muestras">Cantidad de muestras</label>
+                                                                    <select class="form-control" [formControlName]="'cantidad_de_muestras'" id="cantidad_de_muestras" (change)="validaMuestra($event)">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group" *ngIf="recuperacion && validacion['banco_muestras']">
+                                                                    <label for="recuperacion">Recuperación</label>
+                                                                    <select class="form-control" [formControlName]="'recuperacion'" id="recuperacion" (change)="validaRecuperacion($event)">
+                                    <option value="si">Si</option>
+                                    <option value="no">No</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group" *ngIf="selectrecuperacion && validacion['banco_muestras']">
+                                                                    <label for="niveles_de_adicion_por_muestra">Niveles de adicion por muestra</label>
+                                                                    <select class="form-control" [formControlName]="'niveles_de_adicion_por_muestra'" id="niveles_de_adicion_por_muestra">
+                                    <option value="">Selecciona Un Nivel o Niveles</option>
+                                    <option value="Alto">Alto</option>
+                                    <option value="Bajo">Bajo</option>
+                                    <option value="Alto-y-Bajo">Alto y Bajo</option>
+                                    <option value="Ninguno">Ninguno</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group" *ngIf="validacion['banco_muestras']">
+                                                                    <label for="numero_de_dias"># Numero de días</label>
+                                                                    <select class="form-control" [formControlName]="'numero_de_dias'" id="numero_de_dias">
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group" *ngIf="validacion['banco_muestras']">
+                                                                    <label for="duplicados_por_dia"># Duplicados por día</label>
+                                                                    <select class="form-control" [formControlName]="'duplicados_por_dia'" id="duplicados_por_dia">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                  </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <button type="submit" class="btn btn-success" id="calcular-fomr-init">Calcular</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card" *ngIf="validacion['banco_muestras']">
+                                    <div class="card-header">
+                                        <h6 class="m-0">Banco de muestras Ensayos de validación</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Informaciòn Banco de muestras</h6>
+                                        <form [formGroup]="formainformacion">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-12 col-lg-6">
+                                                        <div class="form-group" *ngIf="Ebajo">
+                                                            <label for="">Estandar Bajo</label>
+                                                            <input type="text" class="form-control" [formControlName]="'estandar_bajo'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="Emedio">
+                                                            <label for="">Estandar Medio</label>
+                                                            <input type="text" class="form-control" [formControlName]="'estandar_medio'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="EAlto">
+                                                            <label for="">Estandar Alto</label>
+                                                            <input type="text" class="form-control" [formControlName]="'estandar_alto'">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">Nivel de confianza</label>
+                                                            <select [formControlName]="'nivel'" class="form-control" [value]="95">
+                                <option value="95">95%</option>
+                                <option value="90">90%</option>
+                                <option value="92.5">92.5%</option>
+                                <option value="97.5">97.5%</option>
+                              </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-6">
+                                                        <div class="form-group" *ngIf="numeroMuestras >= 1">
+                                                            <label for="">M1Ab</label>
+                                                            <input type="text" class="form-control" [formControlName]="'recuperacion_M1ab'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="numeroMuestras >= 1">
+                                                            <label for="">M1Aa</label>
+                                                            <input type="text" class="form-control" [formControlName]="'recuperacion_M1aa'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="numeroMuestras >= 2">
+                                                            <label for="">M2Ab</label>
+                                                            <input type="text" class="form-control" [formControlName]="'recuperacion_M2ab'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="numeroMuestras >= 2">
+                                                            <label for="">M2Aa</label>
+                                                            <input type="text" class="form-control" [formControlName]="'recuperacion_M2aa'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="numeroMuestras >= 3">
+                                                            <label for="">M3Ab</label>
+                                                            <input type="text" class="form-control" [formControlName]="'recuperacion_M3ab'">
+                                                        </div>
+                                                        <div class="form-group" *ngIf="numeroMuestras >= 3">
+                                                            <label for="">M3Aa</label>
+                                                            <input type="text" class="form-control" [formControlName]="'recuperacion_M3aa'">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <hr>
+                                        <form [formGroup]="formaTablaBancoMuestras">
+                                            <div class="form-modific" id="row-modific">
+                                                <div class="row-modific m-0">
+                                                    <div class="col-modific p-0">
+                                                        <ul class="list-group text-center">
+                                                            <li class="list-group-item">Días</li>
+                                                            <li class="list-group-item"></li>
+                                                            <li class="list-group-item">1</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2">1</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3">1</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 2">2</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 2">2</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 2">2</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 3">3</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 3">3</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 3">3</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 4">4</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 4">4</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 4">4</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 5">5</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 5">5</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 5">5</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 6">6</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 6">6</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 6">6</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 7">7</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 7">7</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 7">7</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 8">8</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 8">8</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 8">8</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 9">9</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 9">9</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 9">9</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 10">10</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 10">10</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 10">10</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 11">11</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 11">11</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 11">11</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 12">12</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 12">12</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 12">12</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 13">13</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 13">13</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 12">13</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 14">14</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 14">14</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 14">14</li>
+
+                                                            <li class="list-group-item" *ngIf="numeroDias >= 15">15</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && numeroDias >= 15">15</li>
+                                                            <li class="list-group-item" *ngIf="mostrar2 && mostrar3 && numeroDias >= 15">15</li>
+                                                            <li class="list-group-item" *ngIf="pormedios">PROM</li>
+                                                            <li class="list-group-item" *ngIf="pormedios">S</li>
+                                                            <li class="list-group-item" *ngIf="pormedios">% CV</li>
+                                                            <li class="list-group-item py-0" *ngIf="pormedios && ValorAtipoco">Valor Atípico</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroBlancos >= 1">
+                                                        <ul class="list-group" [formArrayName]="'bks1'">
+                                                            <li class="list-group-item">BK1</li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data($event,'bk1')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Bk1.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'bk1'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Bk1')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ prombks1 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ Smbks1 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVbks1 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroBlancos >= 2">
+                                                        <ul class="list-group" [formArrayName]="'bks2'">
+                                                            <li class="list-group-item">BK2</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'bk2')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Bk2.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'bk2'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Bk2')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ prombks2 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ Smbks2 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVbks2 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroBlancos >= 3">
+                                                        <ul class="list-group" [formArrayName]="'bks3'">
+                                                            <li class="list-group-item">BK3</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'bk3')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Bk3.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'bk3'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Bk3')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ prombks3 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ Smbks3 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVbks3 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroBlancos >= 4">
+                                                        <ul class="list-group" [formArrayName]="'bks4'">
+                                                            <li class="list-group-item">BK4</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'bk4')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Bk4.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'bk4'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Bk4')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ prombks4 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ Smbks4 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVbks4 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroBlancos >= 5">
+                                                        <ul class="list-group" [formArrayName]="'bks5'">
+                                                            <li class="list-group-item">BK5</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'bk5')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Bk5.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'bk5'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Bk5')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ prombks5 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ Smbks5 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVbks5 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="Ebajo">
+                                                        <ul class="list-group" [formArrayName]="'Ebs'">
+                                                            <li class="list-group-item">Eb</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'Eb')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Eb.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'Eb'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Eb')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promEbs }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmEbs }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVEbs }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoEB > 0">
+                                                                {{ valorAtipocoEB }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="Emedio">
+                                                        <ul class="list-group" [formArrayName]="'Ems'">
+                                                            <li class="list-group-item">Em</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'Em')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Em.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'Em'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Em')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promEms }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmEms }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVEms }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoEM > 0">
+                                                                {{ valorAtipocoEM }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="EAlto">
+                                                        <ul class="list-group" [formArrayName]="'Eas'">
+                                                            <li class="list-group-item">Ea</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'Ea')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of Ea.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'Ea'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'Ea')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promEas }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmEas }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVEas }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoEA > 0">
+                                                                {{ valorAtipocoEA }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroMuestras >= 1">
+                                                        <ul class="list-group" [formArrayName]="'Ms1'">
+                                                            <li class="list-group-item">M1</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M1')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M1.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M1'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M1')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs1 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs1 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs1 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM1 > 0">
+                                                                {{ valorAtipocoM1 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroMuestras >= 2">
+                                                        <ul class="list-group" [formArrayName]="'Ms2'">
+                                                            <li class="list-group-item">M2</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M2')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M2.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M2'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M2')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs2 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs2 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs2 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM2 > 0">
+                                                                {{ valorAtipocoM2 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="numeroMuestras >= 3">
+                                                        <ul class="list-group" [formArrayName]="'Ms3'">
+                                                            <li class="list-group-item">M3</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M3')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M3.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M3'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M3')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs3 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs3 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs3 }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM3 > 0">
+                                                                {{ valorAtipocoM3 }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra1Ab">
+                                                        <ul class="list-group" [formArrayName]="'Ms1Ab'">
+                                                            <li class="list-group-item">%M1Ab</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M1Ab')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M1Ab.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M1Ab'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M1Ab')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs1Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs1Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs1Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM1Ab > 0">
+                                                                {{ valorAtipocoM1Ab }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra1Ab">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">%R</li>
+                                                            <!-- Es el porcentaje de m1AB -->
+                                                            <li class="list-group-item"></li>
+                                                            <!-- Es el porcentaje de m1AB -->
+                                                            <li class="list-group-item p-0" *ngFor="let dato of porcentajeRaABm1">
+                                                                {{dato | percent}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra1Aa">
+                                                        <ul class="list-group" [formArrayName]="'Ms1Aa'">
+                                                            <li class="list-group-item">%M1Aa</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M1Aa')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M1Aa.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M1Aa'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M1Aa')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs1Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs1Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs1Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM1Aa > 0">
+                                                                {{ valorAtipocoM1Aa }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra1Aa">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">%R</li>
+                                                            <!-- Es el porcentaje de m1AA -->
+                                                            <li class="list-group-item"></li>
+                                                            <!-- Es el porcentaje de m1AA -->
+                                                            <li class="list-group-item p-0" *ngFor="let dato of porcentajeRaAAm1">
+                                                                {{dato | percent}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra2Ab">
+                                                        <ul class="list-group" [formArrayName]="'Ms2Ab'">
+                                                            <li class="list-group-item">%M2Ab</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M2Ab')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M2Ab.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M2Ab'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M2Ab')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs2Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs2Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs2Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM2Ab > 0">
+                                                                {{ valorAtipocoM2Ab }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra2Ab">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">%R</li>
+                                                            <!-- Es el porcentaje de m2AB -->
+                                                            <li class="list-group-item p-0">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let dato of porcentajeRaABm2">
+                                                                {{dato | percent}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra2Aa">
+                                                        <ul class="list-group" [formArrayName]="'Ms2Aa'">
+                                                            <li class="list-group-item">%M2Aa</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M2Aa')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M2Aa.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M2Aa'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M2Aa')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs2Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs2Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs2Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM2Aa > 0">
+                                                                {{ valorAtipocoM2Aa }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra2Aa">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">%R</li>
+                                                            <!-- Es el porcentaje de m2AA -->
+                                                            <li class="list-group-item p-0">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let dato of porcentajeRaAAm2">
+                                                                {{dato | percent}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra3Ab">
+                                                        <ul class="list-group" [formArrayName]="'Ms3Ab'">
+                                                            <li class="list-group-item">%M3Ab</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M3Ab')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M3Ab.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M3Ab'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M3Ab')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs3Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs3Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs3Ab }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM3Ab > 0">
+                                                                {{ valorAtipocoM3Ab }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra3Ab">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">%R</li>
+                                                            <!-- Es el porcentaje de m3AB -->
+                                                            <li class="list-group-item p-0">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let dato of porcentajeRaABm3">
+                                                                {{dato | percent}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra3Aa">
+                                                        <ul class="list-group" [formArrayName]="'Ms3Aa'">
+                                                            <li class="list-group-item">%M3Aa</li>
+                                                            <li class="list-group-item p-0">
+                                                                <input type="text" (paste)="data($event,'M3Aa')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of M3Aa.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <input type="text" class="form-control" [formControlName]="'M3Aa'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'M3Aa')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ promMs3Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ SmMs3Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios">{{ CVMs3Aa }}</li>
+                                                            <li class="list-group-item p-0" *ngIf="pormedios && valorAtipocoM3Aa > 0">
+                                                                {{ valorAtipocoM3Aa }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-modific p-0" *ngIf="muestra3Aa">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">%R</li>
+                                                            <!-- Es el porcentaje de m3AA -->
+                                                            <li class="list-group-item p-0">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let dato of porcentajeRaAAm3">
+                                                                {{dato | percent}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <hr>
+                                                <button class="btn btn-success" (click)="cargar()">Calcular</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="card" *ngIf="validacion['linealidad']">
+                                    <app-linealidad [id]="$identificador" [intervalodetrabajoInput]="validacion['intervalodetrabajo']" [permisosLocal]="permisosLocal" (Guardado)="guardadoLinealidad($event)"></app-linealidad>
+                                </div>
+                                <div class="card" *ngIf="validacion['sencibilidad']">
+                                    <app-sensibilidad [permisosLocal]="permisosLocal" [id]="$identificador" [intervalodetrabajoInput]="validacion['intervalodetrabajo']" (Guardado)="guardadoSensibilidad($event)"></app-sensibilidad>
+                                </div>
+                                <div class="card" *ngIf="validacion['limite_deteccion'] || validacion['limite_cuantificacion']">
+                                    <app-limites [permisosLocal]="permisosLocal" [id]="$identificador" [limiteTecion]="matricesBlancos.limiteTecion" [banco_muestras]="validacion['banco_muestras']" [limite_deteccion]="validacion['limite_deteccion']" [limite_cuantificacion]="validacion['limite_cuantificacion']"
+                                        (Guardado)="guardadoLimites($event)">
+                                    </app-limites>
+                                </div>
+                                <div class="card" *ngIf="validacion['exactitud']">
+                                    <app-exactitud [permisosLocal]="permisosLocal" [id]="$identificador" [exactitud]="matricesBlancos.exactitud" [banco_muestras]="validacion['banco_muestras']" [numeroMuestras]="numeroMuestras" [muestra1Ab]="muestra1Ab" [muestra1Aa]="muestra1Aa" [porcentajeRaABm1]="porcentajeRaABm1"
+                                        [porcentajeRaAAm1]="porcentajeRaAAm1" [muestra2Ab]="muestra2Ab" [muestra2Aa]="muestra2Aa" [porcentajeRaABm2]="porcentajeRaABm2" [porcentajeRaAAm2]="porcentajeRaAAm2" [muestra3Ab]="muestra3Ab" [muestra3Aa]="muestra3Aa"
+                                        [porcentajeRaABm3]="porcentajeRaABm3" [porcentajeRaAAm3]="porcentajeRaAAm3" (Guardado)="guardadoExactitud($event)"></app-exactitud>
+                                </div>
+                                <app-accuracy *ngIf="validacion['presicion_repetitibilidad'] || validacion['presicion_producivilidad']" [id]="$identificador" [permisosLocal]="permisosLocal" [validacion]="validacion" (Guardado)="guardadoPresiciones($event)"></app-accuracy>
+
+                                <div class="card" *ngIf="validacion['recuperacion_matriz']">
+                                    <div class="card-header">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-10">
+                                                    <h6 class="m-0">Recuperación En matriz</h6>
+                                                </div>
+                                                <div class="col-12 col-lg-2 text-right">
+                                                    <button *ngIf="permisosLocal.editar" class="btn btn-primary" (click)="edicion()">
+                            <span class="icofont icofont-ui-edit"></span>
+                          </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <form [formGroup]="formaRecuperacion">
+                                            <div class="form-group row">
+                                                <div class="col" *ngIf="edit">
+                                                    <input type="checkbox" [checked]="matricesBlancos.recuperacion" (change)="usaMatrisBlancos(matricesBlancos.recuperacion, 'recuperacion');">
+                                                    <label class="form-check-label" for="exampleRadios2">
+                            Usar banco de muestras
+                          </label>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="!matricesBlancos.recuperacion">
+                                                <div class="form-group row" *ngIf="edit">
+
+                                                    <div class="col">
+                                                        <select class="form-control" #cantMuestras (change)="selectCantMuestras(cantMuestras.value)" [formControlName]="'CantidadMuestras'">
+                              <option value="">Seleccione la cantidad de Muestras</option>
+                              <option value="1">1 Muestra</option>
+                              <option value="2">2 Muestras</option>
+                              <option value="3">3 Muestras</option>
+                            </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control" #nivelAdicion (change)="selectCantMuestras(nivelAdicion.value)" [formControlName]="'nivelesAdicion'">
+                              <option>Niveles de adicion por muestra</option>
+                              <option value="alto">Alto</option>
+                              <option value="bajo">Bajo</option>
+                              <option value="alto-bajo">Alto - Bajo</option>
+                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-12">
+                                                        <h6> Información de muestras</h6>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="">Unidades: </label>
+                                                            <input *ngIf="edit" type="text" class="form-control" [formControlName]="'unidad'">
+                                                            <span *ngIf="!edit">{{ArrRecuperacion['unidad']}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" *ngIf="RecuperacionMuestras.m1">
+                                                        <h6> Muestra 1</h6>
+                                                        <div *ngIf="Ralto">
+                                                            <label>Ma</label>
+                                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'RecuperacionAm1'">
+                                                            <p *ngIf="!edit">{{ArrRecuperacion['RecuperacionAm1']}}</p>
+                                                        </div>
+                                                        <div *ngIf="Rbajo">
+                                                            <label>Mb</label>
+                                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'RecuperacionBm1'">
+                                                            <p *ngIf="!edit">{{ArrRecuperacion['RecuperacionBm1']}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" *ngIf="RecuperacionMuestras.m2">
+                                                        <h6> Muestra 2</h6>
+                                                        <div *ngIf="Ralto">
+                                                            <label>Ma</label>
+                                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'RecuperacionAm2'">
+                                                            <p *ngIf="!edit">{{ArrRecuperacion['RecuperacionAm2']}}</p>
+                                                        </div>
+                                                        <div *ngIf="Rbajo">
+                                                            <label>Mb</label>
+                                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'RecuperacionBm2'">
+                                                            <p *ngIf="!edit">{{ArrRecuperacion['RecuperacionBm2']}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" *ngIf="RecuperacionMuestras.m3">
+                                                        <h6> Muestra 3</h6>
+                                                        <div *ngIf="Ralto">
+                                                            <label>Ma</label>
+                                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'RecuperacionAm3'">
+                                                            <p *ngIf="!edit">{{ArrRecuperacion['RecuperacionAm3']}}</p>
+                                                        </div>
+                                                        <div *ngIf="Rbajo">
+                                                            <label>Mb</label>
+                                                            <input *ngIf="edit" type="number" class="form-control" [formControlName]="'RecuperacionBm3'">
+                                                            <p *ngIf="!edit">{{ArrRecuperacion['RecuperacionBm3']}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row" *ngIf="RecuperacionMuestras.m1">
+                                                    <div class="col-12">
+                                                        <h6>Muestra 1</h6>
+                                                    </div>
+                                                    <div class="col">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs1'">
+                                                            <li class="list-group-item">Muestra</li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM1')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM1.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM1', 'RMs1')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM1'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM1')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs1']" [nombre]='"Muestra"'>
+                                                        </app-tabla-arrays>
+                                                    </div>
+                                                    <div class="col" *ngIf="Ralto">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs1Aa'">
+                                                            <li class="list-group-item">Muestra Alto</li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM1Aa')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM1Aa.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM1Aa', 'RMs1Aa')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM1Aa'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM1Aa')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs1Aa']" [nombre]='"Muestra Alto"'></app-tabla-arrays>
+                                                    </div>
+                                                    <div class="col" *ngIf="Rbajo">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs1Ab'">
+                                                            <li class="list-group-item">Muestra Bajo</li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM1Ab')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM1Ab.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex, 'RM1Ab', 'RMs1Ab')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM1Ab'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM1Ab')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs1Ab']" [nombre]='"Muestra Bajo"'></app-tabla-arrays>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row" *ngIf="RecuperacionMuestras.m2">
+                                                    <div class="col-12">
+                                                        <h6>Muestra 2</h6>
+                                                    </div>
+                                                    <div class="col">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs2'">
+                                                            <li class="list-group-item">Muestra </li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM2')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM2.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM2', 'RMs2')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM2'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM2')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs2']" [nombre]='"Muestra"'>
+                                                        </app-tabla-arrays>
+                                                    </div>
+                                                    <div class="col" *ngIf="Ralto">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs2Aa'">
+                                                            <li class="list-group-item">Muestra Alto </li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM2Aa')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM2Aa.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM2Aa', 'RMs2Aa')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM2Aa'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM2Aa')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs2Aa']" [nombre]='"Muestra Alto"'></app-tabla-arrays>
+                                                    </div>
+                                                    <div class="col" *ngIf="Rbajo">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs2Ab'">
+                                                            <li class="list-group-item">Muestra Bajo </li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM2Ab')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM2Ab.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM2Ab', 'RMs2Ab')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM2Ab'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM2Ab')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs2Ab']" [nombre]='"Muestra Bajo"'></app-tabla-arrays>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row" *ngIf="RecuperacionMuestras.m3">
+                                                    <div class="col-12">
+                                                        <h6>Muestra 3</h6>
+                                                    </div>
+                                                    <div class="col">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs3'">
+                                                            <li class="list-group-item">Muestra </li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM3')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM3.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM3', 'RMs3')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM3'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM3')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs3']" [nombre]='"Muestra"'>
+                                                        </app-tabla-arrays>
+                                                    </div>
+                                                    <div class="col" *ngIf="Ralto">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs3Aa'">
+                                                            <li class="list-group-item">Muestra Alto </li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM3Aa')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM3Aa.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM3Aa', 'RMs3Aa')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM3Aa'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM3Aa')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs3Aa']" [nombre]='"Muestra Alto "'></app-tabla-arrays>
+                                                    </div>
+                                                    <div class="col" *ngIf="Rbajo">
+                                                        <ul class="list-group" *ngIf="edit" [formArrayName]="'RMs3Ab'">
+                                                            <li class="list-group-item">Muestra Bajo </li>
+                                                            <li class="list-group-item p-0 ajusteTam">
+                                                                <input type="text" (paste)="data2($event,'RM3Ab')" class="form-control" placeholder="Pega tus datos">
+                                                            </li>
+                                                            <li class="list-group-item p-0" *ngFor="let item of RM3Ab.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                                                <div class="input-group m-0 campomodific">
+                                                                    <div class="input-group-prepend ">
+                                                                        <span class="input-group-text " id="basic-addon1" style="background: #28A745;" (click)="addinput(pointIndex,'RM3Ab', 'RMs3Ab')">
+                                      <span class="icofont icofont-plus-circle"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" [formControlName]="'RM3Ab'">
+                                                                    <div class="input-group-prepend btn-danger">
+                                                                        <span class="input-group-text btn-danger" id="basic-addon1" (click)="removeDato(pointIndex, 'RM3Ab')">
+                                      <span class="icofont icofont-ui-delete"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <app-tabla-arrays *ngIf="!edit" [array]="ArrRecuperacion['RMs3Ab']" [nombre]='"Muestra Bajo"'></app-tabla-arrays>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-success" (click)="calculoRecuperacion()">Calcular</button>
+                                                <button class="btn btn-success" *ngIf="edit" (click)="guardarRecuperacion()">Guardar</button>
+                                            </div>
+                                        </form>
+                                        <div class="constainer-fluid">
+                                            <div class="row" *ngIf="!matricesBlancos.recuperacion">
+                                                <div class="col-12">
+                                                    <h6>Calculos De Muestras</h6>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 1">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M1Ab
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM1 | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 1">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M1Aa
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM1Aa | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 1">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M1A
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM1Ab | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 2">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M2Ab
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM2 | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                    <h6></h6>
+                                                    <span> </span>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 2">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M2Aa
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM2Aa | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 2">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M2A
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM2Ab | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 3">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M3Ab
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM3 | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 3">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M3Aa
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM3Aa | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf="ArrRecuperacion['CantidadMuestras'] >= 3">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M3A
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM3Ab | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12">
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12" *ngIf=" numeroMuestras >= 1 || numeroMuestras >= 2 || numeroMuestras >= 3">
+                                                    <h6>Calculos De Muestras</h6>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 1">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M1Ab
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM1 | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 1">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M1Aa
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM1Aa | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 1">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M1A
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM1Ab | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 2">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M2Ab
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM2 | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                    <h6></h6>
+                                                    <span> </span>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 2">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M2Aa
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM2Aa | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 2">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M2A
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM2Ab | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 3">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M3Ab
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM3 | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 3">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M3Aa
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM3Aa | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12 col-lg-4" *ngIf=" numeroMuestras >= 3">
+                                                    <ul class="list-group mb-3">
+                                                        <li class="list-group-item">
+                                                            R'(%) M3A
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span> {{promrecnM3Ab | percent: '1.1-4'}} </span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-12">
+                                                    <hr />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <app-work-interval *ngIf="validacion['intervalodetrabajo']" [id]="$identificador" [permisosLocal]="permisosLocal" (Guardado)="guardadoIntervaloTrabajo($event)"></app-work-interval>
+                                <div class="card" *ngIf="validacion['robustez']">
+                                    <app-robustez [permisosLocal]="permisosLocal" [id]="$identificador" (Guardado)="guardadoRobustez($event)"></app-robustez>
+                                </div>
+                                <div class="card">
+                                    <app-pdf [id]="$identificador" (guardarPDF)="guardarPDF($event)">
+                                    </app-pdf>
+                                </div>
+                                <div class="card">
+                                    <app-carga-archivo [id]="$identificador"></app-carga-archivo>
+                                </div>
+                                <div class="card">
+                                    <button class="btn btn-info" (click)="cargaReporte()">Generar Reporte</button>
+                                    <app-reportes [Json]="ArrayGeneralSubModulos" *ngIf="reporte"></app-reportes>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-preloader *ngIf="preloader"></app-preloader>

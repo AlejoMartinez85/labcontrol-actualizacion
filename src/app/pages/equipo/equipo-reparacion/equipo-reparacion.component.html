@@ -1,0 +1,322 @@
+<div class="card" *ngIf="ver_registros == 1">
+    <div class="card-header">
+        <h1>Ver Registro</h1>
+        <h4 class="card-header-text">Registro de daño, mal funcionamiento, modificación, reparación y/o Mantenimiento </h4>
+    </div>
+
+    <div class="card-body">
+        <form [formGroup]="form">
+
+            <div class="form-group row">
+
+                <label class="col-sm-2 col-form-label" [ngbTooltip]="tipCodigo">Clasificación</label>
+                <ng-template #tipCodigo>Clasificación del evento</ng-template>
+
+
+                <div class="col-sm-4">
+                    <label *ngIf="ver_registros">{{item.clasificacion}}</label>
+                </div>
+
+                <label class="col-sm-2 col-form-label" [ngbTooltip]="tipNombre">Fecha</label>
+                <ng-template #tipNombre>Fecha Novedad</ng-template>
+                <div class="col-sm-4">
+                    <label> {{item.fechaNovedad}}</label>
+                </div>
+            </div>
+            <!-- <div class="form-group row">
+        <label for="" class="col-12 col-lg-2">Recordad Cada</label>
+        <div class="col-12 col-lg-5">
+          23
+        </div>
+        <div class="col-12 col-lg-5">
+          Meses
+        </div>
+      </div> -->
+            <div class="form-group row">
+                <label class="col-sm-6 col-lg-12 col-form-label" [ngbTooltip]="tipDescription">Descripción {{item.clasificacion}}</label>
+                <ng-template #tipDescription>Descripción del registro del {{item.clasificacion}} </ng-template>
+                <br>
+                <div class="col-12 col-lg-12">
+                    {{item.descripcion}}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-6 col-form-label" [ngbTooltip]="tipObs">Observaciones</label>
+
+                <ng-template #tipObs>Observaciones y comentarios sobre el registro del {{item.clasificacion}} </ng-template>
+                <div class="col-sm-12 ">
+                    <ul class="show-notification">
+
+                        <li *ngFor="let obs of item.observaciones; index as i;" b>
+                            <div class="media">
+                                <img class="d-flex align-self-center img-radius" src="assets/images/avatar-blank.jpg" alt="Generic placeholder image">
+                                <div class="media-body ml-2">
+                                    <h5 class="notification-user">{{obs.name}}</h5>
+                                    <p class="notification-msg">{{obs.obs}}</p>
+                                    <span class="notification-time">{{obs.fecha|date:'dd/MM/yyyy'}}</span>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-lg-8 col-form-label">Archivos </label>
+                <div class="col-sm-12 col-lg-8 ">
+                    <ul class="show-notification">
+
+                        <li *ngFor="let archivo of item.archivos; index as i;" b>
+                            <a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-lg-8 " *ngIf="AgregarArchivos">
+                    <label class="custom-file btn">
+
+            <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+            <span class="code-header"> <i class="fa fa-plus  fa-2x text-info"></i>
+            </span>
+
+          </label>
+                    <ngb-progressbar type="primary" height=".3rem" [value]="uploader.progress"></ngb-progressbar>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer" *ngIf="AgregarArchivos">
+        <div class=" row">
+            <div class="col-sm-12   text-right">
+                <div _ngcontent-c7="" class="btn-group ">
+                    <button (click)="cancelar()" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+            Cancelar!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of card-body -->
+</div>
+<div class="card" *ngIf="ver_registros == 0">
+    <div class="card-header">
+        <h1>Editar registro</h1>
+        <h4 class="card-header-text">Registro de daño, mal funcionamiento, modificación, reparación y/o Mantenimiento </h4>
+    </div>
+
+    <div class="card-body">
+        <form [formGroup]="form">
+
+            <div class="form-group row">
+
+                <label class="col-sm-2 col-form-label" [ngbTooltip]="tipCodigo">Clasificación</label>
+                <ng-template #tipCodigo>Clasificación daño, mal funcionamiento, modificación, reparación y/o Mantenimiento
+                </ng-template>
+
+                <div class="col-sm-4">
+                    <select class="form-control" formControlName="clasificacion" [(ngModel)]="item.clasificacion" (change)="seleccionaClasificacion($event.target.value)">
+            <option selected disabled hidden value="">Seleccione una Opción</option>
+            <option value="{{clasificacion}}" *ngFor="let clasificacion of clasificaciones">{{clasificacion}}</option>
+
+          </select>
+                    <input type="text" class="form-control" id="clasificacion-id-singel" placeholder="Otro" *ngIf="Otro">
+                    <span *ngIf="input_required && !item.clasificacion" class="messages text-danger">Campo requerido</span>
+                    <!-- <div
+            *ngIf="form.controls.clasificacion.invalid && (form.controls.clasificacion.dirty || form.controls.clasificacion.touched)">
+            <div class="messages text-danger" *ngIf="form.controls.clasificacion.errors?.required ">
+              Campo Requerido
+            </div>
+          </div> -->
+                </div>
+
+                <label class="col-sm-2 col-form-label" [ngbTooltip]="tipNombre">Fecha</label>
+                <ng-template #tipNombre>Fecha Novedad</ng-template>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" formControlName="fechaNovedad" [(ngModel)]="item.fechaNovedad" placeholder="Fecha Novedad">
+                    <span *ngIf="input_required && (form.controls.fechaNovedad.invalid || form.controls.fechaNovedad == null || !item.fechaNovedad )" class="messages text-danger"> Campo requerido</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-form-label" [ngbTooltip]="tipDescription">Descripción {{item.clasificacion}}</label>
+                <ng-template #tipDescription>Descripción del registro del {{item.clasificacion}} </ng-template>
+                <span *ngIf="input_required && form.controls.descripcion.invalid" class="messages text-danger"> Campo requerido</span>
+                <textarea name="" class="form-control" formControlName="descripcion" [(ngModel)]="item.descripcion" id="" cols="10" rows="3"></textarea>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-6 col-form-label" [ngbTooltip]="tipObs">Observaciones</label>
+
+                <ng-template #tipObs>Observaciones y comentarios sobre el registro del {{item.clasificacion}} </ng-template>
+                <div class="col-sm-12 ">
+                    <ul class="show-notification">
+
+                        <li *ngFor="let obs of item.observaciones; index as i;" b>
+                            <div class="media">
+                                <img class="d-flex align-self-center img-radius" src="assets/images/avatar-blank.jpg" alt="Generic placeholder image">
+                                <div class="media-body ml-2 col-12">
+                                    <h5 class="notification-user">{{obs.name}}</h5>
+                                    <p class="notification-msg">{{obs.obs}}</p>
+                                    <span class="notification-time">{{obs.fecha|date:'dd/MM/yyyy      '}}</span>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-lg-8">
+                    <textarea class="form-control" [(ngModel)]="observacion" placeholder="Observaciones" [ngModelOptions]="{standalone: true}"></textarea>
+
+
+                </div>
+                <div class="col-sm-4">
+                    <button (click)="agregarObservacion()" class="btn btn-primary md-"><i
+              class="icofont icofont-ui-add"></i>Agregar observación</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-lg-8  col-form-label">Archivos adjuntos</label>
+
+                <div class="col-sm-12 col-lg-8 ">
+                    <ul class="show-notification">
+
+                        <li *ngFor="let archivo of item.archivos; index as i;" b>
+                            <a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-lg-8">
+                    <label class="custom-file btn">
+
+            <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+            <span class="code-header"> <i class="fa fa-plus  fa-2x text-info"></i>
+            </span>
+
+          </label>
+                    <ngb-progressbar type="primary" height=".3rem" [value]="uploader.progress"></ngb-progressbar>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer" (mouseover)="input_required = true">
+        <div class=" row">
+            <div class="col-sm-12   text-right">
+                <div _ngcontent-c7="" class="btn-group ">
+                    <button (click)="guardar()" class="btn btn-primary md-" [disabled]="!form.valid"><i
+              class="icofont icofont-plus "></i>Actualizar Registro</button>
+                    <button (click)="cancelar()" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+            Cancelar!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of card-body -->
+</div>
+<!-- NEW EVENT CARD | CARD NUEVO INGRESO EVENTO-->
+
+<div class="card col-12" *ngIf="ver_registros == 2">
+    <div class="card-header">
+        <h1>Nuevo Registro</h1>
+        <h4 class="card-header-text">Registro de daño, mal funcionamiento, modificación, reparación y/o Mantenimiento </h4>
+    </div>
+
+    <div class="card-body">
+        <form [formGroup]="form">
+
+            <div class="form-group row">
+
+                <label class="col-sm-2 col-form-label" [ngbTooltip]="tipCodigo">Clasificación</label>
+                <ng-template #tipCodigo>Clasificación daño, mal funcionamiento, modificación, reparación y/o Mantenimiento
+                </ng-template>
+
+                <div class="col-sm-4">
+                    <select class="form-control" formControlName="clasificacion" [(ngModel)]="item.clasificacion" (change)="seleccionaClasificacion($event.target.value)">
+            <option selected disabled hidden value="">Seleccione una Opción</option>
+            <option value="{{clasificacion}}" *ngFor="let clasificacion of clasificaciones">{{clasificacion}}</option>
+
+          </select>
+                    <input type="text" class="form-control" id="clasificacion-id-singel" placeholder="Otro" *ngIf="Otro">
+                    <span *ngIf="input_required && !item.clasificacion" class="messages text-danger">Campo requerido</span>
+                </div>
+
+                <label class="col-sm-2 col-form-label" [ngbTooltip]="tipNombre">Fecha</label>
+                <ng-template #tipNombre>Fecha Novedad</ng-template>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" formControlName="fechaNovedad" [(ngModel)]="item.fechaNovedad" placeholder="Fecha Novedad">
+                    <span *ngIf="input_required && (form.controls.fechaNovedad.invalid || form.controls.fechaNovedad == null || !item.fechaNovedad )" class="messages text-danger"> Campo requerido</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-form-label" [ngbTooltip]="tipDescription">Descripción {{item.clasificacion}}</label>
+                <ng-template #tipDescription>Descripción del registro del {{item.clasificacion}} </ng-template>
+                <span *ngIf="input_required && form.controls.descripcion.invalid" class="messages text-danger"> Campo requerido</span>
+                <textarea name="" class="form-control" formControlName="descripcion" [(ngModel)]="item.descripcion" id="" cols="10" rows="3"></textarea>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-6 col-form-label" [ngbTooltip]="tipObs">Observaciones</label>
+
+                <ng-template #tipObs>Observaciones y comentarios sobre el registro del {{item.clasificacion}} </ng-template>
+                <div class="col-sm-12 ">
+                    <ul class="show-notification">
+
+                        <li *ngFor="let obs of item.observaciones; index as i;" b>
+                            <div class="media">
+                                <img class="d-flex align-self-center img-radius" src="assets/images/avatar-blank.jpg" alt="Generic placeholder image">
+                                <div class="media-body ml-2 col-12">
+                                    <h5 class="notification-user">{{obs.name}}</h5>
+                                    <p class="notification-msg">{{obs.obs}}</p>
+                                    <span class="notification-time">{{obs.fecha|date:'dd/MM/yyyy      '}}</span>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-lg-8">
+                    <textarea class="form-control" [(ngModel)]="observacion" placeholder="Observaciones" [ngModelOptions]="{standalone: true}"></textarea>
+
+
+                </div>
+                <div class="col-sm-4">
+                    <button (click)="agregarObservacion()" class="btn btn-primary md-"><i
+              class="icofont icofont-ui-add"></i>Agregar observación</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-lg-8  col-form-label">Archivos adjuntos</label>
+
+                <div class="col-sm-12 col-lg-8 ">
+                    <ul class="show-notification">
+
+                        <li *ngFor="let archivo of item.archivos; index as i;" b>
+                            <a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-lg-8">
+                    <label class="custom-file btn">
+
+            <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+            <span class="code-header"> <i class="fa fa-plus  fa-2x text-info"></i>
+            </span>
+
+          </label>
+                    <ngb-progressbar type="primary" height=".3rem" [value]="uploader.progress"></ngb-progressbar>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer" (mouseover)="input_required = true">
+        <div class=" row">
+            <div class="col-sm-12   text-right">
+                <div _ngcontent-c7="" class="btn-group ">
+                    <button (click)="guardar()" class="btn btn-primary md-" [disabled]="!form.valid"><i
+              class="icofont icofont-plus "></i>Guardar Registro</button>
+                    <button (click)="cancelar()" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+            Cancelar!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of card-body -->
+</div>

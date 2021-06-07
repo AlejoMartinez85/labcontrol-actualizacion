@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-header-text">Informacion de pagos </h5><small>Estas es la información referente al pago</small>
+
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Valor a cancelar</label>
+        <div class="col-sm-4">
+          <h6 class="text-uppercase text-primary">{{ensayo.total|currency}}</h6>
+        </div>
+        <label class="col-sm-1 col-form-label">Número factura</label>
+        <div class="col-sm-2">
+          {{ensayo.numerofactura}}
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Fecha Facturado *</label>
+        <div class="col-sm-4">
+
+          {{ensayo.fFacturado|date:'dd/MM/yyyy'}}
+
+
+        </div>
+
+        <label class="col-sm-2 col-form-label">Fecha Vencimiento</label>
+        <div class="col-sm-4">
+          {{ensayo.fVencimiento|date:'dd/MM/yyyy'}}
+          
+
+
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Vigencia</label>
+        <div class="col-sm-4">
+          <h6 class="text-uppercase text-primary">{{calcularVigencia() }} dias</h6>
+        </div>
+       
+      </div>
+
+    </form>
+  </div>
+  <!-- end of card-body -->
+</div>
+
+
+<app-cargar-archivos [ensayo]="ensayo" [lab]="false" [tipo]="" (uploadfile)="uploadfile($event)"></app-cargar-archivos>
+
+
+<div class="card" *ngIf="ensayo.reporte!=undefined">
+  <div class="card-header">
+    <h5 class="card-header-text">Vista previa del informe </h5><small>Esta es la vista previa del contenido del informe</small>
+
+  </div>
+  <div class="card-body text-left">
+    <div class="btn-group ">
+
+      <a routerLink="/ensayos/vistaprevia/{{ensayo._id}}" class="btn btn-primary md-" ><i
+          class="icofont icofont-printe"></i>Vista de Impresión</a>
+    
+    </div>
+  </div>
+</div>

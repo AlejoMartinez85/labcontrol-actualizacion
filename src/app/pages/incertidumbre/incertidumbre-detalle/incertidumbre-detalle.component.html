@@ -1,0 +1,79 @@
+
+    <div class="card" *ngIf="parametro!=undefined">
+      <div class="card-header">
+        <h4 class="card-header-text">Medición {{parametro.parametro.nombre}} </h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <label class="col-sm-2 col-form-label">Formula</label>
+          <div class="col-sm-4" *ngIf="reload">
+            <app-matheditor [variables]="parametro.variables" [formula]="formulaactual" [editable]="false" #mathEditor>
+            </app-matheditor>
+          </div>
+          <div class="col-sm-6">
+            <label for="checkIncertidumbre">
+              <input type="checkbox" name="" id="checkIncertidumbre">
+              Mostrar incertidumbre Relativa 
+            </label><br>
+            <label class="col-form-label" *ngIf="reload">
+              <div>
+                Resultado {{parametro.parametro.simbolo}}= {{parametro?.resultado|number:'1.0-'+evaluardecimal()}}&plusmn;
+                {{parametroresult?.u|number:'1.0-'+evaluardecimal()}} {{parametro.parametro.unidad}}
+              </div>
+            </label><br />
+            <h5 class="text-warning" *ngIf="!reload">...Calculando</h5><br />
+
+
+          </div>
+          <div class="col-sm-6">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Simbolo</th>
+                  <th>Valor </th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let variable of parametro.variables;index as i;">
+                  <td>{{i+1}}</td>
+                  <td>
+                    {{variable.nombre}}
+                  </td>
+                  <td>
+                    {{variable.simbolo}}
+                  </td>
+                  <td>
+                    <input type="number" class="form-control" name="var_valor{{i}}" placeholder="Valor "
+                      [(ngModel)]="variable.valor" [ngModelOptions]="{standalone: true}" disabled>
+
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+          </div>
+          <div class="col-sm-6">
+            <label class="col-form-label">Validaciones</label><br />
+            <ng-container *ngFor="let validacion of parametroresult?.validaciones;index as i;">
+              <div class="alert alert-success" *ngIf="validacion.evaluacion!=''">
+                <button type="button" class="close" appRemoveAlert>
+                  <i class="icofont icofont-close-line-circled"></i>
+                </button>
+                <strong>Alerta!</strong> {{validacion.evaluacion}}
+              </div>
+            </ng-container>
+          </div>
+          
+
+
+
+        </div>
+      </div>
+
+    </div>
+

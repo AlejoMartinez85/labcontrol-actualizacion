@@ -1,0 +1,901 @@
+<div class="card-header">
+
+</div>
+<div class="card-body">
+    <div class="container-fluid">
+        <div class="">
+            <h1>Informe de validación</h1>
+            
+            <!-- Linealidad -->
+            <div *ngIf="ArregloGeneral.linealidad.view">
+                <h3>Linealidad</h3>
+                <div *ngIf="R2Linearity > 0.99">
+                    <h5 class="text-success">Aprobado</h5>
+                    <p>El método tiene un comportamiento lineal con respecto al método de referencia. Esto se corrobora mediante una regresión lineal con un coeficiente de correlación de {{ArregloGeneral.linealidad.arr.Rquadrado | number: '1.0-3'}}, y con una ecuación de y = x{{ArregloGeneral.linealidad.arr.pendiente | number: '1.0-3'}} + {{ArregloGeneral.linealidad.arr.intercepto | number: '1.0-3'}} {{ArregloGeneral.linealidad.arr.unidad}}</p>
+                </div>
+                <div *ngIf="R2Linearity < 0.99"> 
+                    <h5 class="text-warning">Revisar</h5> 
+                    <p>
+                    El método no  tiene un comportamiento lineal con respecto al método de referencia dado que el coeficiente de correlación es  {{R2Linearity}}.
+                    </p>
+                </div>
+            </div>
+            <br>
+
+            <!-- <div>
+                <h3>Sensibilidad</h3>
+                <div *ngIf="R2Linearity > 0.99">
+                    <h5 class="text-success">Aprobado</h5>
+                    <p>El método tiene un comportamiento lineal con respecto al método de referencia. Esto se corrobora mediante una regresión lineal con un coeficiente de correlación de {{ArregloGeneral.linealidad.arr.Rquadrado}}, y con una ecuación de y = x{{ArregloGeneral.linealidad.arr.pendiente}} + {{ArregloGeneral.linealidad.arr.intercepto}} {{ArregloGeneral.linealidad.arr.unidad}}</p>
+                </div>
+                <div *ngIf="R2Linearity < 0.99"> 
+                    <h5 class="text-warning">Revisar</h5> 
+                    <p>
+                    El método no  tiene un comportamiento lineal con respecto al método de referencia dado que el coeficiente de correlación es  {{R2Linearity}}.
+                    </p>
+                </div>
+            </div> -->
+
+            <!-- Límite de detección -->
+            <div *ngIf="ArregloGeneral.limites.view && ArregloGeneral.limites.arr.fLdeteccion != undefined">
+                <h3>Límite de detección </h3>
+                <div >
+                    <h5 class="text-success">Aprobado</h5>
+                    <p>
+                        La concentración más baja de analito que  puede ser detectada es  de {{ArregloGeneral.limites.arr.fLdeteccion | number: '1.0-3'}} {{ArregloGeneral.limites.arr.unidad}} 
+                    </p>
+                </div>
+            </div>
+            <br>
+
+            <!-- Límite de cuantificación -->
+            <div *ngIf="ArregloGeneral.limites.view  && ArregloGeneral.limites.arr.fLquantificacion != undefined">
+                <h3>Límite de cuantificación</h3>
+                <div >
+                    <h5 class="text-success">Aprobado</h5>
+                    <p>
+                        La concentración más baja de analito que  puede ser cuantificada con un nivel de confianza del 95% es  de {{ArregloGeneral.limites.arr.fLquantificacion | number: '1.0-3'}} {{ArregloGeneral.limites.arr.unidad}} 
+                    </p>
+                </div>
+            </div>
+            <br>
+            <!-- Exactitud -->
+            <div *ngIf="ArregloGeneral.exactitud.view">
+                <h3>Exactitud</h3>
+                <div >
+                    <h5 class="text-success">Aprobado</h5>
+                    <p *ngIf="ArregloGeneral.exactitud.arr.medirMR">
+                        Es una medida del sesgo en relación con un valor o material material de referencia, en donde el sesgo es de b= {{ArregloGeneral.exactitud.arr.exactitudb}}&nbsp;{{ArregloGeneral.exactitud.arr.unidad}}, el sesgo porcentual es de  b(%)= {{ArregloGeneral.exactitud.arr.exactitudbpor | number: '1.0-3'}} y la recuperación aparente R(%) = {{ArregloGeneral.exactitud.arr.exactitudr | number: '1.0-3'}}
+
+                    </p>
+                    <p *ngIf="ArregloGeneral.exactitud.arr.medirMRMetodoCacicato">
+                        Es una medida del sesgo en relación con los datos obtenidos con el método  referencia, en donde el sesgo es de b= {{ArregloGeneral.exactitud.arr.exactitudb2 | number: '1.0-3'}}&nbsp;{{ArregloGeneral.exactitud.arr.unidad}}, el sesgo porcentual es de  b(%)= {{ArregloGeneral.exactitud.arr.exactitudbpor2 | number: '1.0-3'}} y la recuperación aparente R(%) = {{ArregloGeneral.exactitud.arr.exactitudr2 | number: '1.0-3'}}
+
+                    </p>
+                </div>
+            </div>
+            <br>
+
+            <!-- Precisión -->
+            <div *ngIf="ArregloGeneral.presicion.view">
+                <h3>Precisión</h3>
+                <div *ngIf="Pvalue > 0.05" >
+                    
+                    <h5 class="text-success">Aprobado</h5>
+                    <p *ngIf="standardDeviationBetweenGroups == 0">
+                    Pvalue > 0.05 & Desviación estándar entre grupo = 0
+                    <br>
+                    El Pvalue es mayor a 0.05 esto quiere decir que no hay diferencias significativas entre los resultados producidos por diferentes analistas y que la variación del método es causada principalmente a errores aleatorios. Adicionalmente la varianza de repetibilidad es cero lo cual es consistente dado que el efecto no es estadísticamente significativo.</p>
+                    <p *ngIf="standardDeviationBetweenGroups != 0"> 
+                    Pvalue > 0.05 & Desviación estándar entre grupo diferente de 0
+                    <br>
+                    El Pvalue es mayor a 0.05 esto quiere decir que no hay diferencias significativas entre los resultados producidos por diferentes analistas y que la variación del método es causada principalmente a errores aleatorios.
+                    </p>
+
+                </div>
+
+                <div *ngIf="Pvalue < 0.05">
+                    <h5 class="text-warning">Revisar</h5>
+                    <p >
+                    Pvalue < 0.05
+                    <br>
+                    El Pvalue es menor a 0.05 esto quiere decir que hay diferencias significativas entre los resultados producidos por diferentes analistas y dicha desviación estándar es de -Desviación estándar entre grupo- -unidades-
+                    </p>
+                </div>
+                <br>
+                <div class="col-12 mt-3">
+                    <div class="">
+                        <div class="">
+                            <strong>ANOVA</strong> 
+                        </div> 
+                        <div class="">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-3"><strong>Grupo</strong></div>
+                                        <div class="col-12 col-sm">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><strong class="mr-1 link" >DF</strong></div>
+                                                <div class="col-12 col-sm-2"><strong class="mr-1 link" >SS</strong></div>
+                                                <div class="col-12 col-sm-2"><strong class="mr-1 link" >MS</strong></div>
+                                                <div class="col-12 col-sm-2"><strong class="mr-1 link" >F</strong></div>
+                                                <div class="col-12 col-sm-3"><strong class="mr-1 link" >P. Value</strong></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-3">Entre grupos</div>
+                                        <div class="col-12 col-sm">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.treatment.DF}}">{{ArregloGeneral.presicion.arr.anova.treatment.DF | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.treatment.SS}}">{{ArregloGeneral.presicion.arr.anova.treatment.SS | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.treatment.MS}}">{{ArregloGeneral.presicion.arr.anova.treatment.MS | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.treatment.F}}">{{ArregloGeneral.presicion.arr.anova.treatment.F | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.treatment.PV}}">{{ArregloGeneral.presicion.arr.anova.treatment.PV | number: '1.0-4'}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-3">Intra grupo</div>
+                                        <div class="col-12 col-sm">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.residual.DF}}">{{ArregloGeneral.presicion.arr.anova.residual.DF | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.residual.SS}}">{{ArregloGeneral.presicion.arr.anova.residual.SS | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.residual.MS}}">{{ArregloGeneral.presicion.arr.anova.residual.MS | number: '1.0-4'}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-3">Total</div>
+                                        <div class="col-12 col-sm">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.total.DF}}">{{ArregloGeneral.presicion.arr.anova.total.DF | number: '1.0-4'}}</span></div>
+                                                <div class="col-12 col-sm-2"><span ngbTooltip="{{ArregloGeneral.presicion.arr.anova.residual.SS}}">{{ArregloGeneral.presicion.arr.anova.residual.SS | number: '1.0-4'}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <!-- Intervalo de trabajo -->
+            <div *ngIf="ArregloGeneral.intervaloTrabajo.view">
+                <h3>Intervalo de trabajo</h3>
+                <h5 class="text-success">Aprobado</h5>
+                <p>
+                    El intervalo de trabajo del método es de {{ArregloGeneral.intervaloTrabajo.arr.lowerLimit}} {{ArregloGeneral.intervaloTrabajo.arr.unidad}} a {{ArregloGeneral.intervaloTrabajo.arr.upperLimit}} {{ArregloGeneral.intervaloTrabajo.arr.unidad}}
+                </p>
+            </div>
+            <br>
+            <!-- Robusness -->
+            <div *ngIf="ArregloGeneral.robustez.view">
+                <h3>Robustez</h3>
+                <h5 *ngIf="!sensible" class="text-success">Aprobado</h5>
+                <h5 *ngIf="sensible" class="text-warning">Revisar</h5>
+                <br>
+                <div>
+                    <p>Medida de la capacidad de un procedimiento analítico de no ser afectado por variaciones pequeñas pero deliberadas de los parámetros del método; proporciona una indicación de la fiabilidad del procedimiento en un uso normal. Para esto se
+                        usó un diseño de Youden Steiner. Este diseño se puede observar en la tabla posterior. En donde las letras en mayúsculas (A, B, C,…,G) representan los niveles altos de las variables y las letras en minúscula (a,b,c,..,g) representan
+                        los niveles bajos de las variables.</p>
+                        <br>
+                    <table class="table">
+                        <thead>
+                            <td>Niveles</td>
+                            <td colspan="8">Ensayo</td>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>7</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>A,a</td>
+                                <td>A</td>
+                                <td>A</td>
+                                <td>A</td>
+                                <td>A</td>
+                                <td>a</td>
+                                <td>a</td>
+                                <td>a</td>
+                                <td>a</td>
+                            </tr>
+                            <tr>
+                                <td>C,c</td>
+                                <td>C</td>
+                                <td>c</td>
+                                <td>C</td>
+                                <td>c</td>
+                                <td>C</td>
+                                <td>c</td>
+                                <td>C</td>
+                                <td>c</td>
+                            </tr>
+                            <tr>
+                                <td>D, d</td>
+                                <td>D</td>
+                                <td>D</td>
+                                <td>d</td>
+                                <td>d</td>
+                                <td>d</td>
+                                <td>d</td>
+                                <td>D</td>
+                                <td>D</td>
+                            </tr>
+                            <tr>
+                                <td>E, e</td>
+                                <td>E</td>
+                                <td>e</td>
+                                <td>E</td>
+                                <td>e</td>
+                                <td>e</td>
+                                <td>E</td>
+                                <td>e</td>
+                                <td>E</td>
+                            </tr>
+                            <tr>
+                                <td>F, f</td>
+                                <td>F</td>
+                                <td>f</td>
+                                <td>f</td>
+                                <td>F</td>
+                                <td>F</td>
+                                <td>f</td>
+                                <td>f</td>
+                                <td>F</td>
+                            </tr>
+                            <tr>
+                                <td>G, g</td>
+                                <td>G</td>
+                                <td>g</td>
+                                <td>g</td>
+                                <td>G</td>
+                                <td>g</td>
+                                <td>G</td>
+                                <td>G</td>
+                                <td>g</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p>Las variables y los niveles seleccionados se pueden observar en siguiente tabla</p>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>No.</td>
+                                <td>Variable</td>
+                                <td colspan="2">Niveles</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][0].nombre}}</td>
+                                <td>
+                                    <tr class="w-100">
+                                        <td>A</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][0].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>a</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][0].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][1].nombre}}</td>
+                                <td>
+                                    <tr>
+                                        <td>B</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][1].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>b</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][1].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][2].nombre}}</td>
+                                <td>
+                                    <tr>
+                                        <td>C</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][2].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>c</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][2].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][3].nombre}}</td>
+                                <td>
+                                    <tr>
+                                        <td>D</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][3].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>d</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][3].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][4].nombre}}</td>
+                                <td>
+                                    <tr>
+                                        <td>E</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][4].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>e</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][4].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][5].nombre}}</td>
+                                <td>
+                                    <tr>
+                                        <td>F</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][5].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>f</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][5].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][6].nombre}}</td>
+                                <td>
+                                    <tr>
+                                        <td>G</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][6].valorAlto}}</td>
+                                    </tr>
+                                </td>
+                                <td>
+                                    <tr>
+                                        <td>g</td>
+                                        <td>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][6].valorBajo}}</td>
+                                    </tr>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p>Para la evaluación de la sensibilidad de cada variable se halla el promedio para cada nivel A, y a. luego se toma la diferencia A-a, si este valor es menor al criterio s*√2 = {{ArregloGeneral.robustez.arr.robustezCritica | number: '1.0-3'}} <span class="text-gray">{{ArregloGeneral.robustez.arr.unidad}}</span> la variable es no sensible y el sistema es robusto a dicha variable.
+                        Estos cálculos se pueden observar en la siguiente tabla </p>
+                        <br>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Variable</th>
+                                    <th>Efecto</th>
+                                    <th>Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of ArregloGeneral.robustez.arr['ValorDeCalibracion']">
+                                    <td>{{item.nombre}}</td>
+                                    <td>{{item.X_x | number: '1.0-3'}} <span class="text-gray">{{ArregloGeneral.robustez.arr.unidad}}</span></td>
+                                    <td >{{item.significant}}</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+                </div>
+            </div>
+            <br>
+
+            <h1>Resumen Variables</h1>
+            <div>
+                <br>
+                <h3>Linealidad</h3>
+                <br>
+                <p>unidad: {{ArregloGeneral.linealidad.arr.unidad}}</p>
+                <p>Pendiente: {{ArregloGeneral.linealidad.arr.pendiente}}</p>
+                <p>Intercepto: {{ArregloGeneral.linealidad.arr.intercepto}}</p>
+                <p>R2: {{ArregloGeneral.linealidad.arr.Rquadrado}}</p>
+            </div>
+
+            <div>
+                <br>
+                <h3>Sensibilidad</h3>
+                <br>
+                <!-- <p>unidad: {{ArregloGeneral.sensibilidad.arr.unidad}}</p>
+                <p>Pendiente: {{ArregloGeneral.sensibilidad.arr.pendiente}}</p>
+                <p>Intercepto: {{ArregloGeneral.sensibilidad.arr.intercepto}}</p>
+                <p>R2: {{ArregloGeneral.sensibilidad.arr.rquadrado}}</p> -->
+            </div>
+            <!-- Límites de detección y cuantificación -->
+            <div>
+                <br>
+                <h3>Límite de detección y cuantificación</h3>
+                <br>
+                <p>unidad: {{ArregloGeneral.limites.arr.unidad}}</p>
+                <p>Factor Límite de Detección{{ArregloGeneral.limites.arr.factorLimiteDetencion}}</p>
+                <p>Factor límite de cuantificación{{ArregloGeneral.limites.arr.factorLimiteCuantificacion}}</p>
+                <p>Límite de Detección{{ArregloGeneral.limites.arr.fLdeteccion}}</p>
+                <p>Límite de cuantificación{{ArregloGeneral.limites.arr.fLquantificacion}}</p>
+            </div>
+
+            <div>
+                <br>
+                <h3>Exactitud</h3>
+                <br>
+                <!-- <p>Matriz: []</p> -->
+                <p>Xref: null  {{ArregloGeneral.exactitud.arr.Xref}}</p>
+                <p>errorEa: 0 {{ArregloGeneral.exactitud.arr.errorEa}}</p>
+                <p>errorEb: 0 {{ArregloGeneral.exactitud.arr.errorEb}}</p>
+                <p>errorEm: 0 {{ArregloGeneral.exactitud.arr.errorEm}}</p>
+                <p>exactitudb: 0 {{ArregloGeneral.exactitud.arr.exactitudb}}</p>
+                <p>exactitudb2: 0 {{ArregloGeneral.exactitud.arr.exactitudb2}}</p>
+                <p>exactitudbpor: 0 {{ArregloGeneral.exactitud.arr.exactitudbpor}}</p>
+                <p>exactitudbpor2: 0 {{ArregloGeneral.exactitud.arr.exactitudbpor2}}</p>
+                <p>exactitudr: 0  {{ArregloGeneral.exactitud.arr.exactitudr}}</p>
+                <p>exactitudr2: 0 {{ArregloGeneral.exactitud.arr.exactitudr2}}</p>
+                <p>exactitudrpor: 0 {{ArregloGeneral.exactitud.arr.exactitudrpor}}</p>
+                <p>medirBlancos: false {{ArregloGeneral.exactitud.arr.medirBlancos}}</p>
+                <p>medirMR: false {{ArregloGeneral.exactitud.arr.medirMR}}</p>
+                <p>medirMRMetodoCacicato: false {{ArregloGeneral.exactitud.arr.medirMRMetodoCacicato}}</p>
+                <!-- <p>metodosRef: [] {{ArregloGeneral.exactitud.arr.metodosRef}}</p> -->
+                <p>promrecnM1: 0 {{ArregloGeneral.exactitud.arr.promrecnM1}}</p>
+                <p>promrecnM1Aa: 0 {{ArregloGeneral.exactitud.arr.promrecnM1Aa}}</p>
+                <p>promrecnM1Ab: 0 {{ArregloGeneral.exactitud.arr.promrecnM1Ab}}</p>
+                <p>promrecnM2: 0 {{ArregloGeneral.exactitud.arr.promrecnM2}}</p>
+                <p>promrecnM2Aa: 0 {{ArregloGeneral.exactitud.arr.promrecnM2Aa}}</p>
+                <p>promrecnM2Ab: 0 {{ArregloGeneral.exactitud.arr.promrecnM2Ab}}</p>
+                <p>promrecnM3: 0 {{ArregloGeneral.exactitud.arr.promrecnM3}}</p>
+                <p>promrecnM3Aa: 0 {{ArregloGeneral.exactitud.arr.promrecnM3Aa}}</p>
+                <p>promrecnM3Ab: 0 {{ArregloGeneral.exactitud.arr.promrecnM3Ab}}</p>
+                <p>unidad: "rerer" {{ArregloGeneral.exactitud.arr.unidad}}</p>
+            </div>
+            <!-- Precisión -->
+            <div>
+                <br>
+                <h3>Precisión</h3>
+                <br>
+                <!-- <p>unidad: {{ArregloGeneral.limite.arr.unidad}} "mg/L"</p> -->
+                <p>repeatabilityStandardDeviation: 2.9631486631622113 {{ArregloGeneral.presicion.arr.repeatabilityStandardDeviation}}</p>
+                <p>replicas: 5 {{ArregloGeneral.presicion.arr.replicas}}</p>
+                <p>reproducibilityStandardDeviation: 2.9631486631622113 {{ArregloGeneral.presicion.arr.reproducibilityStandardDeviation}}</p>
+                <p>standardDeviationBetweenGroups: 0 {{ArregloGeneral.presicion.arr.standardDeviationBetweenGroups}}</p>
+                <p>analysts: 4 {{ArregloGeneral.presicion.arr.analysts}}</p>
+                <h5>ANOVA</h5>
+                <div>
+                 <h6>Residual</h6>   
+                <p>DF{{ArregloGeneral.presicion.arr.anova.residual.DF}}</p>
+                <p>MS{{ArregloGeneral.presicion.arr.anova.residual.MS}}</p>
+                <p>SS{{ArregloGeneral.presicion.arr.anova.residual.SS}}</p>
+                <h6>total</h6>
+                <p>DF{{ArregloGeneral.presicion.arr.anova.total.DF}}</p>
+                <p>SS{{ArregloGeneral.presicion.arr.anova.total.SS}}</p>
+                <h6>Tratamientos</h6>
+                <p> DF: 3 {{ArregloGeneral.presicion.arr.anova.treatment.DF}}</p>
+                <p>F: 0.09891517895276246 {{ArregloGeneral.presicion.arr.anova.treatment.F}}</p>
+                <p>MS: 0.8684999999999926 {{ArregloGeneral.presicion.arr.anova.treatment.MS}}</p>
+                <p>PV: 0.9594690022250602 {{ArregloGeneral.presicion.arr.anova.treatment.PV}}</p>
+                <p>SS: 2.605499999999978 {{ArregloGeneral.presicion.arr.anova.treatment.SS}}</p>
+                </div>
+                
+                
+            </div>
+
+            <div>
+                <h5>Recuperacion en matriz</h5>
+
+                    <p>RecuperacionAm1: 1 {{ArregloGeneral.recuperacion.arr.RecuperacionAm1}}</p>
+                    <p>RecuperacionAm2: null {{ArregloGeneral.recuperacion.arr.RecuperacionAm2}}</p>
+                    <p>RecuperacionAm3: null {{ArregloGeneral.recuperacion.arr.RecuperacionAm3}}</p>
+                    <p>RecuperacionBm1: null {{ArregloGeneral.recuperacion.arr.RecuperacionBm1}}</p>
+                    <p>RecuperacionBm2: null {{ArregloGeneral.recuperacion.arr.RecuperacionBm2}}</p>
+                    <p>RecuperacionBm3: null {{ArregloGeneral.recuperacion.arr.RecuperacionBm3}}</p>
+                    <p>nivelesAdicion: "alto" {{ArregloGeneral.recuperacion.arr.nivelesAdicion}}</p>
+                    <p>promrecnM1: NaN {{ArregloGeneral.recuperacion.arr.promrecnM1}}</p>
+                    <p>promrecnM1Aa: 0.15 {{ArregloGeneral.recuperacion.arr.promrecnM1Aa}}</p>
+                    <p>promrecnM1Ab: NaN {{ArregloGeneral.recuperacion.arr.promrecnM1Ab}</p>}
+                    <p>promrecnM2: 0 {{ArregloGeneral.recuperacion.arr.promrecnM2}}</p>
+                    <p>promrecnM2Aa: 0 {{ArregloGeneral.recuperacion.arr.promrecnM2Aa}}</p>
+                    <p>promrecnM2Ab: 0 {{ArregloGeneral.recuperacion.arr.promrecnM2Ab}}</p>
+                    <p>promrecnM3: 0 {{ArregloGeneral.recuperacion.arr.promrecnM3}}</p>
+                    <p>promrecnM3Aa: 0 {{ArregloGeneral.recuperacion.arr.promrecnM3Aa}}</p>
+                    <p>promrecnM3Ab: 0 {{ArregloGeneral.recuperacion.arr.promrecnM3Ab}}</p>
+                    <p>unidad: "matriz" {{ArregloGeneral.recuperacion.arr.unidad}}</p>
+
+            </div>
+
+            <!-- Intervalo de trabajo -->
+            <div>
+                <br>
+                <h3>Intervalo de trabajo</h3>
+                <br>
+                <p>unidad: {{ArregloGeneral.intervaloTrabajo.arr.unidad}}</p>
+                <p>grade: 1 {{ArregloGeneral.intervaloTrabajo.arr.grade}}</p> 
+                <p>intercept: 0 {{ArregloGeneral.intervaloTrabajo.arr.intercept}}</p> 
+                <p>labelx: "Eje X" {{ArregloGeneral.intervaloTrabajo.arr.labelx}}</p> 
+                <p>labely: "Eje Y" {{ArregloGeneral.intervaloTrabajo.arr.labely}}</p> 
+                <p>lowerLimit: 67 {{ArregloGeneral.intervaloTrabajo.arr.lowerLimit}}</p> 
+                <p>upperLimit: 68 {{ArregloGeneral.intervaloTrabajo.arr.upperLimit}}</p> 
+            </div> 
+
+            <div>
+                <h3>Robustez</h3>
+                
+
+                <h5>Variables calibración</h5>
+                <h6>nombres</h6>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][0].nombre}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][1].nombre}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][2].nombre}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][3].nombre}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][4].nombre}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][5].nombre}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][6].nombre}}</span>
+                
+                
+                <h6>Valor alto</h6>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][0].valorAlto}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][1].valorAlto}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][2].valorAlto}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][3].valorAlto}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][4].valorAlto}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][5].valorAlto}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][6].valorAlto}}</span>
+                
+                
+                <h6>Valor bajo</h6>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][0].valorBajo}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][1].valorBajo}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][2].valorBajo}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][3].valorBajo}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][4].valorBajo}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][5].valorBajo}}</span>
+                <span>{{ArregloGeneral.robustez.arr['ValorDeCalibracion'][6].valorBajo}}</span>
+                
+                <h5>robustez critica</h5>
+                <p>{{ArregloGeneral.robustez.arr.robustezCritica}}</p>
+                <p>{{ArregloGeneral.robustez.arr.unidades}}</p>
+                <h6>valores</h6>
+                <p>{{ArregloGeneral.robustez.arr.valor1}}</p>
+                <p>{{ArregloGeneral.robustez.arr.valor2}}</p>
+                <p>{{ArregloGeneral.robustez.arr.valor3}}</p>
+                <p>{{ArregloGeneral.robustez.arr.valor4}}</p>
+                <p>{{ArregloGeneral.robustez.arr.valor5}}</p>
+                <p>{{ArregloGeneral.robustez.arr.valor6}}</p>      
+                <p>{{ArregloGeneral.robustez.arr.valor7}}</p>
+                <p>{{ArregloGeneral.robustez.arr.valor8}}</p>
+
+            </div>
+        </div>
+        <button (click)="showArreglo()">Mostrar arreglo</button>
+        <!-- <div class="row">
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.linealidad.view">
+                <label for="">Linealidad</label>
+                <p>El método tiene un comportamiento lineal con respecto al método de referencia. Esto se corrobora mediante una regresión lineal con un coeficiente de correlación de R2, y con una ecuación de y = x pendiente + intercepto.unidades</p>
+                <p>El método no tiene un comportamiento lineal con respecto al método de referencia dado que el coeficiente de correlación es R2.</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.sensibilidad.view">
+                <label for="">Sensibilidad</label>
+                <p>Corresponde a la pendiente de la relación entre el sistema de medida y el método o material de referencia. En este caso la sensibilidad del método es -pendiente-.</p>
+                <p>En este caso existen problemas de sensibilidad dado que se aleja demasiado de la unidad en el rango analizado.</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.limites.view">
+                <label for="">Límite de detección</label>
+                <p>La concentración más baja de analito que puede ser detectada es de -LOD- -unidades-</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.limites.view">
+                <label for="">Límite de cuantificación</label>
+                <p>La concentración más baja de analito que puede ser cuantificada con un nivel de confianza del 95% es de -LOD- -unidades-</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.exactitud.view">
+                <label for="">Exactitud</label>
+                <p>La proximidad de los resultados obtenidos por el método comparados con un valor de referencia, en donde el sesgo es de -b (%)- -unidades-</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.presicion.view">
+                <label for="">Precisión</label>
+                <p>Pvalue>0.05</p>
+                <p>El Pvalue es mayor a 0.05 esto quiere decir que hay diferencias significativas entre los resultados producidos por diferentes analistas y dicha desviación estándar es de -Desviación estándar entre grupo- -unidades-</p>
+                <p>Pvalue
+                    < 0.05 & Desviación estándar entre grupo=0 </p>
+                        <p>El Pvalue es menor a 0.05 esto quiere decir que no hay diferencias significativas entre los resultados producidos por diferentes analistas y que la variación del método es causada principalmente a errores aleatorios. Adicionalmente
+                            la varianza de repetibilidad es cero lo cual es consistente dado que el efecto no es estadísticamente significativo.</p>
+                        <p>Pvalue
+                            < 0.05 & Desviación estándar entre grupo diferente de 0</p>
+                                <p>El Pvalue es menor a 0.05 esto quiere decir que no hay diferencias significativas entre los resultados producidos por diferentes analistas y que la variación del método es causada principalmente a errores aleatorios.</p>
+                                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.recuperacion.view">
+                <label for="">Recuperación en matriz</label>
+                <p>La veracidad del método calculada mediante recuperación en matiz es de -R'(%) M1Ab- -unidades-</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.intervaloTrabajo.view">
+                <label for="">Intervalo de trabajo</label>
+                <p>El intervalo de trabajo del método es de -intervalo minimo- a -intervalo maximo- -unidades-</p>
+                <hr>
+            </div>
+            <div class="col-12 col-lg-12" *ngIf="ArregloGeneral.robustez.view">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>nombre</td>
+                            <td>data 1</td>
+                            <td>data 2</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ArregloGeneral.robustez['arr']['ValorDeCalibracion']">
+                            <td>{{item.nombre}}</td>
+                            <td>{{item.valorAlto}}</td>
+                            <td>{{item.valorBajo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span>{{ArregloGeneral.robustez['arr']['ValorDeCalibracion'][0].nombre}}</span>
+                <label for="">Robustez</label>
+                <p>Medida de la capacidad de un procedimiento analítico de no ser afectado por variaciones pequeñas pero deliberadas de los parámetros del método; proporciona una indicación de la fiabilidad del procedimiento en un uso normal. Para esto se
+                    usó un diseño de Youden Steiner. Este diseño se puede observar en la tabla posterior. En donde las letras en mayúsculas (A, B, C,…,G) representan los niveles altos de las variables y las letras en minúscula (a,b,c,..,g) representan
+                    los niveles bajos de las variables.</p>
+                <table class="table">
+                    <thead>
+                        <td>Niveles</td>
+                        <td colspan="8">Ensayo</td>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>A,a</td>
+                            <td>A</td>
+                            <td>A</td>
+                            <td>A</td>
+                            <td>A</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                            <td>a</td>
+                        </tr>
+                        <tr>
+                            <td>C,c</td>
+                            <td>C</td>
+                            <td>c</td>
+                            <td>C</td>
+                            <td>c</td>
+                            <td>C</td>
+                            <td>c</td>
+                            <td>C</td>
+                            <td>c</td>
+                        </tr>
+                        <tr>
+                            <td>D, d</td>
+                            <td>D</td>
+                            <td>D</td>
+                            <td>d</td>
+                            <td>d</td>
+                            <td>d</td>
+                            <td>d</td>
+                            <td>D</td>
+                            <td>D</td>
+                        </tr>
+                        <tr>
+                            <td>E, e</td>
+                            <td>E</td>
+                            <td>e</td>
+                            <td>E</td>
+                            <td>e</td>
+                            <td>e</td>
+                            <td>E</td>
+                            <td>e</td>
+                            <td>E</td>
+                        </tr>
+                        <tr>
+                            <td>F, f</td>
+                            <td>F</td>
+                            <td>f</td>
+                            <td>f</td>
+                            <td>F</td>
+                            <td>F</td>
+                            <td>f</td>
+                            <td>f</td>
+                            <td>F</td>
+                        </tr>
+                        <tr>
+                            <td>G, g</td>
+                            <td>G</td>
+                            <td>g</td>
+                            <td>g</td>
+                            <td>G</td>
+                            <td>g</td>
+                            <td>G</td>
+                            <td>G</td>
+                            <td>g</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Las variables y los niveles seleccionados se pueden observar en siguiente tabla</p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>No.</td>
+                            <td>Variable</td>
+                            <td colspan="2">Niveles</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Altura de la muestra<br>(dentro del GAC)</td>
+                            <td>
+                                <tr class="w-100">
+                                    <td>A</td>
+                                    <td>Alto</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>a</td>
+                                    <td>Bajo</td>
+                                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Tiempo de Reposo</td>
+                            <td>
+                                <tr>
+                                    <td>B</td>
+                                    <td>1 min</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>b</td>
+                                    <td>5 min</td>
+                                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Analista</td>
+                            <td>
+                                <tr>
+                                    <td>C</td>
+                                    <td>Analista 1</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>c</td>
+                                    <td>Analista 2</td>
+                                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Punto de toma <br>(localización)</td>
+                            <td>
+                                <tr>
+                                    <td>D</td>
+                                    <td>Superficial</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>d</td>
+                                    <td>Profundo</td>
+                                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Cantidad de <br>Repeticiones en GAC</td>
+                            <td>
+                                <tr>
+                                    <td>E</td>
+                                    <td>1</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>e</td>
+                                    <td>2</td>
+                                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Hora del día</td>
+                            <td>
+                                <tr>
+                                    <td>F</td>
+                                    <td>Mañana</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>f</td>
+                                    <td>Tarde</td>
+                                </tr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Ubicación del Equipo</td>
+                            <td>
+                                <tr>
+                                    <td>G</td>
+                                    <td>Ubicación 1</td>
+                                </tr>
+                            </td>
+                            <td>
+                                <tr>
+                                    <td>g</td>
+                                    <td>Ubicación 2</td>
+                                </tr>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Para la evaluación de la sensibilidad de cada variable se halla el promedio para cada nivel A, y a. luego se toma la diferencia A-a, si este valor es menor al criterio s√2 la variable es no sensible y el sistema es robusto a dicha variable.
+                    Estos cálculos se pueden observar en la siguiente tabla </p>
+            </div>
+        </div> -->
+        
+    </div>
+    
+</div>

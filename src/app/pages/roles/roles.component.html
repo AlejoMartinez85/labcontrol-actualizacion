@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-gray">Roles</h1>
+      <hr>
+    </div>
+    <div class="col-12">
+      <app-card [cardOptionBlock]="true">
+        <div class="btn-group " role="group" aria-label="Basic example">
+          <button class="btn btn-success" (click)="openMyModal('roles')"> <i class="fa fa-plus"></i> Crear Rol </button>
+          <!-- <button type="button" class="btn btn-secondary">Middle</button> -->
+        </div>
+        <div *ngIf="catchRol">
+          <hr>
+          <h5 id="tbl-title-roles">Listado de permisos</h5>
+          <br>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rol of Roles; let i = index">
+                <td>{{ i+1 }}</td>
+                <td>{{ rol.nombre }}</td>
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-info" [routerLink]="[ 'ver', rol._id ]">
+                      <span class="icofont icofont-link-alt"></span>
+                    </button>
+                    <button type="button" class="btn btn-warning" (click)="edit(rol._id)">
+                      <span class="icofont icofont-ui-edit"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger" (click)="delete(rol._id)">
+                      <span class="icofont icofont-ui-delete"></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>
+
+<app-modal-animation [modalID]="'roles'" [modalClass]="'md-roles md-large'">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Creación de permisos</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('roles')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="guardarRole()">
+        <div class="form-group">
+          <label for="nombre">Rol</label>
+          <input type="hidden" name="_id" id="_id" [(ngModel)]="Rol._id" #_id>
+          <input type="text" class="form-control" placeholder="Nombre" name="nombreRol" id="nombreRol"
+            [(ngModel)]="Rol.nombre" #nombreRol>
+        </div>
+        <div class="form-group text-right">
+          <button class="btn btn-success d-inline-block" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal('roles')">Close</button>
+    </div>
+  </div>
+</app-modal-animation>
+<app-preloader *ngIf="preloader"></app-preloader>

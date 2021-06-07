@@ -1,0 +1,228 @@
+<div class="pcoded-main-container">
+	<div class="pcoded-inner-content p-0">
+		<!-- Main-body start -->
+		<div class="main-body">
+			<div>
+				<!-- Page-body start -->
+				<div class="page-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-12">
+
+								<div class="card">
+									<div class="card-header">
+										<p>{{estimacon?.nombre}}</p>
+									</div>
+									<div class="card-body py-4">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-12 col-md-6">
+													<p>Parámetro de ensayo: {{estimacon?.parametroEnsayo}}</p>
+													<p>Equipo: {{estimacon?.equipo}}</p>
+												</div>
+												<div class="col-12 col-md-6 text-right">
+													<button type="button" class="btn btn-success"
+														(click)="openModal('modal-generico-agregar-annos')">Agregar
+														Año</button>
+												</div>
+												<div class="col-12" *ngIf="estimacion">
+													<h3>
+														Periodo de calibración estimado 
+														<div *ngIf="resultadoFinal >= 1; else blokeExespcion">
+															{{year }} Año
+															{{months * 12 | number:'1.0-0' }} Meses
+														</div>
+														<ng-template #blokeExespcion>
+															{{resultadoFinal * 12 | number:'1.0-0'}} Meses
+														</ng-template>
+													</h3>
+												</div>
+												<div class="col">
+													<ul class="list-group">
+														<li class="list-group-item"><strong>Puntos de
+																calibración</strong></li>
+														<li class="list-group-item py-3"
+															*ngFor="let item of puntosCalibraqcion; let i = index">
+															<div class="input-group m-0">
+																<input type="number" class="form-control" #valor
+																	value="{{ item?.valor }}">
+																<div class="input-group-prepend"
+																	(click)="editPuntoCalibracion(item?._id, valor)">
+																	<span class="input-group-text">
+																		<span class="icofont icofont-ui-edit"></span>
+																	</span>
+																</div>
+																<div class="input-group-prepend"
+																	(click)="deletePunto(item?._id,i)">
+																	<span class="input-group-text bg-danger">
+																		<span class="icofont icofont-ui-delete"></span>
+																	</span>
+																</div>
+															</div>
+														</li>
+														<!-- <li class="list-group-item text-center">
+															<button type="button"
+																class="btn btn-success">Agregar</button>
+														</li> -->
+													</ul>
+												</div>
+												<div class="col" *ngFor="let item of annos">
+													<div
+														*ngIf="puntosForAnnio[item?.anno]?.length!=0 && puntosForAnnio[item?.anno]?.length <= puntosCalibraqcion?.length; else elseBlock">
+														<ul class="list-group">
+															<li class="list-group-item">
+																<strong>{{ item?.anno }}
+																	<button class="btn btn-danger"
+																	(click)="eliminaAnno(item?._id)"
+																		style="padding: 0px 3px; float: right;">
+																		<span class="icofont icofont-ui-delete"></span>
+																	</button>
+																</strong>
+															</li>
+															<li class="list-group-item py-3"
+																*ngFor="let punto of puntosForAnnio[item?.anno]">
+																<div class="input-group m-0">
+																	<input type="number" class="form-control" #valor
+																		value="{{ punto?.valor }}">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text" (click)="editAnnio(punto?._id, valor)">
+																			<span
+																				class="icofont icofont-ui-edit"></span>
+																		</span>
+																	</div>
+																</div>
+															</li>
+														</ul>
+													</div>
+													<ng-template #elseBlock>
+
+														<ul class="list-group">
+															<li class="list-group-item">
+																<strong>
+																	{{ item?.anno }}
+																	<button class="btn btn-danger"
+																	(click)="eliminaAnno(item?._id)"
+																		style="padding: 0px 3px; float: right;">
+																		<span class="icofont icofont-ui-delete"></span>
+																	</button>
+																</strong>
+															</li>
+															<li class="list-group-item py-4">
+																<div class="form-group">
+																	<label for="">Copia y pega los Datos</label>
+																	<input type="text" (paste)="data($event)" class="form-control">
+																</div>
+																<table class="table table-bordered table-striped">
+																	<thead>
+																		<tr>
+																			<td>Valor</td>
+																			<td>Opciones</td>
+																		</tr>
+																	</thead>
+																	<tbody *ngIf="datosCalibracion.length > 0">
+																		<tr *ngFor="let item of datosCalibracion; let i = index;">
+																			<td>
+																				{{ item }}
+																			</td>
+																			<td>
+																				<button class="btn btn-danger" style="padding: 0px 3px; float: right;" (click)="removeValor(item)">
+																					<span class="icofont icofont-ui-delete"></span>
+																				</button>
+																			</td>
+																		</tr>
+																	</tbody> 
+																</table>
+																<div class="form-grou">
+																	<button type="button" class="btn btn-success" (click)="addAnio(item?._id)">Agregar Valores</button>
+																</div>
+															</li>
+														</ul>
+														
+													</ng-template>
+
+												</div>
+												<div class="col">
+													<ul class="list-group">
+														<li class="list-group-item"><strong>Exactitud</strong></li>
+														<li class="list-group-item py-3"
+															*ngFor="let item of exactitud">
+															<div class="input-group m-0">
+																<input type="number" class="form-control" #valor
+																	value="{{ item?.valor }}">
+																<div class="input-group-prepend"
+																	(click)="editExactitud(item?._id, valor)">
+																	<span class="input-group-text">
+																		<span class="icofont icofont-ui-edit"></span>
+																	</span>
+																</div>
+																<div class="input-group-prepend" 
+																*ngIf="exactitud.length !== puntosCalibraqcion?.length;"
+																	(click)="eliminaExactitud(item?._id)">
+																	<span class="input-group-text bg-danger">
+																		<span class="icofont icofont-ui-delete"></span>
+																	</span>
+																</div>
+															</div>
+														</li>
+														<li class="list-group-item text-center"
+															*ngIf="exactitud.length !== puntosCalibraqcion?.length;">
+															<button type="button"
+																class="btn btn-success">Agregar</button>
+														</li>
+													</ul>
+												</div>
+												<div class="col-12 mt-5">
+													<div class="card text-white bg-primary border-primary mb-3">
+														<div class="card-header">Deriva Instrumental</div>
+														<div class="card-body bg-white text-dark">
+															<div id="chart"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<button class="btn btn-warning" (click)="calcular()">Calcular</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<app-preloader *ngIf="preloader"></app-preloader>
+
+<app-modal-general title="Agregar Años" [modalID]="'modal-generico-agregar-annos'"
+	[modalClass]="'md-modal-generico-agregar-annos modal-lx'">
+	<form [formGroup]="forma">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<td>Año</td>
+					<td>Opciones</td>
+				</tr>
+			</thead>
+			<tbody [formArrayName]="'annos'">
+				<tr *ngFor="let item of getValores.controls; let pointIndex=index" [formGroupName]="pointIndex">
+					<td>
+						<input type="text" [formControlName]="'anno'" class="form-control"
+							placeholder="ingrese El año Ej: 2020">
+					</td>
+					<td>
+						<button class="btn btn-danger" (click)="removeAnno(pointIndex)">
+							<span class="icofont icofont-ui-delete"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="mt-1 w-100 text-center" role="group" aria-label="Basic example">
+			<button type="button" class="btn btn-success" (click)="addValorAnno()">Agregar Fila</button>
+			<button type="button" class="btn btn-primary" (click)="guardarAnnos()">Guardar</button>
+		</div>
+	</form>
+</app-modal-general>

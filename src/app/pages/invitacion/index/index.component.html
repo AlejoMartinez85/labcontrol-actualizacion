@@ -1,0 +1,124 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1 class="text-gray">Invitaciones</h1>
+      <br>
+      <app-card [cardOptionBlock]="true">
+      
+      </app-card>
+    </div>
+    <div class="col-sm-12">
+      <app-card [title]="" [cardOptionBlock]="true">
+        <div class="md-tabs">
+          <ngb-tabset >
+            <ngb-tab id="tab-pendientes">
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Recibidas</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+
+                    <ngx-datatable class="data-table" [rows]="items.recibidas" [columns]="columns" [columnMode]="'force'" [headerHeight]="50"
+                    [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                    <ngx-datatable-column name="Email">
+                      <ng-template let-row="row" let-value="email" ngx-datatable-cell-template>
+                        <span>{{row.tercero?.email_contacto}}</span>
+                     
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Estado">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span >{{row['aprobado']?'Aprobado':'Pendiente'}}</span>
+                     
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Invitado  Por">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span >{{row.tercero?.nombre}}</span>
+                        
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo Invitación">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span > {{row['tipo']==1?'Cliente':'Laboratorio'}}</span>
+                       
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Descripcion">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span>{{row['descripcion']}}</span>
+                      
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+          
+                        <div class="btn-group btn-group-sm" style="float: none;">
+                          <button *ngIf="row['aprobado']==false" type="button" (click)="cactualizarItem(row)"
+                            class="tabledit-edit-button btn btn-primary waves-effect waves-light"><span
+                              class="icofont icofont-ui-check"></span></button>
+          
+                        </div>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                  </div>
+                  
+                </div>
+              </ng-template>
+            </ngb-tab>
+         
+            <ngb-tab id="tab-finalizado">
+              <ng-template ngbTabTitle><i class="icofont icofont-check-alt"></i> Enviadas</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <ngx-datatable class="data-table" [rows]="items.enviadas" [columns]="columns" [columnMode]="'force'" [headerHeight]="50"
+                    [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+                    <ngx-datatable-column name="Email">
+                      <ng-template let-row="row" let-value="email" ngx-datatable-cell-template>
+                        <span>{{row['email']}}</span>
+                     
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Estado">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span >{{row['aprobado']?'Aprobado':'Pendiente'}}</span>
+                     
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Invitado a">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span >{{row.cliente?.nombre}}</span>
+                        
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo Invitación">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span > {{row['tipo']==1?'Cliente':'Laboratorio'}}</span>
+                       
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Descripcion">
+                      <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        <span>{{row['descripcion']}}</span>
+                      
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="">
+                     
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                  </div>
+                 
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      
+      </app-card>
+    </div>
+  </div>
+
+</div>

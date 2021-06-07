@@ -1,0 +1,859 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-12 col-lg-5">
+            <h1 class="text-gray">Equipos</h1>
+            <br>
+        </div>
+        <div class="col-sm-12" *ngIf="permisosLocal.crear">
+            <app-card [cardOptionBlock]="true">
+                <button type="button" class="btn btn-success font-btn-medium" popoverTitle=" Crear un equipo" placement="bottom" [routerLink]="['add']">
+          <i class="fa fa-plus"></i> {{item._id!=undefined?'Actualizar':'Nuevo'}} Equipo</button>
+                <button type="button" class="btn btn-info" (click)="openModal('equipos-masivos')">Equipos Masivos</button>
+                <button (click)="openModal('alertas')" class="btn btn-warning">Configuraciones generales</button>
+                <button (click)="openModal('estructuras')" class="btn btn-primary">Configuración de Estructuras</button>
+            </app-card>
+        </div>
+        <div class="col-sm-12">
+            <app-card [title]="" [cardOptionBlock]="true">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <h4>Lista de equipos</h4>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Buscar Equipos" (keyup)="buscarEquipos($event);">
+                            <div class="input-group-append" (click)="cargardatos()">
+                                <span class="input-group-text" id="basic-addon2">
+                          <i class="icofont icofont-close-line"></i>
+                      </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                </div>
+                <ngx-datatable class="data-table" [rows]="items" [columns]="columns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="100">
+
+                    <ngx-datatable-column name="Imagen">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <img style="width: 50px;height: 50px;" class="user-img img-radius " src="{{compeseurlimage(row)}}" alt="user-img">
+
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Nombre">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span>{{row['nombre']}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Codigo">
+                        <ng-template let-row="row" let-value="codigo" ngx-datatable-cell-template>
+                            <span>{{row['codigo']}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Estado">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span><label [ngClass]="{'text-warning': row.estado == 'En calibración','text-danger': row.estado == 'Fuera de servicio','text-c-green': row.estado == 'Funcional'}"> {{row['estado']}}</label></span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <!-- <ngx-datatable-column name="Fecha Ingreso">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span> {{row['fingreso']|date:'dd/MM/yyyy'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column> -->
+                    <!-- <ngx-datatable-column name="# Variables">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span> {{row['variables']?.length}}</span>
+
+            </ng-template>
+          </ngx-datatable-column> -->
+                    <ngx-datatable-column *ngIf="campos.activaN1" name="{{configEquiposAlertas.nombre1}}">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span> {{row['nombre1']}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column *ngIf="campos.activaN2" name="{{configEquiposAlertas.nombre2}}">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span> {{row['nombre2']}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column *ngIf="campos.activaN3" name="{{configEquiposAlertas.nombre3}}">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span> {{row['nombre3']}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column *ngIf="campos.activaN4" name="{{configEquiposAlertas.nombre4}}">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span> {{row['nombre4']}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column *ngIf="campos.activaN5" name="{{configEquiposAlertas.nombre5}}">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                            <span> {{row['nombre5']}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="">
+                        <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+                            <div class="btn-group btn-group-sm" style="float: none;">
+
+
+                                <button type="button" *ngIf="permisosLocal.ver" class="tabledit-edit-button btn btn-primary waves-effect waves-light" [routerLink]="['edit', row['_id']]"><span class="icofont icofont-eye"></span></button>
+
+                                <!-- <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                  (click)="celiminarItem(row)"><span class="icofont icofont-ui-delete"></span></button> -->
+
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </app-card>
+        </div>
+    </div>
+
+</div>
+
+
+<app-modal-animation [modalID]="'effect-3'" [modalClass]="'md-effect-3 md-large'">
+    <h3>{{item._id!=undefined?'Actualizar':'Nuevo'}} equipo</h3>
+    <div>
+
+
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-header-text">{{item.nombre}} </h4>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="card-block ">
+                                        <div class="col-md-12">
+                                            <div class="media-left">
+
+                                                <a href="javascript:" class="profile-image">
+
+                                                    <img style="width: 200px;height: 200px;" class="user-img " src="{{item?.imagen?apiurl+'upload/files_client/'+item.imagen:'assets/images/200empty.png'}}" alt="user-img">
+                                                </a>
+
+                                            </div>
+                                            <div class="media-body row">
+                                                <div class="col-lg-12">
+                                                    <div class="user-title">
+                                                        <h2></h2>
+                                                        <span class="text-white"></span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="pull-right cover-btn">
+                                                        <label class="custom-file btn">
+
+                              <input type="file" ng2FileSelect [uploader]="uploader" class="custom-file-input">
+                              <span class="code-header"> <i class="fa fa-upload  fa-2x text-info"></i>
+                              </span>
+
+                            </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" *ngIf="uploader.progress>0 ">
+                                            <ngb-progressbar type="primary" height=".3rem" [value]="uploader.progress"></ngb-progressbar>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-8">
+                                    <form [formGroup]="form">
+
+                                        <div class="form-group row">
+
+                                            <label class="col-sm-2 col-form-label">Nombre <span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipNombre"></i></span></label>
+                                            <ng-template #tipNombre>Nombre del equipo</ng-template>
+
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" formControlName="nombre" [(ngModel)]="item.nombre" placeholder="Nombre">
+
+                                                <div *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.nombre.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <ng-template #tipfabricante>Nombre del fabricante</ng-template>
+                                            <label class="col-sm-2 col-form-label">Fabricante <span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipfabricante"></i></span></label>
+
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" formControlName="fabricante" [(ngModel)]="item.fabricante" placeholder="Nombre del fabricante">
+
+                                                <div *ngIf="form.controls.fabricante.invalid && (form.controls.fabricante.dirty || form.controls.fabricante.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.fabricante.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Codigo <span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipcodigo"></i></span></label>
+                                            <ng-template #tipcodigo>Codigo del equipo</ng-template>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" formControlName="codigo" placeholder="Codigo" [(ngModel)]="item.codigo">
+
+                                                <div *ngIf="form.controls.codigo.invalid && (form.controls.codigo.dirty || form.controls.codigo.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.codigo.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label">N° Serie<span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipnserie"></i></span></label>
+                                            <ng-template #tipnserie>N° Serie </ng-template>
+                                            <div class="col-sm-4">
+                                                <input type="number" class="form-control" formControlName="nserie" placeholder="N° Serie" [(ngModel)]="item.nserie">
+                                                <div *ngIf="form.controls.nserie.invalid && (form.controls.nserie.dirty || form.controls.nserie.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.nserie.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Estado<span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipestado"></i></span></label>
+                                            <ng-template #tipestado>Estado del equipo </ng-template>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" formControlName="estado" placeholder="Estado" [(ngModel)]="item.estado">
+                          <option value="">Seleccione</option>
+                          <option class="text-c-green" value="Funcional">Funcional</option>
+                          <option class="text-danger" value="Fuera de servicio">Fuera de servicio</option>
+                        </select>
+
+                                                <div *ngIf="form.controls.estado.invalid && (form.controls.estado.dirty || form.controls.estado.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.estado.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label">Fecha ingreso<span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipfechaingreso"></i></span></label>
+                                            <ng-template #tipfechaingreso>Fecha de ingreso del equipo</ng-template>
+                                            <div class="col-sm-4">
+                                                <input type="date" class="form-control" formControlName="fingreso" placeholder="Fecha ingreso" [(ngModel)]="item.fingreso">
+                                                <div *ngIf="form.controls.fingreso.invalid && (form.controls.fingreso.dirty || form.controls.fingreso.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.fingreso.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Software/Firmware<span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipsoftware"></i></span></label>
+                                            <ng-template #tipsoftware>Software o Firmware específico del equipo </ng-template>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" formControlName="softwarefim" placeholder="Software/Firmware" [(ngModel)]="item.softwarefim">
+                                                <div *ngIf="form.controls.softwarefim.invalid && (form.controls.softwarefim.dirty || form.controls.softwarefim.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.softwarefim.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <label class="col-sm-2 col-form-label">Ubicación<span><i
+                            class="fa fa-question-circle-o text-help icon-small"
+                            [ngbTooltip]="tipubicacion"></i></span></label>
+                                            <ng-template #tipubicacion>Ubicación </ng-template>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" formControlName="ubicacion" placeholder="Ubicación" [(ngModel)]="item.ubicacion">
+                                                <div *ngIf="form.controls.ubicacion.invalid && (form.controls.ubicacion.dirty || form.controls.ubicacion.touched)">
+                                                    <div class="messages text-danger" *ngIf="form.controls.ubicacion.errors?.required">
+                                                        Campo Requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end of card-body -->
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            Archivos y documentos adjuntos
+                        </div>
+
+                        <div class="card-body table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Archivo</th>
+
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let archivo of item.archivos; index as i;">
+                                        <td scope="row">{{i+1}}</td>
+                                        <td><a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a></td>
+
+                                        <td>
+                                            <div class="btn-group btn-group-sm" style="float: none;">
+
+
+
+
+                                                <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light" (click)="eliminararchivo(i)"><span class="icofont icofont-ui-delete"></span></button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+
+                                        <td colspan="3">
+                                            <label class="custom-file btn">
+
+                        <input type="file" ng2FileSelect [uploader]="uploaderequipo" class="custom-file-input">
+                        <span class="code-header"> <i class="fa fa-plus  fa-2x text-info"></i>
+                        </span>
+
+                      </label>
+                                            <ngb-progressbar type="primary" height=".3rem" [value]="uploaderequipo.progress">
+                                            </ngb-progressbar>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+
+                        </div>
+                        <!-- end of card-body -->
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            Variables
+                        </div>
+
+                        <div class="card-body table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nombre</th>
+
+                                        <th>Última calibración</th>
+                                        <th>Proxima calibración</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let variable of item.variables; index as i;">
+                                        <td scope="row">{{i+1}}</td>
+                                        <td scope="row">{{variable.nombre}}</td>
+                                        <td scope="row">{{variable.ultcalibracion|date:'dd/MM/yyyy'}}</td>
+                                        <td scope="row">{{calcularproximafecha(variable)|date:'dd/MM/yyyy'}} </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <!-- end of card-body -->
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            Registro de daño, mal funcionamiento, modificación, reparación y/o Mantenimiento
+                        </div>
+
+                        <div class="card-body table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Fecha</th>
+                                        <th>Clasificación</th>
+                                        <th>Adjuntos</th>
+                                        <th>Observaciones</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let reparacion of item.reparaciones; index as i;">
+                                        <td scope="row">{{i+1}}</td>
+                                        <td scope="row">{{reparacion.fechaNovedad |date:'dd/MM/yyyy'}}</td>
+                                        <td scope="row">{{reparacion.clasificacion }}</td>
+                                        <td scope="row">
+                                            <ul>
+                                                <li *ngFor="let archivo of reparacion.archivos; index as i;">
+                                                    <a href="{{apiurl+'upload/files_client/'+archivo.filename}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td scope="row">
+
+                                            <p *ngFor="let obs of reparacion.observaciones; index as i;">
+                                                {{obs.obs}}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" style="float: none;">
+
+
+                                                <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light" (click)="editdano(i)"><span class="icofont icofont-ui-edit"></span></button>
+
+                                                <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light" (click)="celiminardano(i)"><span class="icofont icofont-ui-delete"></span></button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+
+                                        </td>
+                                        <td>
+                                            <button (click)="agregarReparacion=true" class="btn btn-primary md-"><i
+                          class="icofont icofont-ui-add"></i></button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                            <div *ngIf="agregarReparacion">
+                                <app-equipo-reparacion (endAction)="guardarReparacion($event)" [eventoedit]="eventoedit">
+                                </app-equipo-reparacion>
+                            </div>
+                        </div>
+                        <!-- end of card-body -->
+                    </div>
+                </div>
+
+            </div>
+        </perfect-scrollbar>
+        <div class="card">
+            <div class="card-body text-right">
+                <div class="btn-group floar-rigth">
+
+                    <button (click)="guardar($event)" class="btn btn-primary md-" [disabled]="!form.valid"><i
+              class="icofont icofont-save "></i>Guardar
+          </button>
+                    <button (click)="closeMyModalbtn($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+            Cerrar!</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>
+
+<app-modal-animation title="Cargar datos Masivos" [modalID]="'equipos-masivos'" [modalClass]="'md-equipos-masivos md-large'">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8">
+                <h1>Cargar Equipos Masivos</h1>
+            </div>
+            <div class="col-4">
+                <a target="_blank" class="btn btn-success btn-block" href=".\assets\files\Archivo_Datos_masivos_equipos.xlsx" download="Archiv_Datos_masivos">Descargar Plantilla </a>
+            </div>
+        </div>
+        <hr>
+        <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <input type="text" (paste)="copypaste($event)" class="form-control" placeholder="Pega tus datos">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-striped table-bordere">
+                            <thead>
+                                <tr>
+                                    <td *ngFor="let td of cabeceras">{{td}}</td>
+                                    <td>Acciones</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let items of datoCopypaste; let identificador = index">
+                                    <td *ngFor="let item of items; let i = index">
+                                        <input type="text" class="form-control" value="{{item}}" id="campo-{{i}}-{{identificador}}" name="campo-{{i}}-{{identificador}}">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-info" (click)="editar(identificador)">Editar</button>
+                                            <button class="btn btn-danger" (click)="eliminar(identificador)">Eliminar</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-danger" (click)="closeModal('equipos-masivos')">Cerrar</button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success" (click)="formMasivo()"> Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+</app-modal-animation>
+<app-modal-animation [modalID]="'estructuras'" [modalClass]="'md-estructuras md-large'">
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Configuración recordatorios por email y variables dinámicas</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form [formGroup]="formEstructuras">
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="hidden" formControlName="_id">
+                                    <input type="hidden" formControlName="tercero">
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="text-center my-3">Variables De Estructura</h6>
+                                    <hr>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">Información Adicional Header</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            <button class="btn btn-success d-inline-block" (click)="definirEstructuras('head')">Definir Cabeceras en Todos los Equipos</button>
+                                        </div>
+                                        <div class="col text-right">
+                                            <button class="btn btn-primary waves-effect waves-light mb-3 d-inline-block" (click)="AgregarImagen('effect','myckeditorinfoAdicionalHeader')"><i
+                          class="fa fa-image"></i>Insertar
+                        imagen</button>
+                                        </div>
+                                    </div>
+                                    <ckeditor [config]="ckeconfig" formControlName="infoAdicionalHeader" #myckeditorinfoAdicionalHeader></ckeditor>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">Información adicional</label>
+                                        </div>
+                                        <div class="col text-right">
+                                            <button class="btn btn-success d-inline-block" (click)="definirEstructuras('body')">Definir Información Adicional en Todos los Equipos</button>
+                                        </div>
+                                        <div class="col text-right">
+                                            <button class="btn btn-primary waves-effect waves-light mb-3 d-inline-block" (click)="AgregarImagen('effect','myckeditorInfoAdicional')"><i
+                          class="fa fa-image"></i>Insertar
+                        imagen</button>
+                                        </div>
+                                    </div>
+                                    <ckeditor [config]="ckeconfig" formControlName="infoAdicional" #myckeditorInfoAdicional></ckeditor>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <button class="btn btn-success" (click)="guardar_editarEstructuras()"> Guardar Estructuras</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <button (click)="closeModal('estructuras')" aria-label="Close" class="md-close-btn"><i
+    class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+<app-modal-animation [modalID]="'alertas'" #modaladd [modalClass]="'md-alertas md-large'">
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+        <div class="container">
+            <div class="modal-header">
+                <h3 class="modal-title">Configuración recordatorios por email y variables dinámicas</h3>
+            </div>
+            <div class="modal-body">
+                <p>Se enviara un correo electronico avisando que una calibración o mantenimiento esta proximo a vencer. El correo se enviara para recordar con los dias, semanas, meses de anterioridad configurados el vencimiento de la calibracion o mantenimiento.
+                </p>
+
+                <form [formGroup]="formconfiguraciones">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <input type="hidden" name="_id" formControlName="_id">
+                                    </div>
+                                    <div class="col-12">
+                                        <h6 class="text-center my-3">Calibraciones</h6>
+                                        <hr>
+                                    </div>
+                                    <label for="" class="col-12 col-lg-4">Correo Electónico</label>
+                                    <div class="col-12 col-lg-4">
+                                        <input type="email" formControlName="email" id="" class="form-control" placeholder="E-mail envio de alerta">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="" class="col-12 col-lg-4">Otros Correos Electrónico</label>
+                                    <div class="col-12 col-lg-4">
+                                        <input type="email" #idemails1 id="idemails1" class="form-control" formControlName="emails1" [placeholder]="'Otros Correos'" (keyup.enter)="addemails(idemails1.value, 'emails1')">
+                                        <div class="contentArr d-block p-3 my-3 border">
+                                            <span class="bg-primary btn mb-2" *ngFor="let email1 of emails1">{{email1}} <span (click)="deletearr(email1, 'emails1')">X</span></span>
+                                        </div>
+                                        <!-- <tag-input [ngClass]="'tag-select'" theme='bootstrap' formControlName="emails1" [placeholder]="'Otros Correos'" [addOnBlur]="true" [clearOnBlur]="true" secondaryPlaceholder="Otros Correos">
+                                            <tag-input-dropdown [autocompleteItems]="autocompleteItems" [appendToBody]="false">
+                                            </tag-input-dropdown>
+                                        </tag-input> -->
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="" class="col-12 col-lg-4">Recordar vencimiento con una anticipación de:</label>
+                                    <div class="col-12 col-lg-2">
+                                        <input type="number" formControlName="Rcada" id="" class="form-control" placeholder="tiempo antes de vencimiento">
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        <select formControlName="tiempo" id="" class="form-control">
+                  <option>Seleccione Tiempo</option>
+                  <option value="1">Días</option>
+                  <option value="7">Semanas</option>
+                  <option value="30">Meses</option>
+                  <option value="365">Años</option>
+                </select>
+                                    </div>
+                                    <div class="col-12 col-lg-4">antes de vencimiento</div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="text-center my-3">Mantenimientos</h6>
+                                <hr>
+                            </div>
+                            <div class="col">
+                                <div class="form-group row">
+                                    <label for="" class="col-12 col-lg-4">Correo Electrónico Principal</label>
+                                    <div class="col-12 col-lg-4">
+                                        <input type="email" formControlName="email2" id="" class="form-control" placeholder="E-mail envio de alerta">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="" class="col-12 col-lg-4">Otros Correos Electrónico</label>
+                                    <div class="col-12 col-lg-4">
+
+                                        <input type="email" #idemails2 id="idemails2" class="form-control" formControlName="emails2" [placeholder]="'Otros Correos'" (keyup.enter)="addemails(idemails2.value, 'emails2')">
+                                        <div class="contentArr d-block p-3 my-3 border">
+                                            <span class="bg-primary btn mb-2" *ngFor="let email2 of emails2">{{email2}} <span (click)="deletearr(email2, 'emails2')">X</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="" class="col-12 col-lg-4">Recordar vencimiento con una anticipación de:</label>
+                                    <div class="col-12 col-lg-2">
+                                        <input type="number" formControlName="Rcada2" id="" class="form-control" placeholder="tiempo antes de vencimiento">
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        <select formControlName="tiempo2" id="tiempo" class="form-control">
+                  <option>Seleccione Tiempo</option>
+                  <option value="1">Días</option>
+                  <option value="7">Semanas</option>
+                  <option value="30">Meses</option>
+                  <option value="365">Años</option>
+                </select>
+                                    </div>
+                                    <div class="col-12 col-lg-4">antes de vencimiento</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="text-center my-3">Aviso Correo</h6>
+                                <hr>
+                            </div>
+                            <div class="col">
+                                <div class="form-group row">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" formControlName="avisarCorreo" id="defaultCheck1">
+                                        <label class="form-check-label" for="defaultCheck1">
+                  Recibir recordatorio vía email
+                </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="text-center my-3">Variables dinámicas</h6>
+                                <hr>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" formControlName="nombre1">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Activar</label>
+                                <input type="checkbox" class="form-control" formControlName="activaN1">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" formControlName="nombre2">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Activar</label>
+                                <input type="checkbox" class="form-control" formControlName="activaN2">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" formControlName="nombre3">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Activar</label>
+                                <input type="checkbox" class="form-control" formControlName="activaN3">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" formControlName="nombre4">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Activar</label>
+                                <input type="checkbox" class="form-control" formControlName="activaN4">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" formControlName="nombre5">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="">Activar</label>
+                                <input type="checkbox" class="form-control" formControlName="activaN5">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="text-center my-3">Clasificaciones</h6>
+                                <hr>
+                            </div>
+                            <label for="" class="col-12 col-lg-4">Clasificaciones</label>
+                            <div class="col-12 col-lg-4">
+                                <input type="email" #idclasificaciones id="idclasificaciones" class="form-control" formControlName="clasificaciones" [placeholder]="'Ingrese Clasificaciones'" (keyup.enter)="addemails(idclasificaciones.value, 'clasificaciones')">
+                                <div class="contentArr d-block p-3 my-3 border">
+                                    <span class="bg-primary btn mb-2" *ngFor="let clasificacion of clasificaciones">{{clasificacion}} <span (click)="deletearr(clasificacion, 'clasificaciones')">X</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer text-right">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal('alertas')">Cerrar</button>
+                <button type="button" class="btn btn-primary" (click)="guardarConfig()">Guardar / Editar</button>
+                <button type="button" class="btn btn-info" (click)="edicionGeneral()">Edición general de Calibraciones y Mantenimientos</button>
+                <button type="button" class="btn btn-danger" (click)="deleteConfig(_idConfiguracion)">Eliminar</button>
+            </div>
+            <button (click)="closeModal('alertas')" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+        </div>
+    </perfect-scrollbar>
+</app-modal-animation>
+<app-modal-animation [modalID]="'effect'" #modaladdImagen [modalClass]="'md-effect md-large'">
+    <div class="row col-12">
+        <div class="col-12 text-center">
+            <h3>Galeria de Imagenes</h3>
+        </div>
+    </div>
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+        <div class="card">
+            <div class="card-body text-left">
+                <div class="row">
+                    <div class="col-lg-12 col-xl-12 mb-2">
+                        <label class="custom-file ">
+              <label class="custom-file">
+                <input type="file" ng2FileSelect [uploader]="uploaderImagenEditor"
+                  class="custom-file-input outline-primary">
+                <i class="fa fa-upload  fa-3x text-info"><span class="text-info">Subir nuevas
+                    imagenes</span></i>
+              </label>
+                        <p class="mt-2">
+                            <ngb-progressbar type="primary" [value]="uploaderImagenEditor.progress"></ngb-progressbar>
+                        </p>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngFor="let imagen of imagenes;index as i;" class="col-lg-3 col-xl-3 ">
+                        <div class="card list-view-media">
+                            <div class="card-block text-center">
+                                <img src="{{apiurl}}upload/files_client/{{imagen.filename}}?name={{imagen.originalname}}" alt="img" class="img-fluid img-150">
+                                <h6>{{imagen.originalname}}</h6>
+                                <p class="text-muted m-b-15"><small class="d-block">{{imagen.mimetype|uppercase}}-{{imagen.size/1000|number}}KB</small></p>
+                                <div class="card-footer row">
+                                    <button class="btn" (click)="insertarImagen(imagen)" [ngbTooltip]="tipInsertar"><i
+                      class="fa fa-plus-square"></i></button>
+                                    <ng-template #tipInsertar>Insertar imagen</ng-template>
+                                    <button class="btn" (click)="delimagen(imagen)" [ngbTooltip]="tipEliminar"><i
+                      class="icofont icofont-delete-alt"></i></button>
+                                    <ng-template #tipEliminar>Eliminar imagen</ng-template>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </perfect-scrollbar>
+    <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>

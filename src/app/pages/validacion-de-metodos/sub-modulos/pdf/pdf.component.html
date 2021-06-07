@@ -1,0 +1,33 @@
+<div class="card-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h6 class="m-0">Carga PDF</h6>
+            </div>
+            <div class="col-12 col-lg-2 text-right" *ngIf="pdf !== ''">
+                <button class="btn btn-danger" (click)="deletePDF()">
+                    <span class="icofont icofont-ui-delete"></span>
+                    </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="btn-group" role="group" aria-label="Basic example">
+
+                    <label for="imagen" class="btn btn-info">
+            Subir PDF
+          </label>
+                    <input type="file" id="imagen" class="hidden" ng2FileSelect [uploader]="uploader">
+                    <button class="btn btn-success" *ngIf="btnGuardar" (click)="guardar()">Guardar / Actualizar</button>
+                </div>
+            </div>
+            <div class="col-12">
+                <pdf-viewer [src]="pdf" [show-all]="true" [page]="1" [ngStyle]="estilos"></pdf-viewer>
+            </div>
+        </div>
+    </div>
+</div>

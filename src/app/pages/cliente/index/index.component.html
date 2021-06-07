@@ -1,0 +1,183 @@
+<div *ngIf="user.cuentaActiva" class="page-body">
+  <h1 class="text-gray">Clientes</h1>
+  <br>
+  <div class="row">
+
+    <!-- order-card start -->
+    <div class="col-md-6 col-xl-6">
+      <div class="card bg-c-info order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Numero de clientes</h6>
+          <h2 class="text-right"><i class="ti-wallet f-left"></i><span>{{cliente?.clientes?.length}}</span></h2>
+          <p class="m-b-0">Total pedidos en curso<span class="f-right">{{indicadores?.proceso[0]?.count}}</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <app-card [cardOptionBlock]="true">
+        <button type="button" class="btn btn-info" popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+          (click)="openMyModal('effect-3')">
+          <i class="fa fa-plus"></i> Crear Cliente</button>
+      </app-card>
+    </div>
+    <div class="col-sm-12">
+      <app-card [title]="" [cardOptionBlock]="true">
+        <br>
+        <h4>Listado de Clientes</h4>
+        <br>
+        <ngx-datatable class="data-table" [rows]="indclientes" [columns]="columns" [columnMode]="'force'"
+          [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+          <ngx-datatable-column name="Nombre">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span>{{row.tercero['nombre']}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Pedidos en espera">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="row.indcliente.enespera.length>0"
+                class="label ng-tns-c9-10 label-info ng-star-inserted">{{row.indcliente.enespera[0]?.count}}</span>
+              <span *ngIf="row.indcliente.enespera.length>0 && !user.infofinanciera" class="label ng-tns-c9-10 label-info ng-star-inserted">
+                ${{row.indcliente.enespera[0]?.total|number: '1.0-0'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="En Proceso">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="row.indcliente.proceso.length>0"
+                class="label ng-tns-c9-10 label-warning ng-star-inserted">{{row.indcliente['proceso'][0]?.count}}
+              </span>
+              <span *ngIf="row.indcliente.proceso.length>0 && !user.infofinanciera"
+                class="label ng-tns-c9-10 label-warning ng-star-inserted">${{row.indcliente.proceso[0]?.total|number: '1.0-0'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column *ngIf="!user.infofinanciera" name="Falta de pago">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+              <span *ngIf="row.indcliente.nopago.length>0" class="label ng-tns-c9-10 label-danger ng-star-inserted">
+                {{row.indcliente['nopago'][0]?.count}}</span>
+              <span *ngIf="row.indcliente.nopago.length>0"
+                class="label ng-tns-c9-10 label-danger ng-star-inserted">${{row.indcliente.nopago[0]?.total|number: '1.0-0'}}</span>
+
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="">
+            <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+
+              <div class="btn-group btn-group-sm" style="float: none;">
+
+                <a type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                  routerLink="/config/cliente/detalle/{{row.tercero._id}}"><span class="icofont icofont-ui-edit"></span>
+                </a>
+                <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                  (click)="celiminarItem(row)"><span class="icofont icofont-ui-delete"></span></button>
+
+
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </app-card>
+    </div>
+    <!-- <div class="col-lg-12">
+      <app-actividad>
+
+      </app-actividad>
+    </div> -->
+  </div>
+
+</div>
+
+<app-modal-animation [modalID]="'effect-3'" [modalClass]="'md-effect-3 md-large'">
+  <!-- <h3>Creación cliente
+  </h3> -->
+  <br>
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'60vh'">
+        <div class="col-lg-12">
+          <!-- <div class="card"> -->
+            <h3 class="text-gray">Datos nuevo cliente</h3>
+            
+            <div class="card-body">
+              <form [formGroup]="form">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Email Cliente</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" formControlName="emails" [(ngModel)]="item.emails"
+                      placeholder="Email cliente">
+
+
+                    <div
+                      *ngIf="form.controls.emails.invalid && (form.controls.emails.dirty || form.controls.emails.touched)">
+                      <div class="messages text-danger" *ngIf="form.controls.emails.errors?.required">
+                        Campo Requerido
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Nombre Cliente</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" formControlName="nombre" [(ngModel)]="item.nombre"
+                      placeholder="Nombre Cliente">
+
+
+                    <div
+                      *ngIf="form.controls.nombre.invalid && (form.controls.nombre.dirty || form.controls.nombre.touched)">
+                      <div class="messages text-danger" *ngIf="form.controls.nombre.errors?.required">
+                        Campo Requerido
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6">
+                    <div class="border-checkbox-section">
+                      <div class="border-checkbox-group border-checkbox-group-primary">
+                        <input class="border-checkbox" type="checkbox" id="checkbox_notificar"
+                          [(ngModel)]="item.notificar" name="checkbox_notificar"
+                          [checked]="item.notificar" formControlName="notificar">
+                          
+                        <label class="border-checkbox-label" for="checkbox_notificar" >Enviar un correo de invitación de enlace a la plataforma </label>
+                        <span><ng-template #enviarEmail>Al invitar a un cliente podrás compartir automaticamente con el informes, el podra solicitar ensayos y comunicarse contigo dentro de la plataforma </ng-template>
+                        <i class="fa fa-question-circle-o text-gray text-help" [ngbTooltip]="enviarEmail"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <br>
+              <div class="btn-group float-right">
+      
+                <button (click)="guardar($event)" class="btn btn-primary md-" [disabled]="!form.valid"><i
+                    class="icofont icofont-save"></i>Crear cliente</button>
+                <button (click)="closeModalMasivos($event)" class="btn btn-danger " id="close-modal-clientes"><i class="icofont icofont-ui-close"></i>
+                  Cerrar!</button>
+              </div>
+            </div>
+            <!-- end of card-body -->
+          <!-- </div> -->
+        </div>
+    </perfect-scrollbar>
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>
+<!-- BLOQUE CUENTA NO ACTIVA -->
+<div *ngIf="!user.cuentaActiva" class="page-body">
+  <h1 class="text-success">Cuenta creada</h1>
+  <div class="card">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+      <div class="col-md-12 p-lg-12 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">Tu cuenta estará activa dentro de poco</h1>
+        <p class="lead font-weight-normal">Se há creado tu cuenta con exito, en breve nos pondremos en contacto para ayudarte a empezar tu experiencia</p>
+        <a class="btn btn-outline-secondary" href="mailto:preguntas@labcontrol.co">Tienes preguntas, escribenos</a>
+      </div>
+      <div class="product-device shadow-sm d-none d-md-block"></div>
+      <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    </div>
+  </div>
+</div>

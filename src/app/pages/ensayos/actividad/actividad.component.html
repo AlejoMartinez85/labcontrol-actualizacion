@@ -1,0 +1,69 @@
+
+
+
+  <div class="card">
+    <div class="card-header">
+      <div class="container-">
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <h5 class="card-header-text">Actividades</h5>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" placeholder="Buscar Actividades" class="form-control" (keyup)="buscaActividad($event)">
+                <div class="input-group-append" id="basic-addon2" (click)="CargarComentarios(0)">
+                  <span class="input-group-text m-0">
+                      <i class="icofont icofont-close-line"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <ul class="media-list">
+        <li class="media" *ngFor="let actividad of actividades;index as i;">
+          <div class="media-left">
+            <a href="javascript:;">
+              <img *ngIf="actividad.usuario.imagen; else imgUsuarioDefault" class="media-object img-radius comment-img" src="{{apiurl}}upload/files_client/{{actividad.usuario.imagen}}"alt="Generic placeholder image"/>
+              <ng-template #imgUsuarioDefault>
+
+                
+                <img class="media-object img-radius comment-img" src="assets/images/avatar-blank.jpg"
+                alt="Generic placeholder image">
+              </ng-template>
+            </a>
+          </div>
+          <div class="media-body">
+            <h6 class="media-heading">{{actividad.usuario?.name}} <small>{{actividad.tercero?.nombre}}</small><span
+                class="f-12 text-muted m-l-5">{{actividad.fecha|date:'dd/MM/yyyy HH:mm'}}</span></h6>
+              <div *ngIf="tipoComentario === 'Muestras'; else elsemuestra">
+                <p class="m-b-0">{{actividad.descripcion}}</p>
+                <hr class="m-0">
+                <ul>
+                  <li><strong>Muestras Bajo el ensayo - {{ actividad?.ensayo?.codigo }}</strong></li>
+                  <li *ngFor="let muestra of actividad.ensayo?.muestras; let i = index;"><a [routerLink]="[ '../muestra', muestra ]"><small>Muestra {{i + 1}}</small> </a></li>
+                </ul>
+              </div>
+              <ng-template #elsemuestra>
+                <p class="m-b-0" style="display: inline-block;">{{actividad.descripcion}} - <strong>{{ actividad?.ensayo?.codigo }}</strong></p>
+              </ng-template>
+            <hr>
+
+
+          </div>
+        </li>
+
+      </ul>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><button class="page-link" (click)="CargarComentarios(cantidadListado - 5)" [disabled]="!estado">Anterior</button></li>
+          <li class="page-item"><button class="page-link" (click)="CargarComentarios(cantidadListado + 5)" [disabled]="!continue">Siguiente lote de {{tipoComentario}}</button></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+

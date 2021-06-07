@@ -1,0 +1,350 @@
+<simple-notifications [options]="options"></simple-notifications>
+<div class="page-body">
+  <div class="row">
+    <!-- order-card start -->
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-blue order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Orders Received</h6>
+          <h2 class="text-right"><i class="ti-shopping-cart f-left"></i><span>486</span></h2>
+          <p class="m-b-0">Completed Orders<span class="f-right">351</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-green order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Total Sales</h6>
+          <h2 class="text-right"><i class="ti-tag f-left"></i><span>1641</span></h2>
+          <p class="m-b-0">This Month<span class="f-right">213</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-yellow order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Revenue</h6>
+          <h2 class="text-right"><i class="ti-reload f-left"></i><span>$42,562</span></h2>
+          <p class="m-b-0">This Month<span class="f-right">$5,032</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card bg-c-pink order-card">
+        <div class="card-block">
+          <h6 class="m-b-20">Total Profit</h6>
+          <h2 class="text-right"><i class="ti-wallet f-left"></i><span>$9,562</span></h2>
+          <p class="m-b-0">This Month<span class="f-right">$542</span></p>
+        </div>
+      </div>
+    </div>
+    <!-- order-card end -->
+
+    <div class="col-sm-12">
+      <app-card [cardOptionBlock]="true">
+        <button type="button" class="btn btn-info" popoverTitle=" Crear una solicitud de ensayo" placement="bottom"
+          (click)="openMyModal('effect-3')">
+          <i class="fa fa-plus"></i> Crear una solicitud de ensayo</button>
+      </app-card>
+    </div>
+
+    <!-- tabs card start -->
+    <div class="col-sm-12">
+      <app-card [title]="'Información de ensayos'" [cardClass]="'tab-card'" [cardOptionBlock]="true">
+        <div class="md-tabs">
+          <ngb-tabset>
+            <ngb-tab>
+              <ng-template ngbTabTitle><i class="icofont icofont-stop"></i> Pedidos en espera</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <tr>
+                        <th>Image</th>
+                        <th>Product Code</th>
+                        <th>Customer</th>
+                        <th>Purchased On</th>
+                        <th>Status</th>
+                        <th>Transaction ID</th>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod2.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002344</td>
+                        <td>John Deo</td>
+                        <td>05-01-2017</td>
+                        <td><span class="label label-danger">Failed</span></td>
+                        <td>#7234486</td>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod3.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002653</td>
+                        <td>Eugine Turner</td>
+                        <td>04-01-2017</td>
+                        <td><span class="label label-success">Delivered</span></td>
+                        <td>#7234417</td>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod4.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002156</td>
+                        <td>Jacqueline Howell</td>
+                        <td>03-01-2017</td>
+                        <td><span class="label label-warning">Pending</span></td>
+                        <td>#7234454</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+              <ng-template ngbTabTitle><i class="icofont icofont-key"></i> En proceso</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <tr>
+                        <th>Image</th>
+                        <th>Product Code</th>
+                        <th>Customer</th>
+                        <th>Purchased On</th>
+                        <th>Status</th>
+                        <th>Transaction ID</th>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod3.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002653</td>
+                        <td>Eugine Turner</td>
+                        <td>04-01-2017</td>
+                        <td><span class="label label-success">Delivered</span></td>
+                        <td>#7234417</td>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod4.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002156</td>
+                        <td>Jacqueline Howell</td>
+                        <td>03-01-2017</td>
+                        <td><span class="label label-warning">Pending</span></td>
+                        <td>#7234454</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab>
+              <ng-template ngbTabTitle><i class="icofont icofont-check-alt"></i> Terminados</ng-template>
+              <ng-template ngbTabContent>
+                <div [@fadeInOutTranslate] class="m-t-15">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <tr>
+                        <th>Image</th>
+                        <th>Product Code</th>
+                        <th>Customer</th>
+                        <th>Purchased On</th>
+                        <th>Status</th>
+                        <th>Transaction ID</th>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod1.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002413</td>
+                        <td>Jane Elliott</td>
+                        <td>06-01-2017</td>
+                        <td><span class="label label-primary">Shipping</span></td>
+                        <td>#7234421</td>
+                      </tr>
+                      <tr>
+                        <td><img src="assets/images/product/prod4.jpg" alt="prod img" class="img-fluid"></td>
+                        <td>PNG002156</td>
+                        <td>Jacqueline Howell</td>
+                        <td>03-01-2017</td>
+                        <td><span class="label label-warning">Pending</span></td>
+                        <td>#7234454</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="text-center">
+                    <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      </app-card>
+    </div>
+    <!-- tabs card end -->
+
+
+  </div>
+</div>
+<app-modal-animation [modalID]="'effect-3'" [modalClass]="'md-effect-3 md-large'">
+  <h3>Información solicitud de ensayo
+  </h3>
+  <div>
+
+
+    <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'70vh'">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="md-tabs">
+            <ngb-tabset>
+              <ngb-tab>
+                <ng-template ngbTabTitle><i class="icofont icofont-plus"></i> Solicitud de ensayos</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="card-body">
+                      <div class="card">
+                        <div class="card-header">
+                          <h5 class="card-header-text">Infomación general solicitud de ensayo</h5>
+
+                        </div>
+                        <div class="card-body">
+
+                          <form>
+                            <div class="form-group row">
+                              <label class="col-sm-2 col-form-label">Código cotización</label>
+                              <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Código cotización">
+                              </div>
+
+                              <label class="col-sm-2 col-form-label">Número factura</label>
+                              <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Número factura">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-2 col-form-label">Fecha solicitud</label>
+                              <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Fecha solicitud">
+                              </div>
+
+                              <label class="col-sm-2 col-form-label">Cliente</label>
+                              <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Cliente">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-2 col-form-label">Descripción rapida</label>
+                              <div class="col-sm-10">
+                                <textarea class="form-control" rows="5" cols="5"
+                                  placeholder="Descripción rapida"></textarea>
+                              </div>
+                            </div>
+
+                          </form>
+                        </div>
+                        <!-- end of card-body -->
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab>
+                <ng-template ngbTabTitle><i class="icofont icofont-thermometer-alt"></i> Resultado analista
+                </ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <tr>
+                          <th>Image</th>
+                          <th>Product Code</th>
+                          <th>Customer</th>
+                          <th>Purchased On</th>
+                          <th>Status</th>
+                          <th>Transaction ID</th>
+                        </tr>
+                        <tr>
+                          <td><img src="assets/images/product/prod3.jpg" alt="prod img" class="img-fluid"></td>
+                          <td>PNG002653</td>
+                          <td>Eugine Turner</td>
+                          <td>04-01-2017</td>
+                          <td><span class="label label-success">Delivered</span></td>
+                          <td>#7234417</td>
+                        </tr>
+                        <tr>
+                          <td><img src="assets/images/product/prod4.jpg" alt="prod img" class="img-fluid"></td>
+                          <td>PNG002156</td>
+                          <td>Jacqueline Howell</td>
+                          <td>03-01-2017</td>
+                          <td><span class="label label-warning">Pending</span></td>
+                          <td>#7234454</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="text-center">
+                      <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab>
+                <ng-template ngbTabTitle><i class="icofont icofont-file-document"></i> Reporte analista</ng-template>
+                <ng-template ngbTabContent>
+                  <div [@fadeInOutTranslate] class="m-t-15">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <tr>
+                          <th>Image</th>
+                          <th>Product Code</th>
+                          <th>Customer</th>
+                          <th>Purchased On</th>
+                          <th>Status</th>
+                          <th>Transaction ID</th>
+                        </tr>
+                        <tr>
+                          <td><img src="assets/images/product/prod1.jpg" alt="prod img" class="img-fluid"></td>
+                          <td>PNG002413</td>
+                          <td>Jane Elliott</td>
+                          <td>06-01-2017</td>
+                          <td><span class="label label-primary">Shipping</span></td>
+                          <td>#7234421</td>
+                        </tr>
+                        <tr>
+                          <td><img src="assets/images/product/prod4.jpg" alt="prod img" class="img-fluid"></td>
+                          <td>PNG002156</td>
+                          <td>Jacqueline Howell</td>
+                          <td>03-01-2017</td>
+                          <td><span class="label label-warning">Pending</span></td>
+                          <td>#7234454</td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="text-center">
+                      <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+
+            </ngb-tabset>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+    <div class="card">
+      <div class="card-body text-right">
+        <div class="btn-group floar-rigth">
+
+          <button (click)="guardarEnsayo($event)" class="btn btn-primary md-"><i class="icofont icofont-save"></i>Guardar
+            Cambios</button>
+          <button (click)="closeMyModal($event)" class="btn btn-danger "><i class="icofont icofont-ui-close"></i>
+            Cerrar!</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <button (click)="closeMyModal($event)" aria-label="Close" class="md-close-btn"><i
+      class="icofont icofont-ui-close"></i></button>
+
+</app-modal-animation>

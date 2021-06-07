@@ -1,0 +1,33 @@
+export class Carta {
+    actualizacion: string;
+    finPeriodo: string;
+    inicioPeriodo: string;
+    methodoEnsallo: string;
+    nombre: string;
+    observaciones: string;
+    tipoCarta: string;
+    unidad: string;
+    _id: string;
+    creacion: string;
+    desviacion: number;
+    dias: number;
+    lcl1: number;
+    lcl2: number;
+    lwl1: number;
+    lwl2: number;
+    numeroDatos: number;
+    promedio: number;
+    desviacionRango: number;
+    rango: number;
+    rangoSleccionado: number;
+    ucl1: number;
+    ucl2: number;
+    uwl1: number;
+    uwl2: number;
+    limiteSup: number;
+    limiteInf: number;
+    limiteEInf: number;
+    limiteEsup: number;
+    __v: number;
+    estado: boolean;
+}

@@ -1,0 +1,178 @@
+<div class="pcoded-main-container">
+	<div class="pcoded-inner-content p-0">
+		<!-- Main-body start -->
+		<div class="main-body">
+			<div>
+				<!-- Page-body start -->
+				<div class="page-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-12">
+
+								<!-- Paso 1 -->
+
+								<div *ngIf="paso1">
+									<div class="card">
+										<div class="card-header">
+											<p class="m-0">Creación de análisis de derivada Instrumental</p>
+										</div>
+										<div class="card-body">
+											<form [formGroup]="formCrearDerivada" (ngSubmit)="guardarForm();">
+
+												<div class="form-group">
+													<label for="nombre">Nombre</label>
+													<input type="text" id="nombre" class="form-control"
+														[formControlName]="'nombre'">
+												</div>
+												<div class="form-group">
+													<label for="parametrodeensayo">Parametro de Ensayo</label>
+													<input type="text" class="form-control" id="parametrodeensayo"
+														[formControlName]="'parametroEnsayo'">
+												</div>
+												<div class="form-group">
+													<label for="equipo">Equipo</label>
+													<input type="text" id="equipo" class="form-control"
+														[formControlName]="'equipo'">
+												</div>
+
+												<div class="form-group">
+
+													<button type="submit" class="btn btn-success">Siguiente</button>
+
+												</div>
+
+											</form>
+										</div>
+									</div>
+
+								</div>
+
+								<!-- Paso 2 -->
+
+								<div *ngIf="paso2">
+									<div class="card">
+										<div class="card-header">
+											<p class="m-0">Agrega Los Puntos de calibración</p>
+										</div>
+										<div class="card-body">
+											<div class="form-group">
+												<label for="">Copia y pega los datos a evaluar en el campo</label>
+												<input type="text" (paste)="data($event)" class="form-control">
+											</div>
+											<table class="table table-bordered table-striped">
+												<thead>
+													<tr>
+														<td>#</td>
+														<td>Valor</td>
+														<td>Opciones</td>
+													</tr>
+												</thead>
+												<tbody *ngIf="datosCalibracion.length > 0">
+													<tr *ngFor="let item of datosCalibracion; let i = index;">
+														<td>{{i+1}}</td>
+														<td>
+															{{ item }}
+														</td>
+														<td>
+															<button class="btn btn-danger" (click)="removeValor(item)">
+																<span class="icofont icofont-ui-delete"></span>
+															</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="form-group row">
+												<div class="col-8">
+													<input type="number" #newDato class="form-control py-2 mt-1">
+												</div>
+												<div class="col-4">
+													<button type="button" class="btn btn-success"
+														(click)="addValorCampo(newDato)">Agregar Fila</button>
+													<button type="button" class="btn btn-primary"
+														(click)="guardarParametrosCalibracion()">
+														Guardar</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div *ngIf="paso3">
+									<div class="card">
+										<div class="card-header">
+											<p class="m-0">Configuraciones Finales</p>
+										</div>
+										<div class="card-body">
+											<button type="button" class="btn btn-success"
+												(click)="openModal('modal-generico-agregar-annos')">Agregar
+												Años</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<app-modal-general title="Agregar Años" [modalID]="'modal-generico-agregar-annos'"[modalClass]="'md-modal-generico-agregar-annos modal-lx'">
+	<form [formGroup]="forma" *ngIf="!datosforAnno">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<td>Año</td>
+					<td>Opciones</td>
+				</tr>
+			</thead>
+			<tbody [formArrayName]="'annos'">
+				<tr *ngFor="let item of getValores.controls; let pointIndex=index" [formGroupName]="pointIndex">
+					<td>
+						<input type="text" [formControlName]="'anno'" class="form-control"
+							placeholder="ingrese El año Ej: 2020">
+					</td>
+					<td>
+						<button class="btn btn-danger" (click)="removeAnno(pointIndex)">
+							<span class="icofont icofont-ui-delete"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="mt-1 w-100 text-center" role="group" aria-label="Basic example">
+			<button type="button" class="btn btn-success" (click)="addValorAnno()">Agregar Fila</button>
+			<button type="button" class="btn btn-primary" (click)="guardarAnnos()">Guardar</button>
+		</div>
+	</form>
+</app-modal-general>
+<app-modal-general title="Agregar Exactitud" [modalID]="'modal-generico-agregar-exactitud'"[modalClass]="'md-modal-generico-agregar-exactitud modal-lx'">
+	<div class="form-group">
+		<label for="">Copia y pega los datos a evaluar en el campo</label>
+		<input type="text" (paste)="data($event)" class="form-control">
+	</div>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<td>#</td>
+				<td>Valor</td>
+			</tr>
+		</thead>
+		<tbody *ngIf="datosCalibracion.length > 0">
+			<tr *ngFor="let item of datosCalibracion; let i = index;">
+				<td>{{i+1}}</td>
+				<td>
+					{{ item }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="form-group row">
+		<div class="col-12">
+			<button type="button" class="btn btn-primary" (click)="guardarExactitudCalibracion()">
+				Guardar</button>
+		</div>
+	</div>
+</app-modal-general>
+<app-preloader *ngIf="preloader"></app-preloader>

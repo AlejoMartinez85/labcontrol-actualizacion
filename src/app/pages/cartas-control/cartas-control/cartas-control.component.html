@@ -1,0 +1,195 @@
+<div class="pcoded-main-container">
+    <div class="pcoded-inner-content p-0">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div>
+                <!-- Page-body start -->
+                <div class="page-body">
+                    <div class="container-fluid">
+                        <h1 class="text-gray">Cartas de control</h1>
+                        <div class="row">
+                            <div class="col-12 text-right mb-3">
+                                <button type="button" class="btn btn-success" (click)="openModal('modal-generico-agregar-carta-control')">Agregar Carta</button>
+                            </div>
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-6">
+                                                    <p class="m-0"> <span class="icofont icofont-globe d-inline-block"></span> Estimaciones <code>{{cantidad}}</code></p>
+                                                </div>
+                                                <div class="col-12 col-lg-6">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" placeholder="Buscar Cartas" (keyup)="buscarCartas($event);">
+                                                        <div class="input-group-append" (click)="cargarCartas(desde)">
+                                                            <span class="input-group-text mt-0" id="basic-addon2">
+                                                                <i class="icofont icofont-close-line"></i>
+                                                            </span>
+                                                          </div>
+                                                      </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <ngx-datatable 
+                                                class="data-table" 
+                                                [rows]="cartasControl"
+                                                [columns]="columns"
+                                                [columnMode]="'force'"
+                                                [headerHeight]="50" 
+                                                [footerHeight]="50" 
+                                                [rowHeight]="'auto'" 
+                                                [limit]="100" 
+                                                [scrollbarH]="true">
+                                                <ngx-datatable-column name="{{columns[0].name}}">
+                                                    <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                                                        <span *ngIf="!row['edit']">{{row['nombre']}}</span>
+                                                        <input type="text" *ngIf="row['edit']" class="form-control" name="nombre"
+                                                            [(ngModel)]="row.nombre" placeholder="{{columns[0].nombre}}">
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[8].name}}">
+                                                    <ng-template let-row="row" let-value="unidad" ngx-datatable-cell-template>
+                                                        <span *ngIf="!row['edit']">{{row['unidad']}}</span>
+                                                        <input type="text" *ngIf="row['edit']" class="form-control" name="unidad"
+                                                            [(ngModel)]="row.unidad" placeholder="{{columns[0].unidad}}">
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[1].name}}">
+                                                    <ng-template let-row="row" let-value="estado" ngx-datatable-cell-template>
+                                                        <!-- <span class="text-success" *ngIf="row['estado']">ACTUALIZADO</span> -->
+                                                        <span class="text-success" >ACTUALIZADO</span>
+                                                        <!-- <span class="text-danger" *ngIf="!row['estado']">NO ACTUALIZADO</span> -->
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[2].name}}">
+                                                    <ng-template let-row="row" let-value="methodoEnsallo" ngx-datatable-cell-template>
+                                                        <span >{{row['methodoEnsallo']}}</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[3].name}}">
+                                                    <ng-template let-row="row" let-value="actualizacion" ngx-datatable-cell-template>
+                                                        <span  >{{ row['actualizacion'] | date }}</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[4].name}}">
+                                                    <ng-template let-row="row" let-value="inicioPeriodo" ngx-datatable-cell-template>
+                                                        <span  >{{ row['inicioPeriodo'] | date }}</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[5].name}}">
+                                                    <ng-template let-row="row" let-value="inicioPeriodo" ngx-datatable-cell-template>
+                                                        <span  >{{ row['finPeriodo'] | date }}</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[6].name}}">
+                                                    <ng-template let-row="row" let-value="inicioPeriodo" ngx-datatable-cell-template>
+                                                        <span  >{{ row['numeroDatos'] }}</span>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="{{columns[7].name}}">
+                                                    <ng-template let-row="row" let-value="nombre" ngx-datatable-cell-template>
+                        
+                                                        <div class="btn-group btn-group-sm" style="float: none;">
+                                                            <a [routerLink]="[ 'ver', row['_id'] ]" class="btn btn-info">
+                                                                <span class="icofont icofont-link-alt"></span>
+                                                            </a>
+                                                            <!-- <button 
+                                                                type="button" 
+                                                                *ngIf="!row['edit']"
+                                                                class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                                (click)="row['edit']=true">
+                                                                <span class="icofont icofont-ui-edit"></span>
+                                                            </button> -->
+                                                            <button 
+                                                                class="btn btn-danger" 
+                                                                (click)="eliminarCard(row)">
+                                                                <span class="icofont icofont-ui-delete"></span>
+                                                            </button>
+                                                            <!-- <button 
+                                                                type="button" 
+                                                                *ngIf="row['edit']"
+                                                                class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                                                                (click)="EditarCarta(row)">
+                                                                    <span class="icofont icofont-ui-edit"></span>
+                                                            </button> -->
+                                                        </div>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                            </ngx-datatable>
+                                        </div>
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                              <li class="page-item"><button class="page-link" (click)="cargarCartas(desde - 10)" [disabled]="!estadopag">Anterior</button></li>
+                                              <li class="page-item"><button class="page-link" (click)="cargarCartas(desde + 10)" [disabled]="!continue">Siguiente</button></li>
+                                            </ul>
+                                          </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-general title="Ingresar nueva carta de control" [modalID]="'modal-generico-agregar-carta-control'" [modalClass]="'md-modal-generico-agregar-carta-control modal-lx'">
+    <form [formGroup]="formCrearCarta" method="post" class="container" (ngSubmit)="agregarCarta();">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" [formControlName]="'nombre'" placeholder="Nombre">
+        </div>
+        <div class="form-group">
+            <label for="UnidadMedicion">Unidad de medición:</label>
+            <input type="text" class="form-control" [formControlName]="'unidad'" placeholder="Unidad de medición">
+        </div>
+        <div class="form-group">
+            <label for="">Metodo de ensayo:</label>
+            <select [formControlName]="'methodoEnsallo'" class="form-control" id="">
+				<option *ngFor="let parametro of parametros" value="{{parametro.nombre}}">{{parametro.nombre}}</option>
+			</select>
+        </div>
+        <div class="form-group">
+            <label for="">Tipo de carta de Control</label>
+            <div class="row">
+                <div class="col">
+                    <label for=""><input type="radio" [formControlName]="'tipoCarta'" id="" value="Carta de control exactitud"> Carta de control exactitud</label>
+                </div>
+                <div class="col">
+                    <label for=""><input type="radio" [formControlName]="'tipoCarta'" id="" value="Carta de control de duplicados"> Carta de control de duplicados</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="">Observaciones:</label>
+            <textarea [formControlName]="'observaciones'" class="form-control" id="" cols="30" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="">Periodicidad del ingreso de mediciones:</label>
+            <div class="row">
+                <div class="col-8">
+                    <input type="number" [formControlName]="'dias'" class="form-control">
+                </div>
+                <div class="col-4">
+                    <select [formControlName]="'rangoSleccionado'" class="form-control" id="">
+						<option value="1">Días</option>
+						<option value="8">Semanas</option>
+						<option value="30">Meses</option>
+						<option value="365">Años</option>
+					</select>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-danger" (click)="close('modal-generico-agregar-carta-control')">Cancelar</button>
+        </div>
+        <!-- end /.content -->
+    </form>
+</app-modal-general>

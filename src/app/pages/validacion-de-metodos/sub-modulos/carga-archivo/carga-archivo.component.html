@@ -1,0 +1,44 @@
+<div class="card-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h6 class="m-0">Carga Archivos</h6>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="btn-group" role="group" aria-label="Basic example">
+
+                    <label for="archivo" class="btn btn-info">Subir Archivo</label>
+                    <input type="file" id="archivo" class="hidden" ng2FileSelect [uploader]="uploaderarchivo">
+                </div>
+            </div>
+            <div class="col-12" *ngIf="archivos.length > 0">
+                <table class="table tablo-border">
+                    <thead>
+                        <tr>
+                            <td>Archivo</td>
+                            <td>Acciones</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let archivo of archivos">
+                            <td>
+                                <a target="_blank" class="ng-binding" href="{{apiurl}}upload/files_client/{{archivo.filename}}?name={{archivo.originalname}}" download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-xs pull-right" (click)="delFile(archivo)"><i
+                                class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-info" (click)="guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,279 @@
+<div class="page-body">
+  <div class="row">
+
+    <div class="col-sm-12">
+      <app-card [title]="" [cardOptionBlock]="true">
+        <div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row ">
+                    <div class="col-lg-4">
+                      <div class="card-block">
+                        <div class="col-md-12">
+                          <a href="javascript:" class="profile-image">
+
+                            <img style="width: 200px;height: 200px;" class="user-img " src="{{compeseurlimage()}}"
+                              alt="user-img">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-lg-2"></div>
+                      <div class="col-lg-8">
+                        <form [formGroup]="form">
+                          <!-- START OPTIONS BUTTON -->
+                          <!-- END OPTIONS BUTTON -->
+
+                          <!-- HEADER EQUIPTMENT-->
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="row">
+                                <div class="col">
+                                  <label for="">Información adicional Cabecera</label>
+                                </div>
+                                <div class="col-12">
+                                  <div [innerHTML]="item.infoAdicionalHeader|safeHtmlEquipos2"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- END HEADER EQUIPTMENT -->
+
+                          <div class="col-12 row d-flex justify-content-between">
+
+                            <!-- START EQUIPTMENT NAME -->
+                            <h2>{{item.nombre}}</h2>
+                            <!-- END EQUIPTMENT NAME -->
+
+                            <!-- START EQUIPTMENT QR CODE -->
+                            <div class=" mt-3 float-left">
+                              <qrcode [qrdata]="myAngularxQrCode" [size]="100" class="imagen-qr" #qr
+                                [ngbTooltip]="imprimirQR" (click)="imprimir(qr)"></qrcode>
+                              <ng-template #imprimirQR>Dar click para imprimir QR </ng-template>
+                            </div>
+                            <!-- END EQUIPTMENT QR CODE -->
+                          </div>
+
+
+
+
+                          <!-- START EQUIPTMENT IMAGE AND INFO BLOCK -->
+                          <div class="row">
+                            <!-- START EQUIPTMENT INFO BLOCK -->
+                            <div class="col-lg-8 my-auto">
+                              <div class="d-flex justify-content-between">
+                                <div class="col-6 paddingItems">
+                                  <div class="row">
+                                    <label for="" class="col-6">Nombre</label>
+                                    <label class="col-6"> {{item.nombre}}</label>
+                                  </div>
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">Código</label>
+                                    <label class="col-6"> {{item.codigo}}</label>
+                                  </div>
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">Estado</label>
+                                    <label class="col-6"
+                                      [ngClass]="{'text-warning': item.estado == 'En mantenimiento','text-danger': item.estado == 'Fuera de servicio','text-c-green': item.estado == 'Funcional'}">
+                                      {{item.estado}}</label>
+                                  </div>
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">Software</label>
+                                    <label class="col-6"> {{item.softwarefim}}</label>
+                                  </div>
+                                  <div class="row paddingItems" *ngIf="campos.activaN1">
+                                    <label for="" class="col-6">{{campos.nombre1}}</label>
+                                    <label class="col-6"> {{item.nombre1}}</label>
+                                  </div>
+                                  <div class="row paddingItems" *ngIf="campos.activaN3">
+                                    <label for="" class="col-6">{{campos.nombre3}}</label>
+                                    <label class="col-6"> {{item.nombre3}}</label>
+                                  </div>
+                                </div>
+                                <div class="col-6">
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">Fabricante</label>
+                                    <label class="col-6"> {{item.fabricante}}</label>
+                                  </div>
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">N° Serie</label>
+                                    <label class="col-6"> {{item.nserie}}</label>
+                                  </div>
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">Fecha Ingreso</label>
+                                    <label class="col-6"> {{item.fingreso}}</label>
+                                  </div>
+                                  <div class="row paddingItems">
+                                    <label for="" class="col-6">Ubicación</label>
+                                    <label class="col-6"> {{item.ubicacion}}</label>
+                                  </div>
+                                  <div class="row paddingItems" *ngIf="campos.activaN2">
+                                    <label for="" class="col-6">{{campos.nombre2}}</label>
+                                    <label class="col-6"> {{item.nombre2}}</label>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                            <!-- END EQUIPTMENT INFO BLOCK -->
+                          </div>
+                          <!-- END EQUIPTMENT IMAGE AND INFO BLOCK -->
+
+                          <!-- START EQUIPTMENT ADITIONAL INFO -->
+                          <div class="row mt-3">
+                            <div class="col-12">
+                              <div class="row">
+                                <div class="col">
+                                  <label for="">Información adicional</label>
+                                </div>
+                                <div class="col-12">
+                                  <div [innerHTML]="item.infoAdicional|safeHtmlEquipos2"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <br>
+                          <!-- END EQUIPTMENT ADITIONAL INFO -->
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end of card-body -->
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header bg-primary">
+                Archivos y documentos adjuntos
+              </div>
+
+              <div class="card-body table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Archivo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let archivo of item.archivos; index as i;">
+                      <td scope="row">{{i+1}}</td>
+                      <td><a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}"
+                          download="{{archivo.originalname}}">{{archivo.originalname}}</a></td>
+
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+              <!-- end of card-body -->
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header bg-primary">
+                Variables
+              </div>
+
+              <div class="card-body table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <!-- <th>#</th> -->
+                      <th>Nombre</th>
+
+                      <th>Última calibración</th>
+                      <th>Proxima calibración</th>
+                      <th>Fecha Aviso</th>
+                      <th>Vigencia</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let variable of item.variables; index as i;">
+                      <td scope="row">{{variable.nombre}}</td>
+                      <td scope="row">{{variable.ultcalibracion|date:'dd/MM/yyyy'}}</td>
+                      <td scope="row">{{calcularproximafecha(variable)|date:'dd/MM/yyyy'}} </td>
+                      <td scope="row"> {{variable.fechaAviso | date }}</td>
+                      <td scope="row"> {{variable.vigencia * -1}} Días</td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+              <!-- end of card-body -->
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header bg-primary">
+                Registro de daño, mal funcionamiento, modificación, reparación y/o Mantenimiento
+              </div>
+
+              <div class="card-body table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <!-- <th>#</th> -->
+                      <th>Fecha</th>
+                      <th>Clasificación</th>
+                      <th>Adjuntos</th>
+                      <th>Observaciones</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let reparacion of item.reparaciones; index as i;">
+                      <!-- <td scope="row">{{i+1}}</td> -->
+                      <td scope="row">{{reparacion?.fechaNovedad}}</td>
+                      <td scope="row">{{reparacion?.clasificacion }}</td>
+                      <td scope="row">
+                        <ul>
+                          <li *ngFor="let archivo of reparacion.archivos; index as i;">
+                            <a href="{{apiurl+'upload/files_client/'+archivo.filename}}?name={{archivo.originalname}}"
+                              download="{{archivo.originalname}}">{{archivo.originalname}}</a>
+                          </li>
+                        </ul>
+                      </td>
+                      <td scope="row">
+
+                        <p *ngFor="let obs of reparacion.observaciones; index as i;">
+                          {{obs.obs}}
+                        </p>
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm" style="float: none;">
+                          <button type="button" class="tabledit-edit-button btn btn-info waves-effect waves-light"
+                            (click)="metodo('ver-registros',i)"><span class="icofont icofont-eye"></span></button>
+                        </div>
+                      </td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
+                <div *ngIf="agregarReparacion">
+                  <app-public-equipos-reparacion [eventoedit]="eventoedit" [ver_registros]="ver_registros"
+                    [AgregarArchivos]="false">
+                  </app-public-equipos-reparacion>
+                </div>
+              </div>
+              <!-- end of card-body -->
+            </div>
+          </div>
+
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>

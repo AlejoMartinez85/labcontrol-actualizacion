@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-header-text">Comentarios</h4>
+    <!-- se agrando encabezado comentarios -->
+  </div>
+  <div class="card-body">
+    <ul class="media-list">
+      <li class="media" *ngFor="let comentario of comentarios;index as i;">
+        <div class="media-left">
+          <a href="javascript:;">
+            <img *ngIf="comentario.usuario.imagen; else imgUsuarioDefault" class="media-object img-radius comment-img" src="{{apiurl}}upload/files_client/{{comentario.usuario.imagen}}"alt="Generic placeholder image"/>
+              <ng-template #imgUsuarioDefault>
+
+                
+                <img class="media-object img-radius comment-img" src="assets/images/avatar-blank.jpg"
+                alt="Generic placeholder image">
+              </ng-template>
+          </a>
+        </div>
+        <div class="media-body">
+          <h6 class="media-heading">{{comentario.usuario.name}} <small>{{comentario.tercero.nombre}}</small><span class="f-12 text-muted m-l-5">{{comentario.fecha|date:'dd/MM/hh h:ss'}}</span></h6>
+          
+          <p class="m-b-0">{{comentario.comentario}}</p>
+          <hr>
+
+
+        </div>
+      </li>
+   
+    </ul>
+    <div class="md-float-material d-flex">
+      <form [formGroup]="form" class="col-lg-12">
+        <div class="md-group-add-on p-relative col-lg-12">
+          <div class="input-group input-group-button input-group-primary">
+            <span class="input-group-prepend"><label class="input-group-text"><i
+                  class="icofont icofont-comment"></i></label></span>
+            <input type="text" class="form-control"  formControlName="comentario" [(ngModel)]="comentario.comentario" placeholder="Escriba un comenatrio">
+            <span class="input-group-append" (click)="guardarComentario()">
+              <label class="input-group-text"><i class="icofont icofont-plus"></i> Agregar</label>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

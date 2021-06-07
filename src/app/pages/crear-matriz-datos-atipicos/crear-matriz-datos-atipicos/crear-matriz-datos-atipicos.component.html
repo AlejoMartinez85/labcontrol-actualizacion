@@ -1,0 +1,121 @@
+<div class="pcoded-main-container">
+	<div class="pcoded-inner-content p-0">
+		<!-- Main-body start -->
+		<div class="main-body">
+			<div>
+				<!-- Page-body start -->
+				<div class="page-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-12 col-md-6">
+								<div class="card">
+									<div class="card-body">
+										<p>Información general</p>
+										<form [formGroup]="formadatos">
+											<div class="form-group">
+												<label for="">Nombre del conjunto de datos</label>
+												<input [formControlName]="'nombre'" type="text" class="form-control"
+													placeholder="Nombre Conjunto De Datos">
+											</div>
+											<div class="form-group">
+												<label for="">Nivel de confianza</label>
+												<select [formControlName]="'nivel'" class="form-control" [value]="95">
+													<option value="95">95%</option>
+													<option value="90">90%</option>
+													<option value="92.5">92.5%</option>
+													<option value="97.5">97.5%</option>
+												</select>
+											</div>
+										</form>
+										<div class="form-group">
+											<label for="">Copia y pega los datos a evaluar en el campo utilizando puntos para los decimales Ej:</label>
+											<input type="text"(paste)="data($event)" class="form-control">
+										</div>
+										<table class="table table-bordered table-striped">
+											<thead>
+												<tr>
+													<td>#</td>
+													<td>Valor</td>
+													<td>Opciones</td>
+												</tr>
+											</thead>
+											<tbody *ngIf="ValoresNew.length > 0">
+												<tr *ngFor="let item of ValoresNew; let i = index;">
+													<td>{{i+1}}</td>
+													<td>
+														{{ item }}
+													</td>
+													<td>
+														<button class="btn btn-danger"
+															(click)="removeValor(item)">
+															<span class="icofont icofont-ui-delete"></span>
+														</button>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="form-group row">
+											<div class="col-4">
+												<input type="number" #newDato class="form-control py-2 mt-1">
+											</div>
+											<div class="col-8">
+												<button type="button" class="btn btn-success"
+													(click)="addValorCampo(newDato)">Agregar Fila</button>
+												<button type="button" class="btn btn-primary" *ngIf="activaGuardar"
+												(click)="guardar()">
+												Guardar</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-md-6">
+								<div class="card">
+									<div class="card-body">
+										<h6>Resultados</h6>
+										<p class="bg-success p-3 w-75 alerta-notificacion text-center"
+											*ngIf="successValorAtipico">No se detectan valores atípicos</p>
+										<p class="bg-danger p-3 w-75 alerta-notificacion text-center"
+											*ngIf="errorValorAtipico">Valor Atípico: {{valorAtipico}}</p>
+										<h6>Interpretación:</h6>
+										<p class="text-justific">Existe suficiente evidencia estadistica para asegurar
+											con una confianza del {{valorSeleccionado}}% que no se encuentran valores
+											atipicos en la matriz Muestra 1</p>
+										<h6>Estadísticos de interés</h6>
+										<table class="table table-bordered">
+											<tr>
+												<td>Promedio:</td>
+												<td>{{ promedio }}</td>
+											</tr>
+											<tr>
+												<td>Desviación</td>
+												<td>{{ desviacion }}</td>
+											</tr>
+											<tr>
+												<td>n</td>
+												<td>{{ arrayValores.length }}</td>
+											</tr>
+											<tr>
+												<td>Gmin</td>
+												<td>{{ Gmin }}</td>
+											</tr>
+											<tr>
+												<td>Gmax</td>
+												<td> {{ Gmax }} </td>
+											</tr>
+											<tr>
+												<td>Gcrit</td>
+												<td> {{Gcrit}} </td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<app-preloader *ngIf="preloader"></app-preloader>

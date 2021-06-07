@@ -1,0 +1,61 @@
+<div class="pcoded-main-container">
+  <div class="pcoded-inner-content p-0">
+      <!-- Main-body start -->
+      <div class="main-body">
+          <div>
+              <!-- Page-body start -->
+              <div class="page-body">
+                  <div class="container-fluid">
+                      <h1 class="text-gray">Deriva Instrumental</h1>
+                      <br>
+                      <div class="row">
+                          <div class="col-12 text-right mb-3">
+                              <button type="button" class="btn btn-success" [routerLink]="['crear-derivada']">Crear análisis de deriva</button>
+                          </div>
+                          <div class="col-12">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                          <table class="table table-bordered table-striped">
+                                              <thead>
+                                                  <tr>
+                                                      <th scope="col">#</th>
+                                                      <th scope="col">Nombre</th>
+                                                      <th scope="col">Parametro de Ensayo</th>
+                                                      <th scope="col">Equipo</th>
+                                                      <th scope="col">Fecha de Creación</th>
+                                                      <th scope="col">Fecha Estimada Calibración</th>
+                                                      <th scope="col">Acciones</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  <tr *ngFor="let exactitud of exactitudes; let i = index;">
+                                                      <td>{{ i+1 }}</td>
+                                                      <td>{{ exactitud?.nombre }}</td>
+                                                      <td>{{ exactitud?.parametroEnsayo }}</td>
+                                                      <td>{{ exactitud?.equipo }}</td>
+                                                      <td>{{ exactitud?.creacion | date }}</td>
+                                                      <td></td>
+                                                      <td>
+                                                          <a [routerLink]="['ver', exactitud?._id]" class="btn btn-info">
+                                                              <span class="icofont icofont-link-alt"></span>
+                                                          </a>
+                                                          <button class="btn btn-danger">
+                                                              <span class="icofont icofont-ui-delete"></span>
+                                                          </button>
+                                                      </td>
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<app-preloader *ngIf="preloader"></app-preloader>

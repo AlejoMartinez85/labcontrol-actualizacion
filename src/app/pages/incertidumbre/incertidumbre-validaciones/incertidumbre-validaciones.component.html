@@ -1,0 +1,341 @@
+<div class="card" *ngIf="parametro!=undefined">
+  <div class="card-header">
+    <h4 class="card-header-text">Validaciones {{parametro.nombre}} </h4>
+  </div>
+  <div class="card-body">
+    <div class="row">
+
+      <div class="col-sm-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Validacion</th>
+              <th>Condición </th>
+              <th> </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let validacion of parametro.validaciones;index as i;">
+              <td>{{i+1}}</td>
+              <td>
+                {{validacion.nombre}}
+              </td>
+              <td>
+                {{crearCondicion(validacion.condiciones)}}
+              </td>
+
+              <td>
+                <div class="btn-group btn-group-sm" style="float: none;">
+
+                  <button type="button" class="tabledit-edit-button btn btn-primary waves-effect waves-light"
+                    (click)="editarItem(i)"><span class="icofont icofont-ui-edit"></span></button>
+
+                  <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                    (click)="celiminarItem(i)"><span class="icofont icofont-ui-delete"></span></button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+
+
+
+
+
+    </div>
+  </div>
+
+</div>
+<app-card [title]="" [cardOptionBlock]="true">
+  <!-- cambio: se quita title 'Información de párametros'  -->
+  <br>
+  <h4>Agregar Condición</h4>
+  <br>
+  <div class="row">
+    <div class="col-sm-12">
+      <label class="col-form-label">Nombre validación</label><br>
+      <input type="text" class="form-control" [(ngModel)]="validacionnew.nombre" placeholder="Nombre validación">
+    </div>
+
+    <div class="col-sm-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Valor 1</th>
+            <th>Condición </th>
+            <th>Valor</th>
+            <th>Condición</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let condicion of validacionnew?.condiciones;index as i;">
+            <td>#{{i+1}}</td>
+            <td>
+              <div class="row">
+                <div class="col-sm-6">
+                  <select class="form-control" [(ngModel)]="condicion.valor1"
+                  (change)="seleccionaLista($event,'valor1')">
+                    <option value="">seleccione</option>
+
+                    <option *ngFor="let variable of parametro?.variables;index as i;" value="{{variable.simbolo}}">
+                      {{variable.nombre}}
+                    </option>
+                    <option value="Otro">Otro</option>
+                    <option value="Resultado">Resultado</option>
+                    <option value="Formula">Formula</option>
+                  </select>
+                </div>
+                <div class="col-sm-6" *ngIf="condicion.valor1=='Otro'">
+                  <input type="text"  class="form-control"
+                    [(ngModel)]="condicion.valorOtro1" placeholder="Valor ">
+                </div>
+                <div class="col-sm-6" *ngIf="condicion.valor1=='Formula'">
+                  <app-matheditor *ngIf="reloadformula" [formula]="condicion.valorOtro1" [editable]="false" [variables]="parametro?.variables"
+                  ></app-matheditor>
+                </div>
+              </div>
+            </td>
+            <td>
+
+              <select class="form-control" [(ngModel)]="condicion.condicion1">
+                <option value="">seleccione</option>
+                <option *ngFor="let tipocondicion of listaGlobal.getTipocondicion();index as i;"
+                  value="{{tipocondicion.value}}">
+                  {{tipocondicion.label}}
+                </option>
+              </select>
+            </td>
+            <td>
+              <ng-container>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <select class="form-control" [(ngModel)]="condicion.valor2"
+                    (change)="seleccionaLista($event,'valor2')">
+                      <option value="">seleccione</option>
+
+                      <option *ngFor="let variable of parametro?.variables;index as i;" value="{{variable.simbolo}}">
+                        {{variable.nombre}}
+                      </option>
+                      <option value="Otro">Otro</option>
+                      <option value="Resultado">Resultado</option>
+                      <option value="Formula">Formula</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-6" *ngIf="condicion.valor2=='Otro'">
+                    <input type="text" class="form-control" [(ngModel)]="condicion.valorOtro2" placeholder="Valor ">
+                  </div>
+                  <div class="col-sm-6" *ngIf="condicion.valor2=='Formula'">
+                    <app-matheditor *ngIf="reloadformula" [formula]="condicion.valorOtro2" [editable]="false" [variables]="parametro?.variables"
+                    ></app-matheditor>
+                  </div>
+                </div>
+
+
+              </ng-container>
+              <ng-container *ngIf="condicion.condicion1=='Está entre'||condicion.condicion1=='No está entre'">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <select class="form-control" [(ngModel)]="condicion.valor3">
+                      <option value="">seleccione</option>
+
+                      <option *ngFor="let variable of parametro?.variables;index as i;" value="{{variable.simbolo}}">
+                        {{variable.nombre}}
+                      </option>
+                      <option value="Otro">Otro</option>
+                      <option value="Resultado">Resultado</option>
+                   
+                    </select>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" *ngIf="condicion.valor3=='Otro'" class="form-control"
+                      [(ngModel)]="condicion.valorOtro3" placeholder="Valor ">
+                  </div>
+                </div>
+              </ng-container>
+
+            </td>
+            <td>
+
+              <select class="form-control" [(ngModel)]="condicion.condicion2">
+                <option value="">seleccione</option>
+                <option *ngFor="let tipocondicion of listaGlobal.getTipOResultado();index as i;"
+                  value="{{tipocondicion.value}}">
+                  {{tipocondicion.label}}
+                </option>
+              </select>
+              <input type="text" *ngIf="condicion.condicion2=='Entonces'" class="form-control"
+                [(ngModel)]="condicion.resultado" placeholder="Entonces">
+            </td>
+            <td>
+              <button type="button" class="tabledit-delete-button btn btn-danger waves-effect waves-light"
+                (click)="eliminarVariable(i)"><span class="icofont icofont-ui-delete"></span></button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot *ngIf="validaentonces()">
+          <tr>
+            <td>#</td>
+            <td>
+              <div class="row">
+                <div class="col-sm-6">
+                  <select class="form-control" [(ngModel)]="condicionnew.valor1" 
+                  (change)="seleccionaLista($event,'valor1')">
+                    <option value="">seleccione</option>
+
+                    <option *ngFor="let variable of parametro?.variables;index as i;" value="{{variable.simbolo}}">
+                      {{variable.nombre}}
+                    </option>
+                    <option value="Otro">Otro</option>
+                    <option value="Resultado">Resultado</option>
+                    <option value="Formula">Formula</option>
+                  </select>
+                </div>
+
+                <div class="col-sm-6" *ngIf="condicionnew.valor1=='Otro'">
+                  <input type="text" class="form-control" [(ngModel)]="condicionnew.valorOtro1" placeholder="Valor ">
+                </div>
+                <div class="col-sm-6" *ngIf="condicionnew.valor1=='Formula'">
+                  <app-matheditor *ngIf="reloadformula" [formula]="condicionnew.valorOtro1" [editable]="false" [variables]="parametro?.variables"
+                 ></app-matheditor>
+                </div>
+              </div>
+            </td>
+            <td>
+
+              <select class="form-control" [(ngModel)]="condicionnew.condicion1">
+                <option value="">seleccione</option>
+                <option *ngFor="let tipocondicion of listaGlobal.getTipocondicion();index as i;"
+                  value="{{tipocondicion.value}}">
+                  {{tipocondicion.label}}
+                </option>
+              </select>
+            </td>
+            <td>
+              <ng-container>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <select class="form-control" [(ngModel)]="condicionnew.valor2"
+                    (change)="seleccionaLista($event,'valor2')">
+                      <option value="">seleccione</option>
+
+                      <option *ngFor="let variable of parametro?.variables;index as i;" value="{{variable.simbolo}}">
+                        {{variable.nombre}}
+                      </option>
+                      <option value="Otro">Otro</option>
+                      <option value="Resultado">Resultado</option>
+                      <option value="Formula">Formula</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" *ngIf="condicionnew.valor2=='Otro'" class="form-control"
+                      [(ngModel)]="condicionnew.valorOtro2" placeholder="Valor ">
+                  </div>
+                  <div class="col-sm-6" *ngIf="condicionnew.valor2=='Formula'">
+                    <app-matheditor *ngIf="reloadformula" [formula]="condicionnew.valorOtro2" [editable]="false" [variables]="parametro?.variables"
+                   ></app-matheditor>
+                  </div>
+                </div>
+
+
+              </ng-container>
+              <ng-container *ngIf="condicionnew.condicion1=='Está entre'||condicionnew.condicion1=='No está entre'">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <select class="form-control" [(ngModel)]="condicionnew.valor3">
+                      <option value="">seleccione</option>
+
+                      <option *ngFor="let variable of parametro?.variables;index as i;" value="{{variable.simbolo}}">
+                        {{variable.nombre}}
+                      </option>
+                      <option value="Otro">Otro</option>
+                      <option value="Resultado">Resultado</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" *ngIf="condicionnew.valor3=='Otro'" class="form-control"
+                      [(ngModel)]="condicionnew.valorOtro3" placeholder="Valor ">
+                  </div>
+                </div>
+              </ng-container>
+
+            </td>
+            <td>
+
+              <select class="form-control" [(ngModel)]="condicionnew.condicion2">
+                <option value="">seleccione</option>
+                <option *ngFor="let tipocondicion of listaGlobal.getTipOResultado();index as i;"
+                  value="{{tipocondicion.value}}">
+                  {{tipocondicion.label}}
+                </option>
+              </select>
+              <input type="text" *ngIf="condicionnew.condicion2=='Entonces'" class="form-control"
+                [(ngModel)]="condicionnew.resultado" placeholder="Entonces">
+            </td>
+            <td><button type="button" class="tabledit-delete-button btn btn-info waves-effect waves-light"
+                (click)="agregarcondicion()"><span class="icofont icofont-ui-add"></span></button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="col-sm-12   text-right" *ngIf="!validaentonces()">
+
+      <button (click)="guardarCondicion()" class="btn btn-primary md-"><i class="icofont icofont-save "></i>Guardar
+        Condición</button>
+
+    </div>
+
+  </div>
+</app-card>
+<app-card [title]="" [cardOptionBlock]="true">
+  <div class="row">
+    <div class="col-sm-12   text-right">
+
+      <button (click)="guardar()" class="btn btn-primary md-"><i class="icofont icofont-save "></i>Guardar</button>
+
+    </div>
+  </div>
+
+</app-card>
+
+
+<!-- INCIO MODAL formula -->
+<app-modal-animation [modalID]="'modalMuestra'" #modalmuestra [modalClass]="'md-sm'">
+  <div class="modal-header">
+    <h3 class="modal-title">Editar formula</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row" *ngIf="parametro!=undefined&&parametro.variables!=undefined">
+
+      <div class="col-lg-12" id="divmath">
+        <app-matheditor [formula]="formulaseleccionada" [editable]="true" [variables]="parametro?.variables"
+          #mathEditor>
+
+        </app-matheditor>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button (click)="closeModal('modalMuestra')" aria-label="Close" class="md-close-btn">
+      <i class="icofont icofont-ui-close"></i>
+    </button>
+    <button (click)="closeModal('modalMuestra')" class="btn btn-danger">
+      <i class="icofont icofont-ui-close"></i> Salir
+    </button>
+    <button (click)="guardarFormula()" class="btn btn-success">
+      <i class="icofont icofont-ui-plus"></i> Guardar
+    </button>
+  </div>
+</app-modal-animation>
+<!-- FIN MODAL MUESTRA -->

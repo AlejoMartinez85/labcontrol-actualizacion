@@ -1,0 +1,198 @@
+<div class="pcoded-main-container">
+  <div class="pcoded-inner-content p-0">
+    <!-- Main-body start -->
+    <div class="main-body">
+      <div>
+        <!-- Page-body start -->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <h1 class="text-gray">Validación de métodos</h1>
+                <app-card [cardOptionBlock]="true">
+                  <div class="btn-group text-rigth" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-success" (click)="openMyModal('Validacion-de-muestras')">Crear
+                      Validación</button>
+                  </div>
+                </app-card>
+                <app-card [cardOptionBlock]="true">
+                  <h5 class="card-header">Listado de Validaciones</h5>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Nombre</th>
+                          <th>Linealidad</th>
+                          <th>Sensibilidad</th>
+                          <th>Límite de <br>detección</th>
+                          <th>Límite de <br>cuantificación</th>
+                          <th>Exactitud</th>
+                          <th>Precision <br>Repetibilidad</th>
+                          <th>Precision <br>Intermedia</th>
+                          <th>Recuperación en <br>matriz</th>
+                          <th>Intervalo de <br>trabajo</th>
+                          <th>Robustez</th>
+                          <th>Banco <br>muestras</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let validacion of Validaciones; let i = index">
+                          <td> {{ validacion.nombre }} </td>
+                          <td>{{ validacion.linealidad? 'Si': 'No'}}</td>
+                          <td>{{ validacion.sencibilidad? 'Si': 'No' }}</td>
+                          <td>{{ validacion.limite_deteccion? 'Si': 'No' }}</td>
+                          <td>{{ validacion.limite_cuantificacion? 'Si': 'No' }}</td>
+                          <td>{{ validacion.exactitud? 'Si': 'No' }}</td>
+                          <td>{{ validacion.presicion_repetitibilidad? 'Si': 'No' }}</td>
+                          <td>{{ validacion.presicion_producivilidad? 'Si': 'No' }}</td>
+                          <td>{{ validacion.recuperacion_matriz? 'Si': 'No' }}</td>
+                          <td>{{ validacion.intervalodetrabajo? 'Si': 'No' }}</td>
+                          <td>{{ validacion.robustez? 'Si': 'No' }}</td>
+                          <td>{{ validacion.banco_muestras? 'Si': 'No' }}</td>
+                          <td>
+                              <button type="button" class="btn btn-primary btn-block m-0" [routerLink]="[ 'crear', validacion._id ]">
+                                <span class="icofont icofont-eye"></span>
+                              </button>
+                              <button type="button" class="btn btn-danger btn-block m-0" (click)="eliminar(validacion._id);">
+                                <span class="icofont icofont-ui-delete"></span>
+                              </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </app-card>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-preloader *ngIf="preloader"></app-preloader>
+<app-modal-animation [modalID]="'Validacion-de-muestras'" #modaladd [modalClass]="'md-Validacion-de-muestras md-large'">
+  <perfect-scrollbar class="overflow-container" [style.width]="'100%'" [style.height]="'80vh'">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <app-card [cardOptionBlock]="true">
+            <form [formGroup]="formaBancoDeMuestras" (ngSubmit)="calcularForm();">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-12 col-lg-12">
+                    <div class="card text-white bg-primary border-primary mb-3">
+                      <h5 class="card-header">Crear Configuración de la validación</h5>
+                      <div class="card-body bg-white text-dark">
+                        <ul class="list-group">
+                          <!-- <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" (click)="selectAll(select);" #select class="form-check-input mt-0" title="All">
+                              <label class="form-check-label">Seleccionar todas</label>
+                            </div>
+                          </li> -->
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <label>Nombre</label>
+                              <input type="text" class="form-control" formControlName="nombre" title="Nombre"
+                                placeholder="Ingrese un nombre">
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Linealidad"
+                                title="Linealidad">
+                              <label class="form-check-label">Linealidad</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Sensibilidad"
+                                title="Sensibilidad">
+                              <label class="form-check-label">Sensibilidad</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Limite_de_deteccion"
+                                title="Limite_de_deteccion">
+                              <label class="form-check-label">Límite de detección</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0"
+                                formControlName="Limite_de_cuantificacion" title="Limite_de_cuantificacion">
+                              <label class="form-check-label">Límite de cuantificación</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Exactitud"
+                                title="Exactitud">
+                              <label class="form-check-label">Exactitud</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Precision_Repetibi"
+                                title="Precision_Repetibi">
+                              <label class="form-check-label">Precisión- Repetibilidad</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Precision_Reproduc"
+                                title="Precision_Reproduc">
+                              <label class="form-check-label">Precisión Intermedia</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0"
+                                formControlName="Recuperacon_en_matriz" title="Recuperacon_en_matriz">
+                              <label class="form-check-label">Recuperación en matriz</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Intervalo_de_trabaj"
+                                title="Intervalo_de_trabaj">
+                              <label class="form-check-label">Intervalo de trabajo</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Robustez"
+                                title="Robustez">
+                              <label class="form-check-label">Robustez</label>
+                            </div>
+                          </li>
+                          <li class="list-group-item">
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input mt-0" formControlName="Banco_muestras"
+                                title="Banco Muestras">
+                              <label class="form-check-label">Usar Banco de Muestras</label>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="form-group mt-5">
+                          <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-danger" (click)="closeMyModal('Validacion-de-muestras')">Cerrar</button>
+                            <button type="submit" class="btn btn-success">Crear</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </app-card>
+        </div>
+      </div>
+    </div>
+  </perfect-scrollbar>
+</app-modal-animation>

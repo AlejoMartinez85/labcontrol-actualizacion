@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="conatiner-fluid">
+                    <div class="row">
+                        <div class="col-12 col-sm">
+                            <h6 class="m-0">Intervalo de trabajo</h6>
+                        </div>
+                        <div class="col-12 col-sm-auto">
+                            <button *ngIf="permisosLocal.editar" class="btn btn-sm btn-primary" (click)="showEditEvent()">
+                <span class="icofont icofont-ui-edit"></span>
+              </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form *ngIf="form" (ngSubmit)="onSubmit()" [formGroup]="form">
+                            <div class="row">
+                                <div class="col-12 col-sm-12">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Unidades:</label>
+                                        <input [hidden]="!showEdit" class="form-control" type="text" formControlName="unidad">
+                                        <span [hidden]="showEdit">{{ form?.controls?.unidad?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Nombre eje X:</label>
+                                        <input [hidden]="!showEdit" class="form-control" type="text" formControlName="labelx">
+                                        <span [hidden]="showEdit">{{ form?.controls?.labelx?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Nombre eje Y:</label>
+                                        <input [hidden]="!showEdit" class="form-control" type="text" formControlName="labely">
+                                        <span [hidden]="showEdit">{{ form?.controls?.labely?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Límite Inferior de trabajo:</label>
+                                        <input [hidden]="!showEdit" class="form-control" placeholder="10..." type="number" formControlName="lowerLimit">
+                                        <span [hidden]="showEdit">{{ form?.controls?.lowerLimit?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Límite Superior de trabajo:</label>
+                                        <input [hidden]="!showEdit" class="form-control" placeholder="40..." type="number" formControlName="upperLimit">
+                                        <span [hidden]="showEdit">{{ form?.controls?.upperLimit?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Pendiente:</label>
+                                        <input [hidden]="!showEdit" class="form-control" placeholder="1..." type="number" formControlName="grade">
+                                        <span [hidden]="showEdit">{{ form?.controls?.grade?.value }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group" [ngClass]="{'border-bottom': !showEdit}">
+                                        <label for="">Intercepto:</label>
+                                        <input [hidden]="!showEdit" class="form-control" placeholder="1..." type="number" formControlName="intercept">
+                                        <span [hidden]="showEdit">{{ form?.controls?.intercept?.value }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button [hidden]="!showEdit" class="btn btn-success" type="submit" [disabled]="!form.valid">
+                Calcular
+              </button>
+                        </form>
+                    </div>
+
+                    <div *ngIf="loader" class="col-12 my-2">
+                        <ngb-progressbar type="primary" [value]="100" [striped]="true" [animated]="true"><i></i></ngb-progressbar>
+                    </div>
+
+                    <!-- Result -->
+                    <div [hidden]="workInterval._id == undefined" class="col-12 mt-3">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                Resultado
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm">
+                                        <div id="workIntervalChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Result -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
