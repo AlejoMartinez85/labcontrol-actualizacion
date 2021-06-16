@@ -1,0 +1,41 @@
+deploy_integration:
+  stage: deploy
+  before_script:
+    - mkdir ~/.ssh
+    - echo $SSH_PRIVATE_KEY_INT >> ~/.ssh/$RSA64
+    - cat ~/.ssh/$RSA64 |base64 -d > ~/.ssh/$RSA
+    - chmod 400 ~/.ssh/$RSA
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo $IP_REMOTE_INT
+    - echo $DOCU_ROOT/$SITE_INT
+    - which ssh-agent
+  script:
+   # - ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT_INT && sudo ls -al && exit"
+    - ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT_INT/ && sudo git checkout $CI_COMMIT_REF_NAME && sudo git stash && sudo git pull origin2 $CI_COMMIT_REF_NAME && exit"
+    - ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT_INT/ && export NVM_BIN=/home/ubuntu/.nvm/versions/node/v12.14.0/bin && export PATH=/home/ubuntu/.nvm/versions/node/v12.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && /home/ubuntu/.nvm/versions/node/v12.14.0/bin/pm2 restart 0 && exit"
+  only:
+   - develop
+
+deploy_master:
+  stage: deploy
+  before_script:
+    - mkdir ~/.ssh
+    - echo $SSH_PRIVATE_KEY_INT >> ~/.ssh/$RSA64
+    - cat ~/.ssh/$RSA64 |base64 -d > ~/.ssh/$RSA
+    - chmod 400 ~/.ssh/$RSA
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo $IP_REMOTE_INT
+    - echo $DOCU_ROOT/$SITE_INT
+    - which ssh-agent
+  script:
+   - ssh -i ~/.ssh/$RSA -p $PUERTO_PRO $USUARIO_PRO@$IP_REMOTE_PRO "cd $DOCU_ROOT_INT && sudo ls -al && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT/$SITE_INT/ && sudo git checkout $CI_COMMIT_REF_NAME && sudo git stash && sudo git pull origin $CI_COMMIT_REF_NAME && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT/$SITE_INT/ && sudo aws s3 cp s3://infra-lovelacol/env_int $DOCU_ROOT/$SITE_INT/.env && exit"
+   # - ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT/$SITE_INT/ && sudo composer update && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT/$SITE_INT/ && sudo composer install && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT/$SITE_INT/ && sudo php artisan migrate:fresh --seed && sudo php artisan config:cache && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "cd $DOCU_ROOT/$SITE_INT/ && sudo php artisan passport:install --force && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "sudo chown www-data.www-data $DOCU_ROOT/$SITE_INT -R && sudo chmod 777 $DOCU_ROOT/$SITE_INT/storage && exit"
+   #- ssh -i ~/.ssh/$RSA -p $PUERTO_INT $USUARIO_INT@$IP_REMOTE_INT "sudo chown www-data.www-data $DOCU_ROOT/$SITE_INT -R && sudo chmod 777 $DOCU_ROOT/$SITE_INT/storage/* -R && exit"
+  only:
+   - master
