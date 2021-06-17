@@ -462,7 +462,7 @@ export class VerParametroComponent implements OnInit, AfterViewInit {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
       });
     } else {
-      this.variableService.add(variable).subscribe((value) => {
+      this.variableService.add(variable).subscribe((value: any) => {
         this.variablenew = { simbolo: '', valor: '' };
         this.item.variables.push(value.data);
         this.reload = true;

@@ -55,8 +55,8 @@ export class AuthenticationService implements AuthService {
    * can execute pending requests or retry original one
    * @returns {Observable<any>}
    */
-  public refreshToken(): Observable<AccessData> {
-    var service = this.environmentService.setAuthService('oauth/token/refresh')
+  public refreshToken(): Observable<any> {
+    var service = this.environmentService.setAuthService('oauth/token/refresh');
     return this.tokenStorage
       .getRefreshToken()
       .switchMap((refreshToken: string) => {

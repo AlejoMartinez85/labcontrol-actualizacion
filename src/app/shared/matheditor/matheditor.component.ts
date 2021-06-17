@@ -161,7 +161,7 @@ export class MatheditorComponent implements OnInit, AfterViewInit, OnDestroy, On
       formula: { ecuacion: formula, variables: this.variables }
     };
     this.changeFormula.emit('Calculando .....');
-    this.subscription = this.evaluarService.add(item).subscribe((value) => {
+    this.subscription = this.evaluarService.add(item).subscribe((value: any) => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Formula ealuada con exito', type: 'success' });
       this.changeFormula.emit(value.resultado);
     }, err => {

@@ -233,7 +233,7 @@ export class PublicEquipoComponent implements OnInit {
   }
   cargardatos() {
     const hoy = moment(new Date());
-    this.equipoService.getByIdPublic(this.id).subscribe((value) => {
+    this.equipoService.getByIdPublic(this.id).subscribe((value: any) => {
       this.item = value.data;
       this.item.variables.forEach((element, index) => {
         this.item.variables[index].vigencia = hoy.diff(element['proxcalibracion'], 'days');
