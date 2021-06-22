@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { Equipo } from '../../models/equipo';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AngularCropperjsComponent, ImageCropperResult } from 'angular-cropperjs';
+import { CropperComponent, ImageCropperResult } from 'angular-cropperjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { InfoAdicionalEquiposService } from '../../services/infoAdicional-equipos/info-adicional-equipos.service';
 import { ConfigAlertaEquiposService } from '../../services/equipo/config-alerta-equipos.service';
@@ -69,7 +69,7 @@ export class PublicEquipoComponent implements OnInit {
   apiurl: any;
   eventoedit: any;
   id: any;
-  @ViewChild('angularCropper') public angularCropper: AngularCropperjsComponent;
+  @ViewChild('angularCropper') public angularCropper: CropperComponent;
   editarImagen: boolean;
   public myAngularxQrCode: string = null;
   imageurl: string;
