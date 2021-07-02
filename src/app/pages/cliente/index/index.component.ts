@@ -12,7 +12,7 @@ import { Permisos } from '../../../models/Rol';
 import { RolesPermisosService } from '../../../services/roles/roles-permisos.service';
 
 @Component({
-  selector: 'app-index',
+  selector: 'app-clientes-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss',
     '../../../../assets/icon/icofont/css/icofont.scss'],
@@ -53,29 +53,29 @@ export class IndexComponent implements OnInit {
   };
   Permisos: Permisos;
   constructor(private notificationService: NotificationService,
-    private formBuilder: FormBuilder,
-    private itemService: ClienteService,
-    private invitacionService: InvitacionService,
-    private rolesPermisosServices: RolesPermisosService) {
+              private formBuilder: FormBuilder,
+              private itemService: ClienteService,
+              private invitacionService: InvitacionService,
+              private rolesPermisosServices: RolesPermisosService) {
       this.Permisos = new Permisos();
-    this.columns = [{ name: 'Nombre' },
+      this.columns = [{ name: 'Nombre' },
     { name: 'Metodo', prop: 'tecnica_analitica' },
     { name: 'Tecnica analítica', prop: 'tecnica_analitica' },
     { name: 'Unidad', prop: 'unidad' },
     { name: 'valor_unit', prop: 'valor_unit' },
     { name: 'descripcion', prop: 'descripcion' }];
 
-    this.cliente = new Cliente();
+      this.cliente = new Cliente();
 
-    this.user = JSON.parse(localStorage.getItem('userInfo'));
-    if ( localStorage.getItem('permisos')) {
+      this.user = JSON.parse(localStorage.getItem('userInfo'));
+      if ( localStorage.getItem('permisos')) {
       this.Permisos = JSON.parse(localStorage.getItem('permisos'));
       this.permisosLocal = this.Permisos.clientes[0];
     } else {
       this.cargarPermisos(this.user.rol);
     }
-    this.cargardatos();
-    this.getclientes();
+      this.cargardatos();
+      this.getclientes();
 
   }
 
@@ -123,7 +123,7 @@ export class IndexComponent implements OnInit {
     this.item.emails = [{ value: this.item.emails }];
     this.item.tipo = 1;
     this.item.tercero_id = this.cliente._id;
-    this.invitacionService.add(this.item).subscribe((value) => {
+    this.invitacionService.add(this.item).subscribe((value: any) => {
       this.item = new Invitacion();
       this.item.notificar = true;
       this.closeModalMasivos('effect-3');
@@ -141,7 +141,7 @@ export class IndexComponent implements OnInit {
       });
   }
   cargardatos() {
-    this.itemService.getById(this.user.tercero._id).subscribe((value) => {
+    this.itemService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.indclientes = value.indclientes;
       this.indicadores = value.indicadores;
@@ -199,7 +199,7 @@ export class IndexComponent implements OnInit {
 
   }
   getclientes() {
-    this.itemService.getOptions(1).subscribe((value) => {
+    this.itemService.getOptions(1).subscribe((value: any) => {
       this.items = value.clientes;
 
     }, err => {

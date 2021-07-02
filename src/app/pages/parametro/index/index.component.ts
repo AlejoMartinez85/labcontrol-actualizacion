@@ -11,7 +11,7 @@ import { RolesPermisosService } from '../../../services/roles/roles-permisos.ser
 import { Permisos } from '../../../models/Rol';
 
 @Component({
-	selector: 'app-index',
+	selector: 'app-parametro-index',
 	templateUrl: './index.component.html',
 	styleUrls: ['./index.component.scss',
 		'../../../../assets/icon/icofont/css/icofont.scss'],
@@ -163,7 +163,7 @@ export class IndexComponent implements OnInit {
 		((event.target.parentElement.parentElement.parentElement.parentElement.parentElement).parentElement).classList.remove('md-show');
 	}
 	guardar(event) {
-		this.parametroService.getUltimo(1).subscribe(valor => {
+		this.parametroService.getUltimo(1).subscribe((valor: any) => {
 			if (valor.success) {
 				console.log(valor.pos.index);
 				this.item.index = parseInt(valor.pos.index) + 1;
@@ -180,7 +180,7 @@ export class IndexComponent implements OnInit {
 		});
 	}
 	cargardatos() {
-		this.parametroService.get(1).subscribe((value) => {
+		this.parametroService.get(1).subscribe((value: any) => {
 			this.items = value.parametros;
 			console.log(this.items)
 		}, err => {
@@ -242,7 +242,7 @@ export class IndexComponent implements OnInit {
 
 	}
 	buscarParametros(event) {
-		this.parametroService.getBuscarParametros(event.target.value).subscribe(parametros => {
+		this.parametroService.getBuscarParametros(event.target.value).subscribe((parametros: any) => {
 			if (parametros.success) {
 				this.items = parametros.parametros;
 			} else {
@@ -276,7 +276,7 @@ export class IndexComponent implements OnInit {
 		this.campo5 = false;
 		this.variableTecnica = false;
 		this.configuraciones = [];
-		this.parametroService.getConfigParametros(1).subscribe(valores => {
+		this.parametroService.getConfigParametros(1).subscribe((valores: any) => {
 			if (valores.success) {
 				if (valores.configuracion.length > 0) {
 					this.configuraciones = valores.configuracion;

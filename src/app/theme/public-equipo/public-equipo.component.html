@@ -79,8 +79,9 @@
                                   <div class="row paddingItems">
                                     <label for="" class="col-6">Estado</label>
                                     <label class="col-6"
-                                      [ngClass]="{'text-warning': item.estado == 'En mantenimiento','text-danger': item.estado == 'Fuera de servicio','text-c-green': item.estado == 'Funcional'}">
-                                      {{item.estado}}</label>
+                                      [ngClass]="{'text-warning': item?.estado == 'En mantenimiento','text-danger': item?.estado == 'Fuera de servicio','text-c-green': item?.estado == 'Funcional'}">
+                                      {{item.estado}}
+                                    </label>
                                   </div>
                                   <div class="row paddingItems">
                                     <label for="" class="col-6">Software</label>

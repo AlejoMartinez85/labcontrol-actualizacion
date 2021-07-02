@@ -20,7 +20,7 @@ import 'rxjs/add/operator/first';
 import { Invitacion } from '../../../models/invitacion';
 import { InvitacionService } from '../../../services/invitacion/invitacion.service';
 @Component({
-  selector: 'app-index',
+  selector: 'app-laboratorio-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss',
     '../../../../assets/icon/icofont/css/icofont.scss'],
@@ -90,7 +90,7 @@ export class IndexComponent implements OnInit {
   guardar(event) {
     this.item.tercero_id = this.user.tercero._id;
     this.item.tipo = 2;
-    this.invitacionService.add(this.item).subscribe((value) => {
+    this.invitacionService.add(this.item).subscribe((value: any) => {
 
       this.closeMyModalbtn(event);
       this.cargardatos();
@@ -105,7 +105,7 @@ export class IndexComponent implements OnInit {
     });
   }
   cargardatos() {
-    this.itemService.getById(this.user.tercero._id).subscribe((value) => {
+    this.itemService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.indicadores = value.indicadores;
       this.indclientes = value.indclientes;

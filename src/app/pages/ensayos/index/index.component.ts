@@ -21,7 +21,7 @@ import { RolesPermisosService } from '../../../services/roles/roles-permisos.ser
 moment.locale('es-CO');
 
 @Component({
-  selector: 'app-index',
+  selector: 'app-ensayos-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss',
     '../../../../assets/icon/icofont/css/icofont.scss'],
@@ -97,7 +97,7 @@ export class IndexComponent implements OnInit {
     this.totalpaso1 = 0;
     this.cantidadPaso3 = 0;
     let paso2enproceso = [], paso2completados = [];
-    this.ensayoservice.getpasos(1).subscribe( valores => {
+    this.ensayoservice.getpasos(1).subscribe( (valores: any) => {
       if (valores.success) {
         this.paso2 = valores.paso2;
         this.paso2.forEach(element => {
@@ -160,11 +160,11 @@ export class IndexComponent implements OnInit {
     document.querySelector('#effect-3').classList.remove('md-show');
 
   }
-  
+
   editarEnsayo(ensayo, tipo) {
-    this.ensayoservice.getById(ensayo._id).subscribe((value) => {
+    this.ensayoservice.getById(ensayo._id).subscribe((value: any) => {
       value.ensayos.muestras.forEach((element, index) => {
-        this.muestraService.getById(element).subscribe(resp => {
+        this.muestraService.getById(element).subscribe((resp: any) => {
           this.ensayo.muestras[index] = resp.muestra;
         });
       });
@@ -192,7 +192,7 @@ export class IndexComponent implements OnInit {
   }
 
   cargarEnsayos(estado) {
-    this.ensayoservice.getEstado(1, estado).subscribe((value) => {
+    this.ensayoservice.getEstado(1, estado).subscribe((value: any) => {
 
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;
@@ -226,7 +226,7 @@ export class IndexComponent implements OnInit {
     } else {
       this.cargarEnsayos('analistaProceso');
     }
-    
+
   }
   beforeChangeEnsayo($event: NgbTabChangeEvent) {
     this.tabactivesol = $event.nextId;
@@ -264,10 +264,10 @@ export class IndexComponent implements OnInit {
   }
 
   clickTabEnsayo(){
-    
+
     const btn = document.getElementById("resultadoTab");
     btn.click();
-    
+
   }
   buscadorpasodosEnproceso(event) {
     const texto = event.target.value.toLowerCase();

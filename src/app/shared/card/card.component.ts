@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, Input, ViewEncapsulation, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {cardToggle, cardClose, cardIconToggle} from './card-animation';
 
 @Component({
@@ -13,8 +13,8 @@ export class CardComponent implements OnInit {
   @Input() title: string;
   @Input() blockClass: string;
   @Input() cardClass: string;
-  @Input() classHeader = false;
-  @Input() cardOptionBlock = false;
+  @Input() classHeader: boolean = false;
+  @Input() cardOptionBlock: boolean = false;
   cardToggle = 'expanded';
   cardClose = 'open';
   fullCard: string;

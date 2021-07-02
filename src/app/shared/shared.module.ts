@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToggleFullScreenDirective} from './fullscreen/toggle-fullscreen.directive';
@@ -33,7 +33,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HttpClientModule,
     PerfectScrollbarModule,
     ClickOutsideModule,
-    NotificationModule,
+    NotificationModule
   ],
   exports: [
     NgbModule,
@@ -71,12 +71,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalGeneralComponent,
     MatheditorComponent,
     PreloaderComponent
-    ],
+  ],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

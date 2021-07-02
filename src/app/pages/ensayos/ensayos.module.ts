@@ -55,7 +55,8 @@ import { NumeroPasteComaToPuntoPipe } from '../../pipes/numero-paste-coma-to-pun
     QRCodeModule,
     PdfViewerModule
   ],
-  declarations: [AdminComponent,
+  declarations: [
+    AdminComponent,
     OrdenComponent,
     SolicitudComponent,
     PagoComponent,
@@ -76,9 +77,10 @@ import { NumeroPasteComaToPuntoPipe } from '../../pipes/numero-paste-coma-to-pun
     RecepcionEnsayoComponent,
     NumeroPasteComaToPuntoPipe,
     VerMuestraComponent,
-    EditMuestraComponent],
-  exports: [
-    ActividadComponent,
-  ]
+    EditMuestraComponent
+  ],
+  // exports: [
+  //   ActividadComponent,
+  // ]
 })
 export class EnsayosModule { }

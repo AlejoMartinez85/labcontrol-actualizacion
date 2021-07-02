@@ -8,7 +8,7 @@ import swal from 'sweetalert2';
 import { InvitacionService } from '../../../services/invitacion/invitacion.service';
 
 @Component({
-  selector: 'app-index',
+  selector: 'app-invitacion-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss',
     '../../../../assets/icon/icofont/css/icofont.scss'],
@@ -77,7 +77,7 @@ export class IndexComponent implements OnInit {
     });
   }
   cargardatos() {
-    this.itemService.get(1).subscribe((value) => {
+    this.itemService.get(1).subscribe((value: any) => {
       this.items = value.invitacion;
 
     }, err => {

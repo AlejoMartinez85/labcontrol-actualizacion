@@ -43,10 +43,10 @@ export class PublicEquipoComponent implements OnInit {
   items: any;
   columns: any[];
   user: any;
-  public desplegable: boolean = false;
-  public editItem: boolean = false;
-  public opcionesEditItem: boolean = true;
-  public ver_registros: boolean = false;
+  desplegable: boolean = false;
+  editItem: boolean = false;
+  opcionesEditItem: boolean = true;
+  ver_registros: boolean = false;
   uploader: FileUploader = new FileUploader({
     url: environment.apiUrl + 'upload',
     authTokenHeader: "Authorization",
@@ -71,7 +71,7 @@ export class PublicEquipoComponent implements OnInit {
   id: any;
   @ViewChild('angularCropper') public angularCropper: CropperComponent;
   editarImagen: boolean;
-  public myAngularxQrCode: string = null;
+  myAngularxQrCode: string = null;
   imageurl: string;
   campos = {
     activaN1: false,
@@ -88,12 +88,12 @@ export class PublicEquipoComponent implements OnInit {
   InfoAdicionalGlogal: any;
   configEquiposAlertas: ConfigEquiposAlertas;
   constructor(private notificationService: NotificationService,
-    private formBuilder: FormBuilder,
-    private equipoService: EquipoService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private configuracionesEquipoService: ConfigAlertaEquiposService,
-    private InfoAdicionalEquiposService: InfoAdicionalEquiposService) {
+              private formBuilder: FormBuilder,
+              private equipoService: EquipoService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private configuracionesEquipoService: ConfigAlertaEquiposService,
+              private InfoAdicionalEquiposService: InfoAdicionalEquiposService) {
     this.columns = [{ name: 'Nombre' },
     { name: 'Metodo', prop: 'tecnica_analitica' },
     { name: 'Tecnica analítica', prop: 'tecnica_analitica' },

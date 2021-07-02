@@ -10,6 +10,7 @@ import 'rxjs/add/observable/throw';
 import { TokenStorage } from './token-storage.service';
 import { EnvironmentService } from '../environment/environment.service';
 import { Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 interface AccessData {
   token: string;
@@ -59,11 +60,13 @@ export class AuthenticationService implements AuthService {
     var service = this.environmentService.setAuthService('oauth/token/refresh');
     return this.tokenStorage
       .getRefreshToken()
-      .switchMap((refreshToken: string) => {
-        return this.http.post(service, { refreshToken });
-      })
+      .pipe(
+        switchMap((refreshToken: string) => {
+          return this.http.post(service, { refreshToken });
+        })
+      )
       .do(this.saveAccessData.bind(this))
-      .catch((err) => {
+      .catch(err => {
         this.logout();
         return Observable.throw(err);
       });

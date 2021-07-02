@@ -14,7 +14,7 @@ import { RolesPermisosService } from '../../../services/roles/roles-permisos.ser
 import { Permisos, Rol } from '../../../models/Rol';
 
 @Component({
-  selector: 'app-index',
+  selector: 'app-usuario-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss',
     '../../../../assets/icon/icofont/css/icofont.scss'],
@@ -56,12 +56,12 @@ export class IndexComponent implements OnInit {
     ver: false,
   };
   constructor(private notificationService: NotificationService,
-    private formBuilder: FormBuilder,
-    private itemService: ClienteService,
-    private userService: UsuariosService,
-    private authService: AuthenticationService,
-    private fb: FormBuilder,
-    private rolesPermisosServices: RolesPermisosService ) {
+              private formBuilder: FormBuilder,
+              private itemService: ClienteService,
+              private userService: UsuariosService,
+              private authService: AuthenticationService,
+              private fb: FormBuilder,
+              private rolesPermisosServices: RolesPermisosService ) {
     this.columns = [{ name: 'Nombre' },
     { name: 'Metodo', prop: 'tecnica_analitica' },
     { name: 'Tecnica analítica', prop: 'tecnica_analitica' },
@@ -110,7 +110,7 @@ export class IndexComponent implements OnInit {
       });
     } catch (e) {
       this.notificationService.addNotify({ title: 'Roles', msg: e.message, type: 'error' });
-      //MEnsaje personalisado 
+      //MEnsaje personalisado
     }
   }
   cargaRoles() {
@@ -182,7 +182,7 @@ export class IndexComponent implements OnInit {
 
   }
   cargardatos() {
-    this.itemService.getById(this.user.tercero._id).subscribe((value) => {
+    this.itemService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.usuarios = this.cliente.usuarios;
       console.log(this.usuarios)
@@ -222,7 +222,7 @@ export class IndexComponent implements OnInit {
       cancelButtonText: 'No',
       useRejections: true           // <<<<<<------- BACKWARD COMPATIBILITY WITH v6.x
     }).then((result) => {
-      this.userService.borrarUser(id).subscribe((value) => {
+      this.userService.borrarUser(id).subscribe((value: any) => {
         if (value.success) {
           console.log(value.message)
           this.notificationService.addNotify({ title: 'Alerta', msg: value.message, type: 'success' });
@@ -236,7 +236,7 @@ export class IndexComponent implements OnInit {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'usuario eliminado con exito', type: 'success' });
       item.edit = false;
       this.cargardatos();
-      
+
     }, err => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
     });
