@@ -23,6 +23,6 @@ import { IncertidumbreModule } from '../incertidumbre/incertidumbreModule.module
     IncertidumbreModule
   ],
   declarations: [IndexComponent, VerParametroComponent],
-  exports: [IndexComponent, VerParametroComponent]
+  // exports: [IndexComponent, VerParametroComponent]
 })
 export class ParametroModule {}

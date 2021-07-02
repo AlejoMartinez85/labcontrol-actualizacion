@@ -1,10 +1,10 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {AdminComponent} from './layout/admin/admin.component';
 import {AuthComponent} from './layout/auth/auth.component';
 import { ProtectedGuard, PublicGuard } from 'ngx-auth';
-import { VerParametroComponent } from './pages/parametro/ver-parametro/ver-parametro.component';
-import { PublicEquipoComponent } from './theme/public-equipo/public-equipo.component';
+//import { VerParametroComponent } from './pages/parametro/ver-parametro/ver-parametro.component';
+// import { PublicEquipoComponent } from './theme/public-equipo/public-equipo.component';
 import { EquipoComponent } from './layout/equipo/equipo.component';
 
 const routes: Routes = [
@@ -28,8 +28,12 @@ const routes: Routes = [
       },
       {
         path: 'config/parametro',
-        loadChildren: './pages/parametro/parametro.module#ParametroModule',
+        loadChildren: './pages/parametro/parametro.module#ParametroModule'
       },
+      /* {
+        path: 'config/parametro',
+        loadChildren: () => import('./pages/parametro/parametro.module').then(m => m.ParametroModule)
+      }, */
       {
         path: 'config/agrupacionparametro',
         loadChildren: './pages/agrupacion-parametros/agrupacion-parametros.module#AgrupacionParametrosModule'

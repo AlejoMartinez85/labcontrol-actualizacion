@@ -36,7 +36,6 @@ import { ErrorHttpService } from './services/error-http/error-http.service';
     AppRoutingModule,
     SharedModule,
     FormsModule,
-    SharedModule,
     SimpleNotificationsModule.forRoot(),
     HttpClientModule
   ],

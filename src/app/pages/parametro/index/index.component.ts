@@ -83,7 +83,7 @@ export class IndexComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.parametroService.getUltimo(1).subscribe(element => {
+		this.parametroService.getUltimo(1).subscribe((element: any) => {
 			console.log(parseInt(element.pos.index) + 1)
 			this.indice = parseInt(element.pos.index) + 1;
 		});
