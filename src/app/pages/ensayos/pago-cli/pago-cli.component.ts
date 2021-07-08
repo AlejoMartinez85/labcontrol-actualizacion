@@ -55,7 +55,7 @@ export class PagoCliComponent implements OnInit {
   }
 
   cargarEmpresa() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.clientes = [];
       this.usuarios = [];
@@ -82,13 +82,13 @@ export class PagoCliComponent implements OnInit {
   guardarEnsayo(event) {
 
     if (this.ensayo._id == undefined) {
-      
+
     } else {
       console.log(this.ensayo)
       this.ensayoservice.update(this.ensayo).subscribe((value) => {
-      
+
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
-      
+
       }, err => {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
       });

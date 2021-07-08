@@ -72,7 +72,7 @@ export class IncertidumbreAddComponent implements OnInit {
     }
   }
   getVariableByID() {
-    this.variableService.getById(this.variableId).subscribe((result) => {
+    this.variableService.getById(this.variableId).subscribe((result: any) => {
       this.item = result.data;
       this.formulaactual = this.item.formulaCoeficiente;
       if (this.item.equipoId != '') {
@@ -84,7 +84,7 @@ export class IncertidumbreAddComponent implements OnInit {
     });
   }
   getEquipos() {
-    this.equipoService.getOption(0).subscribe((result) => {
+    this.equipoService.getOption(0).subscribe((result: any) => {
       this.equipos = result.data;
     });
   }
@@ -92,7 +92,7 @@ export class IncertidumbreAddComponent implements OnInit {
     let id;
     id = event.value;
     if (id != undefined) {
-      this.equipoService.getById(id).subscribe((result) => {
+      this.equipoService.getById(id).subscribe((result: any) => {
         this.equipoSeleccionado = result.data;
         this.opcionesVariables = this.crearOpcionVariablesEquipo(this.equipoSeleccionado.variables);
         this.getElementosByVariable(this.item.variableEquipoId, this.item.valor);
@@ -128,7 +128,7 @@ export class IncertidumbreAddComponent implements OnInit {
 
       return false;
     }
-    this.elementoCalibracionService.get(0, idvariable, varValue).subscribe((result) => {
+    this.elementoCalibracionService.get(0, idvariable, varValue).subscribe((result: any) => {
       this.evaluarElementos(result.data);
       this.calcularIncertidumbre();
 
@@ -184,7 +184,7 @@ export class IncertidumbreAddComponent implements OnInit {
   guardar() {
     if (this.item._id != undefined) {
       this.item.formulaCoeficiente = this.mathEditor.getFormula();
-      this.variableService.update(this.item).subscribe((value) => {
+      this.variableService.update(this.item).subscribe((value: any) => {
 
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Variable actualizada con exito', type: 'success' });
         this.endAction.emit("save");

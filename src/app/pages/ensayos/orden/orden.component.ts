@@ -61,7 +61,7 @@ export class OrdenComponent implements OnInit {
       fEnsayo: [null, Validators.required],
       estado: []
     });
-    this.estructuraService.get(0).subscribe(resp => {
+    this.estructuraService.get(0).subscribe((resp: any) => {
       if (resp.success) {
         this.estructura = resp.Layouts[0];
       } else {
@@ -95,7 +95,7 @@ export class OrdenComponent implements OnInit {
   }
   cargarEmpresa() {
     this.clienteService.getById(this.user.tercero._id).subscribe(
-      value => {
+      (value: any) => {
         this.cliente = value.clientes;
       },
       err => {
@@ -145,7 +145,7 @@ export class OrdenComponent implements OnInit {
       this.ensayo.tercero = this.user.tercero._id;
       this.ensayo.paso = 1;
       this.ensayoservice.add(this.ensayo).subscribe(
-        value => {
+        (value: any) => {
           this.cargarEnsayos("Pendientes");
           this.notificationService.addNotify({
             title: "Alerta",

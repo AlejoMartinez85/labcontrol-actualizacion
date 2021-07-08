@@ -27,7 +27,7 @@ export class IncertidumbreDetalleVarComponent implements OnInit {
   opcionesVariables: any;
   constructor( private equipoService: EquipoService,) {
     this.reload=false;
-   
+
    }
 
   ngOnInit() {
@@ -37,7 +37,7 @@ export class IncertidumbreDetalleVarComponent implements OnInit {
     this.reload=true;
   }
   getEquipos() {
-    this.equipoService.getOption(0).subscribe((result) => {
+    this.equipoService.getOption(0).subscribe((result: any) => {
       this.equipos = result.data;
     });
   }
@@ -45,7 +45,7 @@ export class IncertidumbreDetalleVarComponent implements OnInit {
     let id;
     id =this.item.equipoId;
     if (id != undefined) {
-      this.equipoService.getById(id).subscribe((result) => {
+      this.equipoService.getById(id).subscribe((result: any) => {
         this.equipoSeleccionado = result.data;
         this.opcionesVariables = this.crearOpcionVariablesEquipo(this.equipoSeleccionado.variables);
       });

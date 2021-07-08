@@ -78,7 +78,7 @@ export class SolicitudCliComponent implements OnInit {
 
   }
   cargarEmpresa() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.clientes = [];
       this.laboratorios = [];
@@ -136,7 +136,7 @@ export class SolicitudCliComponent implements OnInit {
 
   guardarMuestra(event) {
 
-    this.muestraService.add(this.muestraAdd).subscribe((value) => {
+    this.muestraService.add(this.muestraAdd).subscribe((value: any) => {
       if (this.ensayo.muestras == undefined) {
         this.ensayo.muestras = [];
       }
@@ -173,7 +173,7 @@ export class SolicitudCliComponent implements OnInit {
     if (this.ensayo.muestras == undefined) {
       this.ensayo.muestras = [];
     }
-    this.muestraService.getById(this.muestrasel).subscribe((value) => {
+    this.muestraService.getById(this.muestrasel).subscribe((value: any) => {
       this.ensayo.muestras.push(value.muestras);
       this.agregarMuestrasPartametro(value.muestras);
 
@@ -191,7 +191,7 @@ export class SolicitudCliComponent implements OnInit {
     }
   }
   cargarParametros() {
-    this.parametroService.get(1).subscribe((value) => {
+    this.parametroService.get(1).subscribe((value: any) => {
       this.parametros = [];
       for (let i = 0; i < value.parametros.length; i++) {
         let parametro = value.parametros[i];
@@ -274,7 +274,7 @@ export class SolicitudCliComponent implements OnInit {
         seleccionado: false
       });
     }
-    this.parametroService.getById(this.parametronew).subscribe((value) => {
+    this.parametroService.getById(this.parametronew).subscribe((value: any) => {
       ensayoparam.parametro = value.parametros;
       ensayoparam.valor_unit = value.parametros.valor_unit;
       this.ensayo.parametros.push(ensayoparam);

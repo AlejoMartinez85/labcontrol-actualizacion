@@ -109,17 +109,17 @@ export class EquipoIndexComponent implements OnInit {
   infoAdicional: any = [];
   imagenes: any = [];
   constructor(private notificationService: NotificationService,
-    private formBuilder: FormBuilder,
-    private equipoService: EquipoService,
-    private configuracionesEquipoService: ConfigAlertaEquiposService,
-    private rolesPermisosServices: RolesPermisosService,
-    private InfoAdicionalEquiposService: InfoAdicionalEquiposService
+              private formBuilder: FormBuilder,
+              private equipoService: EquipoService,
+              private configuracionesEquipoService: ConfigAlertaEquiposService,
+              private rolesPermisosServices: RolesPermisosService,
+              private InfoAdicionalEquiposService: InfoAdicionalEquiposService
     ) {
       this.ckeconfig = {
         allowedContent: false,
         extraPlugins: 'divarea',
       };
-    this.columns = [
+      this.columns = [
       { name: 'Nombre' },
       { name: 'Metodo', prop: 'tecnica_analitica' },
       { name: 'Tecnica analítica', prop: 'tecnica_analitica' },
@@ -127,8 +127,8 @@ export class EquipoIndexComponent implements OnInit {
       { name: 'valor_unit', prop: 'valor_unit' },
       { name: 'descripcion', prop: 'descripcion' }
     ];
-    this.user = JSON.parse(localStorage.getItem('userInfo'));
-    this.Permisos = new Permisos();
+      this.user = JSON.parse(localStorage.getItem('userInfo'));
+      this.Permisos = new Permisos();
   }
   copypaste(event: ClipboardEvent) {
     const clipboardData = event.clipboardData;
@@ -395,7 +395,7 @@ export class EquipoIndexComponent implements OnInit {
     }
   }
   cargardatos() {
-    this.equipoService.get(1).subscribe((value) => {
+    this.equipoService.get(1).subscribe((value: any) => {
       this.items = value.data;
     }, err => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
@@ -465,7 +465,7 @@ export class EquipoIndexComponent implements OnInit {
           });
           this.clasificaciones = [];
           this.clasificaciones = el;
-        break;
+          break;
       }
     } catch (error) {
       alert(error)
@@ -486,7 +486,7 @@ export class EquipoIndexComponent implements OnInit {
         case 'clasificaciones':
           this.clasificaciones.push(email);
           document.getElementById('idclasificaciones')['value']='';
-        break;
+          break;
       }
     } catch (error) {
       alert(error)
@@ -798,7 +798,7 @@ export class EquipoIndexComponent implements OnInit {
       cant_reparaciones : this.formconfiguraciones.value.Rcada * parseInt(this.formconfiguraciones.value.tiempo),
       cant_variables : this.formconfiguraciones.value.Rcada2 * parseInt(this.formconfiguraciones.value.tiempo2)
     }
-    this.configuracionesEquipoService.updateMantenimientosReparaciones(parametros).subscribe( resp => {
+    this.configuracionesEquipoService.updateMantenimientosReparaciones(parametros).subscribe( (resp: any) => {
       console.log(resp)
       if (resp.success) {
         this.guardarConfig();

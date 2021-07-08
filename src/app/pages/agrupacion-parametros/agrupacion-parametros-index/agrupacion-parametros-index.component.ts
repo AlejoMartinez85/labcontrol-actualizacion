@@ -107,7 +107,7 @@ export class AgrupacionParametrosIndexComponent implements OnInit {
   guardar(event) {
 
     this.item.tercero = this.user.tercero._id;
-    this.parametroService.add(this.item).subscribe((value) => {
+    this.parametroService.add(this.item).subscribe((value: any) => {
 
       this.closeMyModalbtn(event);
       this.cargardatos();
@@ -118,7 +118,7 @@ export class AgrupacionParametrosIndexComponent implements OnInit {
     });
   }
   cargardatos() {
-    this.parametroService.get(1).subscribe((value) => {
+    this.parametroService.get(1).subscribe((value: any) => {
 
       this.items = value.parametros;
     }, err => {
@@ -140,7 +140,7 @@ export class AgrupacionParametrosIndexComponent implements OnInit {
     );
   }
   eliminarItem(item) {
-    this.parametroService.delete(item._id, item).subscribe((value) => {
+    this.parametroService.delete(item._id, item).subscribe((value: any) => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Agrupación de Parametro eliminado con exito', type: 'success' });
       item.edit = false;
       let index = this.items.indexOf(item);
@@ -178,7 +178,7 @@ export class AgrupacionParametrosIndexComponent implements OnInit {
   }
   actualizarItem(item) {
 
-    this.parametroService.update(item).subscribe((value) => {
+    this.parametroService.update(item).subscribe((value: any) => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Agrupación de Parametro actualizado con exito', type: 'success' });
       item.edit = false;
       location.reload();
@@ -189,7 +189,7 @@ export class AgrupacionParametrosIndexComponent implements OnInit {
 
   }
   cargarParametros() {
-    this._parametroService.get(1).subscribe((value) => {
+    this._parametroService.get(1).subscribe((value: any) => {
       this.parametros = [];
       for (let i = 0; i < value.parametros.length; i++) {
         let parametro = value.parametros[i];
@@ -206,7 +206,7 @@ export class AgrupacionParametrosIndexComponent implements OnInit {
     if (item.parametros == undefined) {
       item.parametros = [];
     }
-    this._parametroService.getById(this.parametronew).subscribe((value) => {
+    this._parametroService.getById(this.parametronew).subscribe((value: any) => {
 
       item.parametros.push(value.parametros);
 

@@ -84,7 +84,7 @@ export class PagoComponent implements OnInit {
 
   }
   cargarEmpresa() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.clientes = [];
       this.usuarios = [];
@@ -117,7 +117,7 @@ export class PagoComponent implements OnInit {
     }
     this.submited = false;
     if (this.ensayo._id === undefined) {
-      this.ensayoservice.add(this.ensayo).subscribe((value) => {
+      this.ensayoservice.add(this.ensayo).subscribe((value: any) => {
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo guardado con exito', type: 'success' });
         this.closeMyModal('effect-3');
@@ -136,7 +136,7 @@ export class PagoComponent implements OnInit {
       //   this.ensayo.pieReporte = localStorage.getItem('footer');
       // }
       console.log(this.ensayo)
-      this.ensayoservice.update(this.ensayo).subscribe((value) => {
+      this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
         this.closeMyModal('effect-3');
@@ -178,7 +178,7 @@ export class PagoComponent implements OnInit {
     });
   }
   publicar(event, formulario) {
-   
+
       swal({
         title: 'Alerta!',
         text: `Al publicar se generará una versión final de tu informe de resultados y se dará por terminado el informe. Quieres continuar?`,
@@ -205,7 +205,7 @@ export class PagoComponent implements OnInit {
         }
       }
       );
-    
+
   }
 
   pasarAPublicar() {

@@ -5,7 +5,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Reparacion } from '../../../models/reparacion';
 import { ParametroService } from '../../../services/parametro/parametro.service';
 import swal from 'sweetalert2';
-import { ModalComponent } from '../../../theme/ui-elements/advance/modal/modal.component';
 import * as moment from 'moment';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
 import { environment } from '../../../../environments/environment';
@@ -49,7 +48,7 @@ export class PublicEquiposReparacionComponent implements OnInit {
     maxFileSize: 5 * 1024 * 1024,
 
   });
-  
+
   apiurl: string;
   constructor(private notificationService: NotificationService,
     private formBuilder: FormBuilder,
@@ -86,7 +85,7 @@ export class PublicEquiposReparacionComponent implements OnInit {
     }
   }
 
-  guardar(event) {   
+  guardar(event) {
     this.endAction.emit(this.item);
 
   }

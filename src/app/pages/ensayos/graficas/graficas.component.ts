@@ -68,7 +68,7 @@ export class GraficasComponent implements OnInit {
     this.CargarFacturas();
   }
   CargarVentas() {
-    this.graficaService.getVentas(1).subscribe((value) => {
+    this.graficaService.getVentas(1).subscribe((value: any) => {
       this.data5.datasets = value.data;
       this.charventas.chart.update();
     }, err => {
@@ -78,7 +78,7 @@ export class GraficasComponent implements OnInit {
   }
 
   CargarFacturas() {
-    this.graficaService.getFacturas(1).subscribe((value) => {
+    this.graficaService.getFacturas(1).subscribe((value: any) => {
       this.data4.datasets = value.data;
       this.chartfacturas.chart.update();
     }, err => {

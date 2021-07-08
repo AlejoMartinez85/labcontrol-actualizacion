@@ -55,7 +55,7 @@ export class CargaArchivoComponent implements OnInit {
   }
   guardar() {
     this.validacion.archivos = this.archivos;
-    this.ValidacionMetodoService.edit(this.validacion).subscribe( resp => {
+    this.ValidacionMetodoService.edit(this.validacion).subscribe( (resp: any) => {
       console.log(resp)
       if(resp.success) {
         this.notificationService.addNotify({ title: 'Archivos', msg: resp.message, type: 'success' });

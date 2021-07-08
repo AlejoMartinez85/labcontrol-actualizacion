@@ -44,14 +44,14 @@ export class VerMuestraComponent implements OnInit {
   @ViewChild('tabsetadmin') tabset: any;
   public myAngularxQrCode: string = null;
   constructor(private router: ActivatedRoute,
-    private muestraService: MuestraService,
-    private routernavegate: Router,
-    private ensayoservice: EnsayoService,
-    private notificationService: NotificationService) {
+              private muestraService: MuestraService,
+              private routernavegate: Router,
+              private ensayoservice: EnsayoService,
+              private notificationService: NotificationService) {
       this.ensayo = new Ensayo();
-    this.$identificador = this.router.snapshot.paramMap.get('id');
-    this.myAngularxQrCode = window.location.href;
-    this.muestraService.getById(this.$identificador).subscribe( muestra => {
+      this.$identificador = this.router.snapshot.paramMap.get('id');
+      this.myAngularxQrCode = window.location.href;
+      this.muestraService.getById(this.$identificador).subscribe( (muestra: any) => {
       if (muestra.success) {
         this.Muestra = muestra.muestra;
       } else {
@@ -71,10 +71,10 @@ export class VerMuestraComponent implements OnInit {
     a.href = qr['el']['nativeElement']['childNodes'][1]['currentSrc'];
     a.click();
   }
-  
+
   traeSolicitudes() {
     const ensayos = [];
-    this.ensayoservice.getAllEnsayos(1).subscribe(values => {
+    this.ensayoservice.getAllEnsayos(1).subscribe((values: any) => {
       if ( values.success ) {
 
         for (let i = 0; i <= values.ensayos.length - 1; i++) {
@@ -108,7 +108,7 @@ export class VerMuestraComponent implements OnInit {
   }
   editarEnsayo(ensayo) {
     this.ensayo = null;
-    this.ensayoservice.getById(ensayo._id).subscribe((value) => {
+    this.ensayoservice.getById(ensayo._id).subscribe((value: any) => {
       this.openMyModal('effect-3');
       this.ensayo = value.ensayos;
       this.ensayo.fsolicitud = moment(this.ensayo.fsolicitud).format('YYYY-MM-DD');
@@ -157,7 +157,7 @@ export class VerMuestraComponent implements OnInit {
 
   }
   guardarEnsayo() {
-    this.ensayoservice.update(this.ensayo).subscribe((value) => {
+    this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
       this.tabdata();
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
       this.closeMyModal('effect-3');
@@ -178,7 +178,7 @@ export class VerMuestraComponent implements OnInit {
     }
   }
   cargarEnsayos(estado) {
-    this.ensayoservice.getEstado(1, estado).subscribe((value) => {
+    this.ensayoservice.getEstado(1, estado).subscribe((value: any) => {
 
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;
@@ -207,5 +207,5 @@ export class VerMuestraComponent implements OnInit {
 
     );
   }
-  
+
 }

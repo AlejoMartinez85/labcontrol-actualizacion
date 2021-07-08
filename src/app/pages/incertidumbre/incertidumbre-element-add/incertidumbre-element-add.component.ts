@@ -18,7 +18,7 @@ export class IncertidumbreElementAddComponent implements OnInit {
   item: any;
   form: FormGroup;
 
-  
+
   variablenew: any;
   reload: boolean;
   formulaactual = '';
@@ -85,7 +85,7 @@ export class IncertidumbreElementAddComponent implements OnInit {
     this.formulaactual = this.mathEditor.getFormula();
 
     if (variable._id != undefined) {
-      this.variableService.update(variable).subscribe((value) => {
+      this.variableService.update(variable).subscribe((value: any) => {
         this.variablenew = { simbolo: '', valor: '' };
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Variable registrada con exito', type: 'success' });
         this.reload = true;
@@ -93,7 +93,7 @@ export class IncertidumbreElementAddComponent implements OnInit {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
       });
     } else {
-      this.variableService.add(variable).subscribe((value) => {
+      this.variableService.add(variable).subscribe((value: any) => {
         this.reload = false;
         this.item.variables.push(value.data);
         setTimeout(() => {
@@ -120,7 +120,7 @@ export class IncertidumbreElementAddComponent implements OnInit {
   }
   eliminarVariable(variable) {
     this.reload = false;
-    this.variableService.delete(variable._id, variable).subscribe((value) => {
+    this.variableService.delete(variable._id, variable).subscribe((value: any) => {
       this.variablenew = { simbolo: '', valor: '' };
       let varfind = this.item.variables.findIndex((x) => x._id == variable._id);
       this.item.variables.splice(varfind, 1);

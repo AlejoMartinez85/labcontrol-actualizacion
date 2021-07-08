@@ -6,7 +6,8 @@ import { CondicionesAmbientales } from '../../../models/condiciones_ambientales'
 import * as ss from 'simple-statistics';
 import { mean, sampleStandardDeviation, min, max, sum } from 'simple-statistics';
 import { NotificationService } from '../../../shared/notification/notification.service';
-import ApexCharts from 'apexcharts';
+import * as ApexCharts from 'apexcharts';
+// import ApexCharts from 'apexcharts';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { ParametroService } from '../../../services/parametro/parametro.service';
@@ -138,7 +139,7 @@ export class CondicionesAmbientalesVerComponent implements OnInit {
     console.log(datos);
     // return;
     datos.forEach(element => {
-      this.condicionesAmbientales.addDatos(element).subscribe(datoCreado => {
+      this.condicionesAmbientales.addDatos(element).subscribe((datoCreado: any) => {
         if (datoCreado.success) {
           cantidad = cantidad + 1;
           this.reloasMasivo(cantidad);
@@ -183,7 +184,7 @@ export class CondicionesAmbientalesVerComponent implements OnInit {
     } else {
       this.cargarPermisos(this.user.rol);
     }
-    
+
   }
   /**
    * Funciones Generales del sistema
@@ -305,7 +306,7 @@ export class CondicionesAmbientalesVerComponent implements OnInit {
         this.cargaMethodos(metodos['registros']);
       });
   }
- 
+
   cargaMethodos(arr): any {
     const metodosArr = []
     arr.forEach(element => {
@@ -355,7 +356,7 @@ export class CondicionesAmbientalesVerComponent implements OnInit {
       useRejections: true           // <<<<<<------- BACKWARD COMPATIBILITY WITH v6.x
     }).then((result) => {
 
-      this.condicionesAmbientales.deleteDatos(id).subscribe(resp => {
+      this.condicionesAmbientales.deleteDatos(id).subscribe((resp: any) => {
         if (resp.success) {
           this.notificaciones(resp.message, 'Dato', 'success');
           // this.cargarDatos();
@@ -640,7 +641,7 @@ export class CondicionesAmbientalesVerComponent implements OnInit {
     }
   }
   EditarDato(dato) {
-    this.condicionesAmbientales.updateValor(dato).subscribe(resp => {
+    this.condicionesAmbientales.updateValor(dato).subscribe((resp: any) => {
       if (resp.success) {
         this.notificationService.addNotify({ title: 'Dato', msg: resp.message, type: 'success' });
         this.cargarDatos();

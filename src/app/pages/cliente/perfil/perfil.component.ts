@@ -32,7 +32,7 @@ animations: [
 })
 export class PerfilComponent implements OnInit {
 
- 
+
   uploader: FileUploader = new FileUploader({
     url: environment.apiUrl + 'upload',
     authTokenHeader: "Authorization",
@@ -206,7 +206,7 @@ export class PerfilComponent implements OnInit {
   }
 
   cargardatos() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
 
     }, err => {
@@ -232,7 +232,7 @@ export class PerfilComponent implements OnInit {
     this.clienteService.update(item).subscribe((value) => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Uusario actualizado con exito', type: 'success' });
       item.edit = false;
-     
+
     }, err => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
     });
@@ -246,7 +246,7 @@ export class PerfilComponent implements OnInit {
     this.actualizarItem(this.cliente);
   }
 
-  
+
 
 
 }

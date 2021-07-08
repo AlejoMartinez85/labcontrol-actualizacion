@@ -10,6 +10,7 @@ import {SharedModule} from '../../../../shared/shared.module';
     ModalRoutingModule,
     SharedModule
   ],
-  declarations: [ModalComponent]
+  declarations: [ModalComponent],
+  exports:[ModalComponent]
 })
 export class ModalModule { }

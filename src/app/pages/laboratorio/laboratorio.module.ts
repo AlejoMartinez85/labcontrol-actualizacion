@@ -8,7 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ChartModule } from '../../theme/chart/chart.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { TagInputModule } from 'ngx-chips';
-import { JsonpModule } from '@angular/http';
+// import { JsonpModule } from '@angular/http';
 import { DetailsComponent } from './details/details.component';
 import { EnsayosModule } from '../ensayos/ensayos.module';
 
@@ -22,7 +22,7 @@ import { EnsayosModule } from '../ensayos/ensayos.module';
     ChartModule,
     NgxDatatableModule,
     TagInputModule,
-    JsonpModule,
+    // JsonpModule,
     EnsayosModule,
   ],
   declarations: [IndexComponent, DetailsComponent]

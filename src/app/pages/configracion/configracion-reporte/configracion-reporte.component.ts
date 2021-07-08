@@ -52,7 +52,7 @@ export class ConfigracionReporteComponent implements OnInit {
       }
     };
   }
- 
+
   ngOnInit() {
     this.uploader.onAfterAddingFile = (file: any) => { file.withCredentials = false; };
     this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
@@ -66,7 +66,7 @@ export class ConfigracionReporteComponent implements OnInit {
     this.actualizarItem(this.cliente);
   }
   cargardatos() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
 
     }, err => {

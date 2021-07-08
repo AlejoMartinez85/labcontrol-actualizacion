@@ -68,7 +68,7 @@ export class EquipoAddComponent implements OnInit, OnChanges {
   getEquipoById(id) {
 
     if (id != undefined) {
-      this.equipoService.getById(id).subscribe((result) => {
+      this.equipoService.getById(id).subscribe((result: any) => {
         this.item = result.data;
         console.log(this.item)
         let diferencia = this.item.variables.length - this.t.length;
@@ -184,7 +184,7 @@ export class EquipoAddComponent implements OnInit, OnChanges {
   }
   guardar(event) {
     if (this.equipoedit != undefined) {
-      this.equipoService.update(this.item).subscribe((value) => {
+      this.equipoService.update(this.item).subscribe((value: any) => {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Equipo almacenado con exito', type: 'success' });
         console.log(this.item)
         this.endAction.emit('ok');
@@ -193,7 +193,7 @@ export class EquipoAddComponent implements OnInit, OnChanges {
       });
     } else {
       console.log(this.item)
-      this.equipoService.add(this.item).subscribe((value) => {
+      this.equipoService.add(this.item).subscribe((value: any) => {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Equipo almacenado con exito', type: 'success' });
         this.endAction.emit('ok');
       }, err => {
@@ -205,7 +205,7 @@ export class EquipoAddComponent implements OnInit, OnChanges {
     this.endAction.emit('close');
   }
   ngOnChanges(changes: SimpleChanges) {
-    
+
     if (this.equipoedit != undefined) {
       if (this.f == null) {
         this.form = this.formBuilder.group({
@@ -227,7 +227,7 @@ export class EquipoAddComponent implements OnInit, OnChanges {
       showCancelButton: true,
       confirmButtonText: 'Si, eliminar!',
       cancelButtonText: 'No'
-    }).then((result) => {
+    }).then((result: any) => {
       if (result.value) {
         this.item.variables.splice(index,1);
       }

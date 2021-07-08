@@ -38,7 +38,7 @@ export class ResultadoComponent implements OnInit {
       if(this.ensayo.fpago == (undefined || null)){
         this.ensayo.fpago = new Date().toISOString().split('T')[0];
       }
-      
+
       this.paga = true;
     } else {
       // this.ensayo.fpago = null;
@@ -50,7 +50,7 @@ export class ResultadoComponent implements OnInit {
       if(this.ensayo.fFacturado == (undefined || null)){
         this.ensayo.fFacturado = new Date().toISOString().split('T')[0];
       }
-      
+
       this.radicado = true;
     } else {
       // this.ensayo.fFacturado = null;
@@ -87,7 +87,7 @@ export class ResultadoComponent implements OnInit {
 
 
   cargarEmpresa() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.clientes = [];
       this.usuarios = [];
@@ -125,7 +125,7 @@ export class ResultadoComponent implements OnInit {
     }
     this.submited = false;
     if (this.ensayo._id == undefined) {
-      this.ensayoservice.add(this.ensayo).subscribe((value) => {
+      this.ensayoservice.add(this.ensayo).subscribe((value: any) => {
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo guardado con exito', type: 'success' });
         this.closeMyModal('effect-3');
@@ -135,7 +135,7 @@ export class ResultadoComponent implements OnInit {
       });
     } else {
 
-      this.ensayoservice.update(this.ensayo).subscribe((value) => {
+      this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
         this.closeMyModal('effect-3');
@@ -147,7 +147,7 @@ export class ResultadoComponent implements OnInit {
   }
   calcularVigencia() {
     let now = moment();
-  
+
     var fvencimiento = moment(this.ensayo.fVencimiento, 'YYYY/MM/DD');
 
     var dayHoy   = now.format('D');

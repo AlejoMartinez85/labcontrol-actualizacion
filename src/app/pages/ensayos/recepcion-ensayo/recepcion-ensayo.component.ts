@@ -96,19 +96,19 @@ export class RecepcionEnsayoComponent implements OnInit {
   };
   Permisos: Permisos;
   constructor(private notificationService: NotificationService,
-    private ensayoservice: EnsayoService,
-    private formBuilder: FormBuilder,
-    private parametroService: ParametroService,
-    private clienteService: ClienteService,
-    private muestraService: MuestraService,
-    private route: ActivatedRoute,
-    private rolesPermisosServices: RolesPermisosService) {
+              private ensayoservice: EnsayoService,
+              private formBuilder: FormBuilder,
+              private parametroService: ParametroService,
+              private clienteService: ClienteService,
+              private muestraService: MuestraService,
+              private route: ActivatedRoute,
+              private rolesPermisosServices: RolesPermisosService) {
       this.Permisos = new Permisos();
-      
+
       this.ensayo = new Ensayo();
 
-    this.apiurl = environment.apiUrl;
-    this.formaMuestras = new FormGroup({
+      this.apiurl = environment.apiUrl;
+      this.formaMuestras = new FormGroup({
       imagen: new FormControl(''),
       codigo: new FormControl(''),
       descripcion: new FormControl(''),
@@ -127,10 +127,10 @@ export class RecepcionEnsayoComponent implements OnInit {
     this.muestraFinal['descripcion'] = this.formaMuestras.value.descripcion;
     this.muestraFinal['fecha_ingreso'] = this.formaMuestras.value.fecha_ingreso;
     this.muestraFinal['observaciones'] = this.formaMuestras.value.observaciones;
-    this.muestraService.add(this.muestraFinal).subscribe((value) => {
+    this.muestraService.add(this.muestraFinal).subscribe((value: any) => {
     document.querySelector('#create-muestra').classList.remove('md-show');
-      console.log(value)
-      if (value.success) {
+    console.log(value)
+    if (value.success) {
         this.cargarMuestras(0);
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Muestra Creda', type: 'success' });
         if (this.archivosMuestras.length > 0) {
@@ -150,7 +150,7 @@ export class RecepcionEnsayoComponent implements OnInit {
         // return;
       }
     });
-  
+
   }
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('userInfo'));
@@ -196,7 +196,7 @@ export class RecepcionEnsayoComponent implements OnInit {
       this.estado = true;
     }
     this.Muestras = [];
-    this.muestraService.get(this.desde).subscribe( MuestrasResponse => {
+    this.muestraService.get(this.desde).subscribe( (MuestrasResponse: any) => {
 
       if (MuestrasResponse.success) {
         this.Muestras = MuestrasResponse.muestras;
@@ -213,7 +213,7 @@ export class RecepcionEnsayoComponent implements OnInit {
     if ( event.target.value === '') {
       return;
     }
-    this.muestraService.getBuscarMuestras(event.target.value).subscribe( resp => {
+    this.muestraService.getBuscarMuestras(event.target.value).subscribe( (resp: any) => {
       if (resp.success) {
         this.Muestras = resp.muestras;
       }
@@ -246,9 +246,9 @@ export class RecepcionEnsayoComponent implements OnInit {
   editarEnsayo(ensayo, lugar) {
 
     this.ensayo = null;
-    this.ensayoservice.getById(ensayo._id).subscribe((value) => {
+    this.ensayoservice.getById(ensayo._id).subscribe((value: any) => {
       value.ensayos.muestras.forEach((element, index) => {
-        this.muestraService.getById(element).subscribe(resp => {
+        this.muestraService.getById(element).subscribe((resp: any) => {
           this.ensayo.muestras[index] = resp.muestra;
         });
       });
@@ -283,7 +283,7 @@ export class RecepcionEnsayoComponent implements OnInit {
 
 
   cargarEnsayos(estado) {
-    this.ensayoservice.getEstado(1, estado).subscribe((value) => {
+    this.ensayoservice.getEstado(1, estado).subscribe((value: any) => {
 
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;
@@ -359,7 +359,7 @@ export class RecepcionEnsayoComponent implements OnInit {
     );
   }
   guardarEnsayo() {
-    this.ensayoservice.update(this.ensayo).subscribe((value) => {
+    this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
       this.tabdata();
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
       this.closeMyModal('effect-3');
@@ -375,7 +375,7 @@ export class RecepcionEnsayoComponent implements OnInit {
   }
 
   uploadfile1(value) {
-    
+
     this.archivosMuestras = [];
     this.archivosMuestras.push(value);
   }

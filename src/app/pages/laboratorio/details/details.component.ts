@@ -37,7 +37,7 @@ import { Cliente } from '../../../models/cliente';
 })
 export class DetailsComponent implements OnInit {
 
-  
+
   /*ensayo */
   ensayo: Ensayo;
   muestraAdd: Muestra;
@@ -106,7 +106,7 @@ export class DetailsComponent implements OnInit {
 
   editarEnsayo(ensayo) {
 
-    this.ensayoservice.getById(ensayo._id).subscribe((value) => {
+    this.ensayoservice.getById(ensayo._id).subscribe((value: any) => {
       this.openMyModal('effect-3');
       this.ensayo = value.ensayos;
       this.ensayo.fsolicitud = moment(this.ensayo.fsolicitud).format('YYYY-MM-DD');
@@ -122,7 +122,7 @@ export class DetailsComponent implements OnInit {
   }
   cargardatos() {
     const $id = this.route.snapshot.paramMap.get('id');
-    this.clienteService.getById($id).subscribe((value) => {
+    this.clienteService.getById($id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.cliente.tid = this.cliente.tid == undefined ? '' : this.cliente.tid;
       this.indicadores = value.indicadores;
@@ -132,7 +132,7 @@ export class DetailsComponent implements OnInit {
   }
   cargarEnsayos(estado) {
     const $id = this.route.snapshot.paramMap.get('id');
-    this.ensayoservice.getClienteLab($id, 1, estado).subscribe((value) => {
+    this.ensayoservice.getClienteLab($id, 1, estado).subscribe((value: any) => {
 
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;

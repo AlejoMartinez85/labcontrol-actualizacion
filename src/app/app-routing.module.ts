@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    canActivate: [ ProtectedGuard ],
+    canActivate: [ProtectedGuard],
     children: [
       {
         path: '',
@@ -24,135 +24,206 @@ const routes: Routes = [
       },
       {
         path: 'ensayos',
-        loadChildren: './pages/ensayos/ensayos.module#EnsayosModule'
+        loadChildren: () =>
+          import('./pages/ensayos/ensayos.module').then(m => m.EnsayosModule)
+        // loadChildren: './pages/ensayos/ensayos.module#EnsayosModule'
       },
       {
         path: 'config/parametro',
-        loadChildren: './pages/parametro/parametro.module#ParametroModule'
+        loadChildren: () =>
+          import('./pages/parametro/parametro.module').then(
+            m => m.ParametroModule
+          )
       },
-      /* {
-        path: 'config/parametro',
-        loadChildren: () => import('./pages/parametro/parametro.module').then(m => m.ParametroModule)
-      }, */
       {
         path: 'config/agrupacionparametro',
-        loadChildren: './pages/agrupacion-parametros/agrupacion-parametros.module#AgrupacionParametrosModule'
+        loadChildren: () =>
+          import(
+            './pages/agrupacion-parametros/agrupacion-parametros.module'
+          ).then(m => m.AgrupacionParametrosModule)
       },
       {
         path: 'config/cartas-control',
-        loadChildren: './pages/cartas-control/cartas-control.module#CartasControlModule'
+        loadChildren: () =>
+          import('./pages/cartas-control/cartas-control.module').then(
+            m => m.CartasControlModule
+          )
       },
       {
         path: 'config/condiciones-ambientales',
-        loadChildren: './pages/condiciones-ambientales/condiciones-ambientales.module#CondicionesAmbientalesModule'
+        loadChildren: () =>
+          import(
+            './pages/condiciones-ambientales/condiciones-ambientales.module'
+          ).then(m => m.CondicionesAmbientalesModule)
       },
       {
         path: 'config/datos-atipicos',
-        loadChildren: './pages/datos-atipicos/datos-atipicos.module#DatosAtipicosModule'
+        loadChildren: () =>
+          import('./pages/datos-atipicos/datos-atipicos.module').then(
+            m => m.DatosAtipicosModule
+          )
       },
       {
         path: 'config/derivada-instrumental',
-        loadChildren: './pages/deriva-istrumental/deriva-istrumental.module#DerivadaIstrumentalModule'
+        loadChildren: () =>
+          import('./pages/deriva-istrumental/deriva-istrumental.module').then(
+            m => m.DerivadaIstrumentalModule
+          )
       },
       {
         path: 'config/validacion-de-metodos',
-        loadChildren: './pages/validacion-de-metodos/validacion-de-metodos.module#ValidacionDeMetodoslModule'
+        loadChildren: () =>
+          import(
+            './pages/validacion-de-metodos/validacion-de-metodos.module'
+          ).then(m => m.ValidacionDeMetodoslModule)
       },
       {
         path: 'config/reporte',
-        loadChildren: './pages/configracion/configracion.module#ConfigracionModule'
+        loadChildren: () =>
+          import('./pages/configracion/configracion.module').then(
+            m => m.ConfigracionModule
+          )
       },
       {
         path: 'config/cliente',
-        loadChildren: './pages/cliente/cliente.module#ClienteModule'
+        loadChildren: () =>
+          import('./pages/cliente/cliente.module').then(m => m.ClienteModule)
       },
       {
         path: 'config/laboratorio',
-        loadChildren: './pages/laboratorio/laboratorio.module#LaboratorioModule'
+        loadChildren: () =>
+          import('./pages/laboratorio/laboratorio.module').then(
+            m => m.LaboratorioModule
+          )
       },
       {
         path: 'config/usuario',
-        loadChildren: './pages/usuarios/usuarios.module#UsuariosModule'
+        loadChildren: () =>
+          import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule)
       },
       {
         path: 'config/roles',
-        loadChildren: './pages/roles/roles.module#RolesModule'
+        loadChildren: () =>
+          import('./pages/roles/roles.module').then(m => m.RolesModule)
       },
       {
         path: 'config/invitacion',
-        loadChildren: './pages/invitacion/invitacion.module#InvitacionModule'
+        loadChildren: () =>
+          import('./pages/invitacion/invitacion.module').then(
+            m => m.InvitacionModule
+          )
       },
       {
         path: 'basic',
-        loadChildren: './theme/ui-elements/basic/basic.module#BasicModule'
+        loadChildren: () =>
+          import('./theme/ui-elements/basic/basic.module').then(
+            m => m.BasicModule
+          )
       },
       {
         path: 'advance',
-        loadChildren: './theme/ui-elements/advance/advance.module#AdvanceModule'
+        loadChildren: () =>
+          import('./theme/ui-elements/advance/advance.module').then(
+            m => m.AdvanceModule
+          )
       },
       {
         path: 'animations',
-        loadChildren: './theme/ui-elements/animation/animation.module#AnimationModule'
+        loadChildren: () =>
+          import('./theme/ui-elements/animation/animation.module').then(
+            m => m.AnimationModule
+          )
       },
       {
         path: 'forms',
-        loadChildren: './theme/forms/forms.module#FormsModule'
+        loadChildren: () =>
+          import('./theme/forms/forms.module').then(m => m.FormsModule)
       },
       {
         path: 'bootstrap-table',
-        loadChildren: './theme/table/bootstrap-table/bootstrap-table.module#BootstrapTableModule'
+        loadChildren: () =>
+          import('./theme/table/bootstrap-table/bootstrap-table.module').then(
+            m => m.BootstrapTableModule
+          )
       },
       {
         path: 'data-table',
-        loadChildren: './theme/table/data-table/data-table.module#DataTableModule'
+        loadChildren: () =>
+          import('./theme/table/data-table/data-table.module').then(
+            m => m.DataTableModule
+          )
       },
       {
         path: 'maintenance/error',
-        loadChildren: './theme/maintenance/error/error.module#ErrorModule'
+        loadChildren: () =>
+          import('./theme/maintenance/error/error.module').then(
+            m => m.ErrorModule
+          )
       },
       {
         path: 'maintenance/coming-soon',
-        loadChildren: './theme/maintenance/coming-soon/coming-soon.module#ComingSoonModule'
+        loadChildren: () =>
+          import('./theme/maintenance/coming-soon/coming-soon.module').then(
+            m => m.ComingSoonModule
+          )
       },
       {
         path: 'user',
-        loadChildren: './theme/user/user.module#UserModule'
+        loadChildren: () =>
+          import('./theme/user/user.module').then(m => m.UserModule)
       },
       {
         path: 'task',
-        loadChildren: './theme/task/task.module#TaskModule'
+        loadChildren: () =>
+          import('./theme/task/task.module').then(m => m.TaskModule)
       },
       {
         path: 'invoice',
-        loadChildren: './theme/extension/invoice/invoice.module#InvoiceModule'
+        loadChildren: () =>
+          import('./theme/extension/invoice/invoice.module').then(
+            m => m.InvoiceModule
+          )
       },
       {
         path: 'file-upload-ui',
-        loadChildren: './theme/extension/file-upload-ui/file-upload-ui.module#FileUploadUiModule'
+        loadChildren: () =>
+          import('./theme/extension/file-upload-ui/file-upload-ui.module').then(
+            m => m.FileUploadUiModule
+          )
       },
       {
         path: 'charts',
-        loadChildren: './theme/chart/chart.module#ChartModule'
+        loadChildren: () =>
+          import('./theme/chart/chart.module').then(m => m.ChartModule)
       },
       {
         path: 'map',
-        loadChildren: './theme/map/map.module#MapModule'
+        loadChildren: () =>
+          import('./theme/map/map.module').then(m => m.MapModule)
       },
       {
         path: 'simple-page',
-        loadChildren: './theme/simple-page/simple-page.module#SimplePageModule'
+        loadChildren: () =>
+          import('./theme/simple-page/simple-page.module').then(
+            m => m.SimplePageModule
+          )
       },
       {
         path: 'incertidumbre',
-        loadChildren: './pages/incertidumbre/incertidumbreModule.module#IncertidumbreModule'
+        loadChildren: () =>
+          import('./pages/incertidumbre/incertidumbreModule.module').then(
+            m => m.IncertidumbreModule
+          )
       },
       {
         path: 'config/equipos',
-        loadChildren: './pages/equipo/equipo.module#EquipoModule'
+        loadChildren: () =>
+          import('./pages/equipo/equipo.module').then(m => m.EquipoModule)
       },
       {
         path: 'config-generales',
-        loadChildren: './pages/super-user/config-plataforma-super-user.module#ConfigPlataformaSuperUserModule'
+        loadChildren: () =>
+          import('./pages/super-user/config-plataforma-super-user.module').then(m => m.ConfigPlataformaSuperUserModule)
       }
     ]
   },
@@ -162,12 +233,14 @@ const routes: Routes = [
     children: [
       {
         path: 'auth',
-        loadChildren: './theme/auth/auth.module#AuthModule',
-        canActivate: [ PublicGuard ],
+        loadChildren:
+        () => import('./theme/auth/auth.module').then(m => m.AuthModule),
+        canActivate: [PublicGuard]
       },
       {
         path: 'maintenance/offline-ui',
-        loadChildren: './theme/maintenance/offline-ui/offline-ui.module#OfflineUiModule'
+        loadChildren:
+          () => import('./theme/maintenance/offline-ui/offline-ui.module').then(m => m.OfflineUiModule),
       }
     ]
   },
@@ -177,8 +250,9 @@ const routes: Routes = [
     children: [
       {
         path: 'equipo',
-        loadChildren: './theme/public-equipo/public-equipo.module#PublicEquipoModule',
-        canActivate: [ PublicGuard ]
+        loadChildren:
+          () => import('./theme/public-equipo/public-equipo.module').then(m => m.PublicEquipoModule),
+        canActivate: [PublicGuard]
       }
     ]
   }

@@ -5,7 +5,6 @@ import { EnsayosRoutingModule } from './ensayos-routing.module';
 import { AdminComponent } from './admin/admin.component';
 import { SharedModule } from '../../shared/shared.module';
 import {ChartModule} from 'angular2-chartjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UiSwitchModule } from 'ng2-ui-switch';
 import { TagInputModule } from 'ngx-chips';

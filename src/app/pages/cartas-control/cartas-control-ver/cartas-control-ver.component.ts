@@ -8,7 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '../../../shared/notification/notification.service';
 import * as ss from 'simple-statistics';
 import { mean, sampleStandardDeviation, min, max } from 'simple-statistics';
-import ApexCharts from 'apexcharts';
+import * as ApexCharts from 'apexcharts';
 import { ParametroService } from '../../../services/parametro/parametro.service';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
@@ -291,7 +291,7 @@ export class CartasControlVerComponent implements OnInit {
 
   /**Datos */
   cargarDatos() {
-    this.datosServices.getAll(this.$identificador).subscribe((datosRetorno) => {
+    this.datosServices.getAll(this.$identificador).subscribe((datosRetorno: any) => {
       const valores = []
       this.datos = datosRetorno;
       console.log(datosRetorno)
@@ -470,7 +470,7 @@ export class CartasControlVerComponent implements OnInit {
       lcl2: 0
     };
 
-    this.CartasControl.updateValores(this.$identificador, data).subscribe(resp => {
+    this.CartasControl.updateValores(this.$identificador, data).subscribe((resp: any) => {
       this.notificationService.addNotify({ title: 'Dato', msg: resp['message'], type: 'success' });
 
     });
@@ -499,7 +499,7 @@ export class CartasControlVerComponent implements OnInit {
       }
       const newDate = moment().format();
       this.cartaEspesifica['actualizacion'] = `${newDate}`;
-      this.CartasControl.update(this.$identificador, this.cartaEspesifica).subscribe( resp => {
+      this.CartasControl.update(this.$identificador, this.cartaEspesifica).subscribe( (resp: any) => {
         console.log(resp);
       });
     }
@@ -543,7 +543,7 @@ export class CartasControlVerComponent implements OnInit {
       cancelButtonText: 'No',
       useRejections: true           // <<<<<<------- BACKWARD COMPATIBILITY WITH v6.x
     }).then((result) => {
-      this.datosServices.delete(id).subscribe(resp => {
+      this.datosServices.delete(id).subscribe((resp: any) => {
         this.notificationService.addNotify({ title: 'Dato', msg: resp['message'], type: 'success' });
         this.cargarDatos();
       });
@@ -565,7 +565,7 @@ export class CartasControlVerComponent implements OnInit {
     const comentario = {
       comentarios: this.formDatosComentario.value.comentarios
     };
-    this.datosServices.update(id, comentario).subscribe(resp => {
+    this.datosServices.update(id, comentario).subscribe((resp: any) => {
       this.notificationService.addNotify({ title: 'Dato', msg: resp['message'], type: 'success' });
       this.cargarDatos();
       document.querySelector('#modal-generico-comentario').classList.remove('md-show');
@@ -580,7 +580,7 @@ export class CartasControlVerComponent implements OnInit {
     let Cpl = 0;
     this.CartasControl.getId(this.$identificador).subscribe((carta: Carta) => {
       this.cartaEspesifica = carta;
-      
+
       this.titulo = carta['nombre'];
       this.decimales = carta['decimales'];
       sigma = this.cartaEspesifica['rango'] / 1.128;
@@ -1017,7 +1017,7 @@ export class CartasControlVerComponent implements OnInit {
         observaciones: this.formaEditCarta.value.observaciones,
         tipoCarta: this.formaEditCarta.value.tipoCarta
       };
-      this.CartasControl.update(this.$identificador, datos).subscribe(resp => {
+      this.CartasControl.update(this.$identificador, datos).subscribe((resp: any) => {
         this.cargarCarta();
         document.querySelector('#modal-generico-editarCarta').classList.remove('md-show');
       });

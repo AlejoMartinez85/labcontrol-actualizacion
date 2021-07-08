@@ -59,7 +59,7 @@ export class ConfigPlataformaSuperUserComponent implements OnInit {
   }
   cargarEmpresa() {
     this.usuarios = [];
-    this.userService.get(1).subscribe(resp => {
+    this.userService.get(1).subscribe((resp: any) => {
       resp.forEach( element => {
         this.usuarios.push(element);
       });

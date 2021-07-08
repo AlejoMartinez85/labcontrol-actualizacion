@@ -24,7 +24,7 @@ export class ComentariosComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
   ) {
     this.apiurl = environment.apiUrl;
-    
+
   }
 
   ngOnInit() {
@@ -40,7 +40,7 @@ export class ComentariosComponent implements OnInit, OnChanges {
   }
 
   CargarComentarios() {
-    this.comentarioSerice.getByEnsayo(1, this.ensayo_id, this.tipo).subscribe((value) => {
+    this.comentarioSerice.getByEnsayo(1, this.ensayo_id, this.tipo).subscribe((value: any) => {
       console.log(value)
       this.comentarios = value.ensayos;
     }, err => {

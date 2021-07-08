@@ -195,7 +195,7 @@ export class DatosAtipicosComponent implements OnInit {
   }
   editar(valor) {
     this.valorSeleccionado = parseFloat(valor.niverConfianza);
-    this.datosAtiicos.getAllValorDatosAtipicos(valor._id).subscribe(valores => {
+    this.datosAtiicos.getAllValorDatosAtipicos(valor._id).subscribe((valores: any) => {
       if (this.valorSeleccionado === 90) {
         this.Gcrit = this.dataTable[valores.datos.length][0];
       }

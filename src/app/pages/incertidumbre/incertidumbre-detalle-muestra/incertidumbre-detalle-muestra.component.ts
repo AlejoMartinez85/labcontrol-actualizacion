@@ -52,7 +52,7 @@ export class IncertidumbreDetalleMuestraComponent implements OnInit {
   }
   cargarEnsayos(estado) {
     const $id = this.route.snapshot.paramMap.get('id');
-    this.ensayoservice.getClienteCLi($id, 1, estado).subscribe((value) => {
+    this.ensayoservice.getClienteCLi($id, 1, estado).subscribe((value: any) => {
 
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;

@@ -38,7 +38,7 @@ export class ActividadComponent implements OnInit {
     });
     this.CargarComentarios(this.cantidadListado);
   }
-  
+
   CargarComentarios(desde) {
     this.cantidadListado = desde;
     if(desde < 0) {
@@ -47,7 +47,7 @@ export class ActividadComponent implements OnInit {
     if (this.cantidadListado !== 0) {
       this.estado = true;
     }
-    this.actividadService.get(this.tipoComentario,this.cantidadListado).subscribe((value) => {
+    this.actividadService.get(this.tipoComentario,this.cantidadListado).subscribe((value: any) => {
       this.actividades = value.ensayos;
       if(this.actividades.length < 5){
         this.continue = false;
@@ -72,7 +72,7 @@ export class ActividadComponent implements OnInit {
       return;
     }
     const resultadosBusqueda = [];
-    this.actividadService.busquedaActividad(event.target.value).subscribe( resp => {
+    this.actividadService.busquedaActividad(event.target.value).subscribe( (resp: any) => {
       if (resp.success) {
         resp.actividades.forEach((element, index) => {
           if (resp.actividades[index].tipoComentario === this.tipoComentario) {

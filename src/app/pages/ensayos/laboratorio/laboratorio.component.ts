@@ -98,7 +98,7 @@ export class LaboratorioComponent implements OnInit {
 
   editarEnsayo(ensayo) {
     this.ensayoservice.getById(ensayo._id).subscribe(
-      value => {
+      (value: any) => {
         this.openMyModal('effect-3');
         this.ensayo = value.ensayos;
         this.ensayo.fsolicitud = moment(this.ensayo.fsolicitud).format(
@@ -151,7 +151,7 @@ export class LaboratorioComponent implements OnInit {
       this.paso3.length <= 0
     ) {
       this.ensayoservice.getEstado(1, estado).subscribe(
-        value => {
+        (value: any) => {
           this.ensayos = value.ensayos;
           this.indicadores = value.indicadores;
           this.pagos = value.pagos;

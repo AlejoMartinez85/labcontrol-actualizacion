@@ -101,18 +101,18 @@ export class CondicionesAmbientalesComponent implements OnInit {
       limite_inferior: new FormControl(null, Validators.required)
     });
   }
- 
+
   /**
    * Cargar Condiciones ambientales
    */
 
    cargarCondicionesAmbientales(desde) {
      console.log(desde)
-    this.cantidadListado = desde;
-    if(desde < 0) {
+     this.cantidadListado = desde;
+     if(desde < 0) {
       this.cantidadListado = 0;
     }
-    if (this.cantidadListado !== 0) {
+     if (this.cantidadListado !== 0) {
       this.estado = true;
     }
      this.condicionesAmbientales.getAllCondicionesAmbientales(this.cantidadListado)
@@ -128,7 +128,7 @@ export class CondicionesAmbientalesComponent implements OnInit {
       limite_superior : row.limite_superior,
       limite_inferior : row.limite_inferior
      }
-    this.condicionesAmbientales.updateCondicionesAmbientales(row._id,condition).subscribe(element => {
+     this.condicionesAmbientales.updateCondicionesAmbientales(row._id,condition).subscribe(element => {
 
       this.cargarCondicionesAmbientales(this.cantidadListado);
     })
@@ -159,7 +159,7 @@ export class CondicionesAmbientalesComponent implements OnInit {
         }
       );
     }
-if(this.formCondicionesAmbientales.value.limite_inferior > this.formCondicionesAmbientales.value.limite_superior) {
+    if(this.formCondicionesAmbientales.value.limite_inferior > this.formCondicionesAmbientales.value.limite_superior) {
   alert('El límite inferior no debe ser mayor al límite superior');
   return this.notificationService.addNotify(
     { title: 'Ingresar nuevo registro de condiciones ambientales',
@@ -177,12 +177,12 @@ if(this.formCondicionesAmbientales.value.limite_inferior > this.formCondicionesA
       usuario: this.user._id
     };
 
-     this.condicionesAmbientales.addCondicionesAmbientales(condicionAmbiental).subscribe( condicionCreada => {
+    this.condicionesAmbientales.addCondicionesAmbientales(condicionAmbiental).subscribe( (condicionCreada: any) => {
         this.formCondicionesAmbientales.value.metodos_de_ensayo.forEach( (valor) => {
           this.condicionesAmbientales.addMethodosdeEnsayo({name: valor, id_condicionesAmbientales: condicionCreada['condicio']._id})
           .subscribe(methodo => {});
         });
-          location.reload();
+        location.reload();
         });
 
   }
@@ -204,13 +204,13 @@ if(this.formCondicionesAmbientales.value.limite_inferior > this.formCondicionesA
               type: 'success'
             }
           );
-        }); 
+        });
       }
     );
-    
+
   }
   buscarCondiciones(event) {
-    this.condicionesAmbientales.getBuscarcondiciones(event.target.value).subscribe(respuesta => {
+    this.condicionesAmbientales.getBuscarcondiciones(event.target.value).subscribe((respuesta: any) => {
       if(respuesta.success) {
         this.condicionesAmbientalesListado = respuesta.condiciones;
       }

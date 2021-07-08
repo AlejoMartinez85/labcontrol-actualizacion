@@ -62,18 +62,18 @@ export class ConfiguracionListComponent implements OnInit {
     private Restriccion: ConfiguracionesGeneralesService,
     private rolesPermisosServices: RolesPermisosService) {
       this.Permisos = new Permisos();
-    this.ckeconfig = {
+      this.ckeconfig = {
       allowedContent: false,
       extraPlugins: 'divarea',
     };
-    this.user = JSON.parse(localStorage.getItem('userInfo'));
-    if ( localStorage.getItem('permisos')) {
+      this.user = JSON.parse(localStorage.getItem('userInfo'));
+      if ( localStorage.getItem('permisos')) {
       this.Permisos = JSON.parse(localStorage.getItem('permisos'));
       this.permisosLocal = this.Permisos.configReportes[0];
     } else {
       this.cargarPermisos(this.user.rol);
     }
-    this.uploader.onWhenAddingFileFailed = (fileItem, filter) => {
+      this.uploader.onWhenAddingFileFailed = (fileItem, filter) => {
       if (filter.name = 'mimeType') {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Solo se permite archivos de tipo imagen ', type: 'error' });
       }
@@ -167,7 +167,7 @@ export class ConfiguracionListComponent implements OnInit {
       if (this.$identificadorParametroConfig != undefined) {
         this.configuracionReporteService.edit(this.$identificadorParametroConfig,
           { numeroMuestras: parseInt(cantidad.value) }
-        ).subscribe(resp => {
+        ).subscribe((resp: any) => {
           if (resp.success) {
             if (resp.configuracion.length !== 0) {
               this.cargarConfiguracion();
@@ -175,7 +175,7 @@ export class ConfiguracionListComponent implements OnInit {
           }
         })
       } else {
-        this.configuracionReporteService.add(valor).subscribe(resp => {
+        this.configuracionReporteService.add(valor).subscribe((resp: any) => {
           if (resp.success) {
             this.cargarConfiguracion();
           }

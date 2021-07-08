@@ -169,7 +169,7 @@ export class DatosAtipicosverComponent implements OnInit {
     const valor = {
       valor: parseFloat(row.valor)
     }
-    this.datosAtipicos.updateValorDatosAtipicos(row._id, valor).subscribe(resp => {
+    this.datosAtipicos.updateValorDatosAtipicos(row._id, valor).subscribe((resp: any) => {
       if (resp.success) {
         this.calcular();
       }
@@ -177,7 +177,7 @@ export class DatosAtipicosverComponent implements OnInit {
   }
   deleteDato(row) {
     this.preloader = true;
-    this.datosAtipicos.deleteValorDatosAtipicos(row).subscribe(resp => {
+    this.datosAtipicos.deleteValorDatosAtipicos(row).subscribe((resp: any) => {
       if (resp.success) {
         this.calcular();
       }

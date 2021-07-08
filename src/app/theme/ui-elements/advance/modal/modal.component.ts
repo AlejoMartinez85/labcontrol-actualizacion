@@ -171,7 +171,7 @@ export class ModalComponent implements OnInit {
       confirmButtonText: 'Submit',
       showLoaderOnConfirm: true,
       preConfirm: function (email) {
-        return new Promise(function (resolve, reject) {
+        return new Promise<void>(function (resolve, reject) {
           setTimeout(function() {
             if (email === 'taken@example.com') {
               reject('This email is already taken.');

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-sm-12">
             <h1 class="text-gray">Mediciones e Incertidumbre</h1>
-            <br> 
+            <br>
             <app-card [cardOptionBlock]="true" class="text-right">
 
                 <div ngbDropdown class="dropdown-primary">
@@ -29,7 +29,7 @@
         </div>
         <div class="col-sm-12" [@fadeInOutTranslate] *ngIf="opcion==opcionesIncertidumbre.INSERTIDUMBRE">
             <app-card [title]="" [cardClass]="'tab-card'" [cardOptionBlock]="true">
-                <wizard navigationMode="free" navBarLayout="large-filled-symbols">
+                <!-- <wizard navigationMode="free" navBarLayout="large-filled-symbols">
                     <wizard-step stepTitle="Parametros" optionalStep navigationSymbol="1">
 
                         <form [formGroup]="form">
@@ -172,8 +172,8 @@
 
                         </form>
 
-                    </wizard-step>
-                    <wizard-step stepTitle="Incertidumbre" navigationSymbol="2">
+                    </wizard-step> -->
+                    <!-- <wizard-step stepTitle="Incertidumbre" navigationSymbol="2">
                         <div class="col-sm-12" *ngIf="reload">
                             <div class="md-tabs ">
                                 <ngb-tabset (tabChange)="beforeChange($event)">
@@ -182,7 +182,7 @@
                                         <ng-template ngbTabTitle class="col-lg-3"><i
                                                 class="icofont icofont-molecule"></i> <span class="font-weight-bold">
                                                 {{variable.simbolo}}</span></ng-template>
-                                        <!-- cambio: Se puso etiqueta span y negrilla para hacer mas grande titulo tab -->
+
                                         <ng-template ngbTabContent>
                                             <div [@fadeInOutTranslate] class="m-t-15">
                                                 <app-incertidumbre-add [parametroId]="item._id"
@@ -217,7 +217,7 @@
 
                         </div>
                     </wizard-step>
-                </wizard>
+                </wizard> -->
             </app-card>
         </div>
         <div class="col-sm-12" [@fadeInOutTranslate] *ngIf="opcion==opcionesIncertidumbre.ALERTAS">

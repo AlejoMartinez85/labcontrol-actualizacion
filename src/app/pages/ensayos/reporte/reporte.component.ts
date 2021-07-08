@@ -51,11 +51,11 @@ export class ReporteComponent implements OnInit {
   ensayos: any;
   columns: any[];
   @ViewChild('modaladd') modaladd: any;
-  
+
   tabactive: string = 'tab-proceso';
   indicadores: any;
   pagos: any;
-  
+
   user: any;
 
   paso1: any;
@@ -87,7 +87,7 @@ export class ReporteComponent implements OnInit {
     private parametroService: ParametroService,
     private muestraService: MuestraService,
     private actividadService: ActividadService,
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private rolesPermisosServices: RolesPermisosService) {
     this.ensayo = new Ensayo();
     this.Permisos = new Permisos();
@@ -133,7 +133,7 @@ export class ReporteComponent implements OnInit {
     this.cantidadPaso3 = 0;
     this.paso3EnReporte = [];
     const paso3EnReporte = [], paso3Reportados = [];
-    this.ensayoservice.getpasos(1).subscribe( valores => {
+    this.ensayoservice.getpasos(1).subscribe( (valores: any) => {
       if (valores.success) {
         this.paso1 = valores.paso1;
         this.paso2 = valores.paso2;
@@ -172,9 +172,9 @@ export class ReporteComponent implements OnInit {
 
   editarEnsayo(ensayo) {
     console.log(ensayo)
-    this.ensayoservice.getById(ensayo._id).subscribe((value) => {
+    this.ensayoservice.getById(ensayo._id).subscribe((value: any) => {
       value.ensayos.muestras.forEach((element, index) => {
-        this.muestraService.getById(element).subscribe(resp => {
+        this.muestraService.getById(element).subscribe((resp: any) => {
           this.ensayo.muestras[index] = resp.muestra;
         });
       });
@@ -193,7 +193,7 @@ export class ReporteComponent implements OnInit {
   }
 
   cargarEnsayos(estado) {
-    this.ensayoservice.getEstado(1, estado).subscribe((value) => {
+    this.ensayoservice.getEstado(1, estado).subscribe((value: any) => {
 
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;
@@ -225,7 +225,7 @@ export class ReporteComponent implements OnInit {
     } else {
       this.cargarEnsayos('noreporte');
     }
-    
+
   }
 
   buscadorpasodosCompletadossinReporte(event) {
@@ -260,11 +260,11 @@ export class ReporteComponent implements OnInit {
         this.paso3Reportados = arrayP1;
       }
     }
-  
 
- 
 
-  
+
+
+
 
   beforeChangeEnsayo($event: NgbTabChangeEvent) {
     this.tabactivesol = $event.nextId;
@@ -350,5 +350,5 @@ export class ReporteComponent implements OnInit {
     return difDias;
 
   }
-  
+
 }

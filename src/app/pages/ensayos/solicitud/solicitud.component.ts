@@ -104,7 +104,7 @@ export class SolicitudComponent implements OnInit {
     this.reloaddata.emit('hide');
   }
   cargarEmpresa() {
-    this.clienteService.getById(this.user.tercero._id).subscribe((value) => {
+    this.clienteService.getById(this.user.tercero._id).subscribe((value: any) => {
       this.cliente = value.clientes;
       this.clientes = [];
       this.usuarios = [];
@@ -130,7 +130,7 @@ export class SolicitudComponent implements OnInit {
   }
 
   cargarAgrupacion() {
-    this.agrupacionparametroService.getOptions(1).subscribe((value) => {
+    this.agrupacionparametroService.getOptions(1).subscribe((value: any) => {
       this.agrupaciones = value.parametros;
 
     }, err => {
@@ -142,7 +142,7 @@ export class SolicitudComponent implements OnInit {
     this.notificationService.addNotify({ title: 'Alerta', msg: 'Listado de Agrupaciones recargado', type: 'success' });
   }
   editMuestra(muestra) {
-    this.muestraService.update(muestra).subscribe( resp => {
+    this.muestraService.update(muestra).subscribe( (resp: any) => {
       if(resp.success) {
         this.EditarMuestra = false;
       }
@@ -166,7 +166,7 @@ export class SolicitudComponent implements OnInit {
       this.ensayo.creolab = true;
 
       this.ensayo.paso = 1;
-      this.ensayoservice.add(this.ensayo).subscribe((value) => {
+      this.ensayoservice.add(this.ensayo).subscribe((value: any) => {
         console.log('guardarEnsayo', value);
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo guardado con exito', type: 'success' });
@@ -179,7 +179,7 @@ export class SolicitudComponent implements OnInit {
       // if (this.ensayo.estado == 'Cotización') {
       //   this.ensayo.estado = 'Esperando Confirmación';
       // }
-      this.ensayoservice.update(this.ensayo).subscribe((value) => {
+      this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
         this.closeMyModal('effect-3');
@@ -211,7 +211,7 @@ export class SolicitudComponent implements OnInit {
       this.muestraFinal['fecha_ingreso'] = this.muestraAdd.fecha_ingreso;
       this.muestraFinal['imagen_perfil'] = './assets/images/unnamed.png';
 
-      this.muestraService.add(this.muestraFinal).subscribe((value) => {
+      this.muestraService.add(this.muestraFinal).subscribe((value: any) => {
         if (this.ensayo.muestras === undefined) {
           this.ensayo.muestras = [];
         }
@@ -263,7 +263,7 @@ export class SolicitudComponent implements OnInit {
     if (this.ensayo.muestras === undefined) {
       this.ensayo.muestras = [];
     }
-    this.muestraService.getById(this.muestrasel).subscribe((value) => {
+    this.muestraService.getById(this.muestrasel).subscribe((value: any) => {
       this.ensayo.muestras.push(value.muestra);
       this.agregarMuestrasPartametro(value.muestras);
     }, err => {
@@ -281,7 +281,7 @@ export class SolicitudComponent implements OnInit {
     }
   }
   cargarParametros() {
-    this.parametroService.get(1).subscribe((value) => {
+    this.parametroService.get(1).subscribe((value: any) => {
       this.parametros = [];
       for (let i = 0; i < value.parametros.length; i++) {
         let parametro = value.parametros[i];
@@ -296,12 +296,12 @@ export class SolicitudComponent implements OnInit {
   }
 
   recargarParametros(){
-    
+
     this.cargarParametros();
     this.notificationService.addNotify({ title: 'Alerta', msg: 'Parámetros recargados con exito ', type: 'Success' });
   }
   cargarMuestras() {
-    this.muestraService.getOptions(1).subscribe((value) => {
+    this.muestraService.getOptions(1).subscribe((value: any) => {
 
       this.muestras = value.muestras;
 
@@ -373,7 +373,7 @@ export class SolicitudComponent implements OnInit {
         seleccionado: true
       });
     }
-    this.parametroService.getById(this.parametronew).subscribe((value) => {
+    this.parametroService.getById(this.parametronew).subscribe((value: any) => {
       ensayoparam.parametro = value.parametros;
       ensayoparam.valor_unit = value.parametros.valor_unit;
       this.ensayo.parametros.push(ensayoparam);
@@ -449,7 +449,7 @@ export class SolicitudComponent implements OnInit {
       this.ensayo.parametros = [];
     }
     let ensayoparam;
-    this.agrupacionparametroService.getById(this.agrupacionsel).subscribe((value) => {
+    this.agrupacionparametroService.getById(this.agrupacionsel).subscribe((value: any) => {
       value.parametros.parametros.forEach(parametro => {
         ensayoparam = new EnsayoParametro();
         ensayoparam.muestras = [];
@@ -462,7 +462,7 @@ export class SolicitudComponent implements OnInit {
             });
           }
         }
-        
+
         ensayoparam.parametro = parametro;
         ensayoparam.valor_unit = parametro.valor_unit;
         this.ensayo.parametros.push(ensayoparam);
@@ -519,9 +519,9 @@ export class SolicitudComponent implements OnInit {
     if (this.ensayo._id == undefined) {
       this.ensayo.creocli = false;
       this.ensayo.creolab = true;
-      
-      
-      this.ensayoservice.add(this.ensayo).subscribe((value) => {
+
+
+      this.ensayoservice.add(this.ensayo).subscribe((value: any) => {
         console.log('guardarEnsayo2', value);
         this.cargarEnsayos('Pendientes');
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Solicitud movida al Paso 2', type: 'success' });
@@ -530,12 +530,12 @@ export class SolicitudComponent implements OnInit {
 
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });
       });
-    } 
+    }
     else {
       if (this.ensayo.estado == 'Cotización') {
         this.ensayo.estado = 'Esperando Confirmación';
       }
-      this.ensayoservice.update(this.ensayo).subscribe((value) => {
+      this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
         console.log('guardarEnsayo2 id != undefined', value);
 
         this.cargarEnsayos('Pendientes');

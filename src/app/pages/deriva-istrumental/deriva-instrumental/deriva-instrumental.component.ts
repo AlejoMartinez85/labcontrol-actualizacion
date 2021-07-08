@@ -54,7 +54,7 @@ export class DerivaInstrumentalComponent implements OnInit {
     }
   }
   cargarTabla() {
-    this.derivadaService.getAllExactitudes().subscribe( resp => {
+    this.derivadaService.getAllExactitudes().subscribe( (resp: any) => {
       if (resp.success){
         this.notificationService.addNotify({ title: 'Deriva Instrumental', msg: resp.message, type: 'success' });
         this.exactitudes = resp['puntos'];

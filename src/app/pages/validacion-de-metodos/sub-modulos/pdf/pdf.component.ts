@@ -27,7 +27,7 @@ export class PdfComponent implements OnInit {
   validacion:any;
   constructor(private ValidacionMetodoService: ValidacionMetodosConfigService,private notificationService: NotificationService) {
     this.apiurl = environment.apiUrl;
-    
+
   }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class PdfComponent implements OnInit {
 
   guardar() {
     this.validacion['urlPdf'] = this.pdf;
-    this.ValidacionMetodoService.edit(this.validacion).subscribe( resp => {
+    this.ValidacionMetodoService.edit(this.validacion).subscribe( (resp: any) => {
       console.log(resp)
       if (resp.success) {
         this.notificationService.addNotify({ title: 'PDF', msg: resp.message, type: 'success' });
@@ -67,7 +67,7 @@ export class PdfComponent implements OnInit {
   deletePDF(){
     this.validacion['urlPdf'] = '';
     this.pdf = '';
-    this.ValidacionMetodoService.editPdf(this.validacion).subscribe( resp => {
+    this.ValidacionMetodoService.editPdf(this.validacion).subscribe( (resp: any) => {
       console.log(resp)
       if (resp.success) {
         this.notificationService.addNotify({ title: 'PDF', msg: resp.message, type: 'success' });

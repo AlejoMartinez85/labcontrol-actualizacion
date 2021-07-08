@@ -13,7 +13,7 @@ import { IncertidumbreMuestraComponent,RemoveAlertDirective } from './incertidum
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { IncertidumbreValidacionesComponent } from './incertidumbre-validaciones/incertidumbre-validaciones.component';
 import { IncertidumbreDetalleComponent } from './incertidumbre-detalle/incertidumbre-detalle.component';
-import { ArchwizardModule } from 'ng2-archwizard';
+// import { ArchwizardModule } from 'ng2-archwizard';
 import { IncertidumbreDetalleVarComponent } from './incertidumbre-detalle-var/incertidumbre-detalle-var.component';
 import { IncertidumbreDetalleMuestraComponent } from './incertidumbre-detalle-muestra/incertidumbre-detalle-muestra.component';
 @NgModule({
@@ -26,11 +26,16 @@ import { IncertidumbreDetalleMuestraComponent } from './incertidumbre-detalle-mu
     SelectModule,
     EquipoModule,
     NgxDatatableModule,
-    ArchwizardModule,
+    // ArchwizardModule,
   ],
   exports: [IncertidumbreAddComponent, IncertidumbreUtotalComponent, IncertidumbreMuestraComponent, IncertidumbreValidacionesComponent
   ,IncertidumbreDetalleMuestraComponent],
   declarations: [IncertidumbreAddComponent, IncertidumbreElementAddComponent, IncertidumbreUtotalComponent,
-    IncertidumbreMuestraComponent,RemoveAlertDirective, IncertidumbreValidacionesComponent, IncertidumbreDetalleComponent, IncertidumbreDetalleVarComponent, IncertidumbreDetalleMuestraComponent]
+    IncertidumbreMuestraComponent,
+    RemoveAlertDirective,
+    IncertidumbreValidacionesComponent,
+    IncertidumbreDetalleComponent,
+    IncertidumbreDetalleVarComponent,
+    IncertidumbreDetalleMuestraComponent]
 })
 export class IncertidumbreModule { }

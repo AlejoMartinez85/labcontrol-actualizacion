@@ -120,7 +120,7 @@ export class AdminComponent implements OnInit {
               this.user.rol = resp.Rol._id;
               localStorage.removeItem('userInfo');
               localStorage.setItem('userInfo', JSON.stringify(this.user));
-              this.userService.update(this.user).subscribe((value) => {
+              this.userService.update(this.user).subscribe((value: any) => {
                 this.notificationService.addNotify({ title: 'Alerta', msg: 'Usuario actualizado con exito', type: 'success' });
                 this.cargarPermisos(this.user.rol);
               }, err => {
@@ -156,7 +156,7 @@ export class AdminComponent implements OnInit {
     this.totalpaso2 = 0;
     this.totalpaso1 = 0;
     this.cantidadPaso3 = 0;
-    this.ensayoservice.getpasos(1).subscribe(valores => {
+    this.ensayoservice.getpasos(1).subscribe((valores: any) => {
       if (valores.success) {
         this.paso1 = valores.paso1;
         this.paso2 = valores.paso2;
@@ -209,7 +209,7 @@ export class AdminComponent implements OnInit {
       confirmButtonText: 'Si, pasar!',
       cancelButtonText: 'No',
       useRejections: true           // <<<<<<------- BACKWARD COMPATIBILITY WITH v6.x,
-    }).then((result) => {
+    }).then((result: any) => {
       let paso = 0;
       let estado = '';
       let estadocount = 0;
@@ -249,7 +249,7 @@ export class AdminComponent implements OnInit {
         paso: paso,
         estado: estado
       };
-      this.ensayoservice.updatePaso(contenido).subscribe(resp => {
+      this.ensayoservice.updatePaso(contenido).subscribe((resp: any) => {
         if (resp.success) {
           this.closeMyModal(null);
           this.tabdata();
@@ -264,9 +264,9 @@ export class AdminComponent implements OnInit {
   editarEnsayo(ensayo, lugar) {
 
     this.ensayo = null;
-    this.ensayoservice.getById(ensayo._id).subscribe((value) => {
+    this.ensayoservice.getById(ensayo._id).subscribe((value: any) => {
       value.ensayos.muestras.forEach((element, index) => {
-        this.muestraService.getById(element).subscribe(resp => {
+        this.muestraService.getById(element).subscribe((resp: any) => {
           this.ensayo.muestras[index] = resp.muestra;
         });
       });
@@ -301,7 +301,7 @@ export class AdminComponent implements OnInit {
   }
 
   cargarEnsayos(estado) {
-    this.ensayoservice.getEstado(1, estado).subscribe((value) => {
+    this.ensayoservice.getEstado(1, estado).subscribe((value: any) => {
       this.ensayos = value.ensayos;
       this.indicadores = value.indicadores;
       this.pagos = value.pagos;
@@ -389,13 +389,13 @@ export class AdminComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!',
       cancelButtonText: 'No',
       useRejections: true           // <<<<<<------- BACKWARD COMPATIBILITY WITH v6.x
-    }).then((result) => {
+    }).then((result: any) => {
       // if (result.value) {
       //   this.ensayo.estado = 'Eliminado';
       //   this.guardarEnsayo();
       // }
       this.guardarActividades('Eliminó la solicitud de ensayo', 'Ensayo', element);
-      this.ensayoservice.delete(element).subscribe(resp => {
+      this.ensayoservice.delete(element).subscribe((resp: any) => {
         this.tabdata();
         this.closeMyModal('effect-3');
       });
@@ -403,7 +403,7 @@ export class AdminComponent implements OnInit {
     );
   }
   guardarEnsayo() {
-    this.ensayoservice.update(this.ensayo).subscribe((value) => {
+    this.ensayoservice.update(this.ensayo).subscribe((value: any) => {
       this.tabdata();
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Ensayo Actualizado con exito', type: 'success' });
       this.closeMyModal('effect-3');
@@ -427,7 +427,7 @@ export class AdminComponent implements OnInit {
     actividad.fecha = new Date().toISOString().split('T')[0];
     actividad.nombreUsuarioCreador = this.user.name;
     actividad.tipoComentario = tipoComentario;
-    this.actividadService.add(actividad).subscribe((value) => {
+    this.actividadService.add(actividad).subscribe((value: any) => {
 
     }, err => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'No se pudo almacenar la audirotia ', type: 'error' });
@@ -549,7 +549,7 @@ export class AdminComponent implements OnInit {
       const btn = document.getElementById('tab-pago')
       btn.click();
     }
-    
+
   }
   nuevaSolicitudTrue(){
     this.nuevaSolicitud = true;

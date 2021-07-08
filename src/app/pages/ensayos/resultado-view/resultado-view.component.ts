@@ -15,7 +15,6 @@ import { environment } from '../../../../environments/environment';
 import { ParametroService } from '../../../services/parametro/parametro.service';
 import { FileUploader, ParsedResponseHeaders, FileItem } from 'ng2-file-upload';
 import * as XLSX from 'xlsx';
-import { forEach } from '@angular/router/src/utils/collection';
 import { ConfiguracionReporteService } from '../../../services/configuracion-reporte/configuracion-reporte.service';
 import { EstructuraServiceService } from '../../../services/Estructura/Estructura-service.service';
 @Component({
@@ -133,7 +132,7 @@ export class ResultadoViewComponent implements OnInit, OnChanges {
       extraPlugins: 'divarea'
 
     };
-    this.estructuraService.get(0).subscribe(resp => {
+    this.estructuraService.get(0).subscribe((resp: any) => {
       if (resp.success) {
         this.estructuras = resp.Layouts;
       } else {
@@ -177,7 +176,7 @@ export class ResultadoViewComponent implements OnInit, OnChanges {
   }
   cartgarConfiguraciones() {
     this.configuraciones = [];
-    this.parametroService.getConfigParametros(1).subscribe(valores => {
+    this.parametroService.getConfigParametros(1).subscribe((valores: any) => {
       if (valores.success) {
         if (valores.configuracion.length > 0) {
           this.configuraciones = valores.configuracion;
@@ -229,7 +228,7 @@ export class ResultadoViewComponent implements OnInit, OnChanges {
     this.muestrasMaster = [];
     this.muestras = [];
     this.muestrassobrabtres = [];
-    this.ensayoservice.getReporte(this.ensayo_id).subscribe((value) => {
+    this.ensayoservice.getReporte(this.ensayo_id).subscribe((value: any) => {
       this.ensayo = value.ensayos;
       console.log(this.ensayo);
       this.cliente._id = this.ensayo.cliente._id,
@@ -257,7 +256,7 @@ export class ResultadoViewComponent implements OnInit, OnChanges {
       this.cliente.imagenes = this.ensayo.cliente.imagenes;
       const muestras = [];
       this.ensayo.muestras.forEach((element, index) => {
-        this.muestraService.getById(element).subscribe(resp => {
+        this.muestraService.getById(element).subscribe((resp: any) => {
           if (resp.success) {
             muestras[index] = resp.muestra;
           }
@@ -265,8 +264,8 @@ export class ResultadoViewComponent implements OnInit, OnChanges {
       });
 
       this.muestras = muestras;
-      
-      this.configuracionReporteService.get().subscribe(valores => {
+
+      this.configuracionReporteService.get().subscribe((valores: any) => {
         if (valores.success) {
 
           // REVISAR esto hace que si el cliente esta viendo el informe parta las muestras cada 3 sin embargo las debe partir en lo que el susuario del ensayo lo hizo o en su defecto que vea el informe como solo un html ,
@@ -317,7 +316,7 @@ export class ResultadoViewComponent implements OnInit, OnChanges {
           });
         }
       });
-      
+
       this.cargando = false;
     }, err => {
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });

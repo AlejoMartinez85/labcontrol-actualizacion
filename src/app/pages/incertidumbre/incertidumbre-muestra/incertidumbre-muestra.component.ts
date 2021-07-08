@@ -87,12 +87,12 @@ export class IncertidumbreMuestraComponent implements OnInit, OnChanges {
       });
     } catch (e) {
       this.notificationService.addNotify({ title: 'Roles', msg: e.message, type: 'error' });
-      //MEnsaje personalisado 
+      //MEnsaje personalisado
     }
   }
   getParametroByID() {
     if (this.parametroId != undefined) {
-      this.parametroService.getById(this.parametroId).subscribe((parametro) => {
+      this.parametroService.getById(this.parametroId).subscribe((parametro: any) => {
         this.parametro = parametro['parametros'];
         this.formulaactual = this.parametro.formula;
         this.actualizardatos(false);
@@ -124,7 +124,7 @@ export class IncertidumbreMuestraComponent implements OnInit, OnChanges {
     this.cabeceras = ['Fecha', 'Descripción'];
     if (this.parametroId != undefined) {
       console.log(this.parametroId)
-      this.parametroCalibacionService.getById(this.parametroId).subscribe((parametro) => {
+      this.parametroCalibacionService.getById(this.parametroId).subscribe((parametro: any) => {
         this.ensayos = parametro.parametros;
           this.ensayos[0].variables.forEach((element, index) => {
 
@@ -190,7 +190,7 @@ export class IncertidumbreMuestraComponent implements OnInit, OnChanges {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.subscription = this.parametroCalibacionService.add(this.parametro).subscribe((value) => {
+    this.subscription = this.parametroCalibacionService.add(this.parametro).subscribe((value: any) => {
       this.parametroresult = value.data;
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Parametro almacenado con exito', type: 'success' });
       this.reload = true;
@@ -239,7 +239,7 @@ export class IncertidumbreMuestraComponent implements OnInit, OnChanges {
     this.modalOpen('modalMuestra');
   }
 
-  
+
   formMasivo() {
     let contador = 0;
     console.log(this.datoCopypaste)

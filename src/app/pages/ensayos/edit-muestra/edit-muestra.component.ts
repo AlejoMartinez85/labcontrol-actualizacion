@@ -36,7 +36,7 @@ export class EditMuestraComponent implements OnInit {
   ensayo: any;
   apiurl: string;
   constructor(private router: ActivatedRoute, private muestraService: MuestraService,
-    private routernavegate: Router) {
+              private routernavegate: Router) {
     this.$identificador = this.router.snapshot.paramMap.get('id');
     this.ensayo = new Ensayo();
     this.apiurl = environment.apiUrl;
@@ -61,7 +61,7 @@ export class EditMuestraComponent implements OnInit {
   }
   editarForm() {
     this.formaMuestras.value.imagen_perfil = this.imagePath;
-    this.muestraService.update(this.formaMuestras.value).subscribe((value) => {
+    this.muestraService.update(this.formaMuestras.value).subscribe((value: any) => {
       if (value.success) {
         alert(`La muestra ${value.muertaEdit.codigo}, Fue actualizada con Éxito`);
         this.routernavegate.navigate(['/ensayos/recepcionEnsayo']);
@@ -71,7 +71,7 @@ export class EditMuestraComponent implements OnInit {
     });
   }
   cargaMuestra(id) {
-    this.muestraService.getById(id).subscribe(muestra => {
+    this.muestraService.getById(id).subscribe((muestra: any) => {
       if (muestra.success) {
         this.Muestra = muestra.muestra;
         this.imagePath = this.Muestra['imagen_perfil'];
@@ -108,7 +108,7 @@ export class EditMuestraComponent implements OnInit {
     const archivoEliminar = {
       idArchivo: id
     };
-    this.muestraService.deleteArchivo(this.$identificador, archivoEliminar).subscribe(resp => {
+    this.muestraService.deleteArchivo(this.$identificador, archivoEliminar).subscribe((resp: any) => {
       if(resp.success){
         this.cargaMuestra(this.$identificador);
       }

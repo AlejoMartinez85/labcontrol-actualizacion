@@ -110,7 +110,7 @@ export class CartasControlComponent implements OnInit {
   }
 
   /*
-  * Cartas 
+  * Cartas
   */
  cargarCartas(desde){
   this.desde = desde;
@@ -120,7 +120,7 @@ export class CartasControlComponent implements OnInit {
   if (this.desde !== 0) {
     this.estadopag = true;
   }
-  this.cartasControlService.getAll(desde).subscribe(cartas =>{
+  this.cartasControlService.getAll(desde).subscribe((cartas: any) =>{
     this.cartasControl = cartas;
     this.cantidad = cartas.length;
     if(this.cartasControl.length < 5){
@@ -145,7 +145,7 @@ export class CartasControlComponent implements OnInit {
       tercero: this.user.tercero._id,
       usuario: this.user._id
     };
-    this.cartasControlService.add(cartas).subscribe(carta =>{
+    this.cartasControlService.add(cartas).subscribe((carta: any) =>{
       this.router.navigate(['/config/cartas-control/ver',  carta._id ]);
     });
 
@@ -159,7 +159,7 @@ export class CartasControlComponent implements OnInit {
       cancelButtonText: 'No',
       useRejections: true           // <<<<<<------- BACKWARD COMPATIBILITY WITH v6.x
     }).then((result) => {
-        this.cartasControlService.delete(carta._id).subscribe( cartaEliminada => {
+        this.cartasControlService.delete(carta._id).subscribe( (cartaEliminada: any) => {
           this.notificationService.addNotify(
             { title: 'Carta',
               msg:  `La carta ${cartaEliminada.nombre} Se ha eliminado correctamente`,
@@ -171,7 +171,7 @@ export class CartasControlComponent implements OnInit {
     });
   }
   buscarCartas(event) {
-    this.cartasControlService.getBuscarCartasControl(event.target.value).subscribe(resp => {
+    this.cartasControlService.getBuscarCartasControl(event.target.value).subscribe((resp: any) => {
       if (resp.success) {
         this.cartasControl = resp.cartas;
       }

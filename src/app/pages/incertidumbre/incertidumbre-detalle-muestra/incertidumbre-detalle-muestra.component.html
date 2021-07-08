@@ -1,4 +1,4 @@
-<wizard navigationMode="free" navBarLayout="large-filled-symbols">
+<!-- <wizard navigationMode="free" navBarLayout="large-filled-symbols">
   <wizard-step stepTitle="Parametros" optionalStep navigationSymbol="1">
     <div class="container-fluid">
       <div class="col-lg-12" *ngIf="muestraSeleccionada">
@@ -14,9 +14,9 @@
                   id="tab-{{variable._id}}">
                   <ng-template ngbTabTitle class="col-lg-3"><i
                           class="icofont icofont-molecule"></i> <span class="font-weight-bold">
-                          {{variable.simbolo}}</span></ng-template>
+                          {{variable.simbolo}}</span></ng-template> -->
                   <!-- cambio: Se puso etiqueta span y negrilla para hacer mas grande titulo tab -->
-                  <ng-template ngbTabContent>
+                  <!-- <ng-template ngbTabContent>
                       <div [@fadeInOutTranslate] class="m-t-15">
                           <app-incertidumbre-detalle-var [item]="variable"></app-incertidumbre-detalle-var>
                       </div>
@@ -43,7 +43,7 @@
             <input type="number" class="form-control" [(ngModel)]="muestraSeleccionada.parametro.ndecimales"
               placeholder="Numero decimales"  [disabled]="true">
           </div>
-          
+
           <div class="col-sm-6">
             <label class="col-form-label">Uc:{{muestraSeleccionada.uc}}</label>
             <strong></strong><br />
@@ -60,7 +60,7 @@
                   <th>Valor </th>
                   <th>Coeficiente </th>
                   <th>Incertidumbre </th>
-    
+
                 </tr>
               </thead>
               <tbody>
@@ -72,14 +72,14 @@
                   <td>
                     {{variable.simbolo}}
                   </td>
-                  <td>
+                  <td> -->
                     <!-- <input type="number" class="form-control" name="var_valor{{i}}"
-                      
+
                                                             placeholder="Valor " [(ngModel)]="variable.valor"
                                                             [ngModelOptions]="{standalone: true}"
                                                             (input)="actualizardatos()"> -->
-                                                            {{variable.valor}}
-                  </td>
+                                                            <!-- {{variable.valor}} -->
+                  <!-- </td>
                   <td>
                     {{variable.coeficiente}}
                   </td>
@@ -87,18 +87,18 @@
                     {{variable.incertidumbre}}
                   </td>
                 </tr>
-    
+
               </tbody>
-    
+
             </table>
           </div>
-          
-    
-    
-    
+
+
+
+
         </div>
       </div>
-    
+
     </div>
   </wizard-step>
-</wizard>
+</wizard> -->

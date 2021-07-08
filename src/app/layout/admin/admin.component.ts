@@ -128,10 +128,10 @@ export class AdminComponent implements OnInit {
   user: any;
   apiurl: string;
   constructor(public menuItems: MenuItems,
-    private authService: AuthenticationService,
-    private router: Router,
-    private notificationService: NotificationService,
-    private cambiarPerfil: CambiarperfilService
+              private authService: AuthenticationService,
+              private router: Router,
+              private notificationService: NotificationService,
+              private cambiarPerfil: CambiarperfilService
   ) {
     this.navType = 'st2';
     this.themeLayout = 'vertical';
@@ -204,7 +204,7 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     this.apiurl = environment.apiUrl;
     this.setBackgroundPattern('pattern1');
-    this.cambiarPerfil.sharedMessage.subscribe((message) => { this.user = JSON.parse(localStorage.getItem('userInfo')); });
+    this.cambiarPerfil.sharedMessage.subscribe((message: any) => { this.user = JSON.parse(localStorage.getItem('userInfo')); });
     /*document.querySelector('body').classList.remove('dark');*/
   }
 

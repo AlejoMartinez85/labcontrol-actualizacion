@@ -17,7 +17,7 @@ export class IncertidumbreUtotalComponent implements OnInit, OnChanges {
     private notificationService: NotificationService
   ) { }
   getParametroByID() {
-    this.parametroCalibacionService.add(this.parametro).subscribe((value) => {
+    this.parametroCalibacionService.add(this.parametro).subscribe((value: any) => {
       this.parametroresult = value.data;
       this.notificationService.addNotify({ title: 'Alerta', msg: 'Parametro almacenado con exito', type: 'success' });
     }, err => {

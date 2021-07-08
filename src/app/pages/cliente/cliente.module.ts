@@ -7,7 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ChartModule } from '../../theme/chart/chart.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { JsonpModule } from '@angular/http';
+// import { JsonpModule } from '@angular/http';
 import { TagInputModule } from 'ngx-chips';
 import { SelectModule } from 'ng-select';
 import { EnsayosModule } from '../ensayos/ensayos.module';
@@ -25,7 +25,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     ChartModule,
     NgxDatatableModule,
     TagInputModule,
-    JsonpModule,
+    // JsonpModule,
     SelectModule,
     EnsayosModule,
     FileUploadModule
