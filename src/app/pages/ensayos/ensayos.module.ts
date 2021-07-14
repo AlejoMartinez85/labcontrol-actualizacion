@@ -6,7 +6,7 @@ import { AdminComponent } from './admin/admin.component';
 import { SharedModule } from '../../shared/shared.module';
 import {ChartModule} from 'angular2-chartjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UiSwitchModule } from 'ng2-ui-switch';
+// import { UiSwitchModule } from 'ng2-ui-switch';
 import { TagInputModule } from 'ngx-chips';
 import { SelectModule } from 'ng-select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -44,7 +44,7 @@ import { NumeroPasteComaToPuntoPipe } from '../../pipes/numero-paste-coma-to-pun
     EnsayosRoutingModule,
     SharedModule,
     ChartModule,
-    UiSwitchModule,
+    // UiSwitchModule,
     TagInputModule,
     SelectModule,
     NgxDatatableModule,

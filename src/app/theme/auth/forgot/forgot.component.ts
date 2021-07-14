@@ -78,7 +78,7 @@ export class ForgotComponent implements OnInit {
   }
   cargardatos($event) {
     //this.email = $event.target.value;
-    this.userService.getBytoken(this.token, this.email).subscribe((value) => {
+    this.userService.getBytoken(this.token, this.email).subscribe((value: any) => {
       this.usuario = value.user;
       if (this.usuario == undefined) {
         this.notificationService.addNotify({ title: 'Alerta', msg: 'Por favor valide los datos ', type: 'error' });

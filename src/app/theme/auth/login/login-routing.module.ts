@@ -11,19 +11,20 @@ const routes: Routes = [
     children: [
       {
         path: 'simple',
-        loadChildren: './basic-login/basic-login.module#BasicLoginModule'
+        loadChildren: () => import('./basic-login/basic-login.module').then(m => m.BasicLoginModule)
       },
       {
         path: 'header-footer',
-        loadChildren: './header-footer-login/header-footer-login.module#HeaderFooterLoginModule'
+        loadChildren: () => import('./header-footer-login/header-footer-login.module').then(m => m.HeaderFooterLoginModule)
       },
       {
         path: 'social',
-        loadChildren: './social-login/social-login.module#SocialLoginModule'
+        loadChildren: () => import('./social-login/social-login.module').then(m => m.SocialLoginModule)
       },
       {
         path: 'social-header-footer',
-        loadChildren: './social-header-footer-login/social-header-footer-login.module#SocialHeaderFooterLoginModule'
+        loadChildren: () => import('./social-header-footer-login/social-header-footer-login.module')
+        .then(m => m.SocialHeaderFooterLoginModule)
       }
     ]
   }

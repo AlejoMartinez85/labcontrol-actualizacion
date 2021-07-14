@@ -11,19 +11,20 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadChildren: './login/login.module#LoginModule'
+        loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+        // () => import('./theme/auth/auth.module').then(m => m.AuthModule),
       },
       {
         path: 'registration',
-        loadChildren: './registration/registration.module#RegistrationModule'
+        loadChildren: () => import('./registration/registration.module').then(m => m.RegistrationModule)
       },
       {
         path: 'forgot',
-        loadChildren: './forgot/forgot.module#ForgotModule'
+        loadChildren: () => import('./forgot/forgot.module').then(m => m.ForgotModule)
       },
       {
         path: 'lock-screen',
-        loadChildren: './lock-screen/lock-screen.module#LockScreenModule'
+        loadChildren: () => import('./lock-screen/lock-screen.module').then(m => m.LockScreenModule)
       }
     ]
   }

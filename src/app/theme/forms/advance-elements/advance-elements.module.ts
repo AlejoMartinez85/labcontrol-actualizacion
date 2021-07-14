@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AdvanceElementsComponent } from './advance-elements.component';
 import {AdvanceElementsRoutingModule} from './advance-elements-routing.module';
 import {SharedModule} from '../../../shared/shared.module';
-import {UiSwitchModule} from 'ng2-ui-switch';
+// import {UiSwitchModule} from 'ng2-ui-switch';
 import {TagInputModule} from 'ngx-chips';
 import {FormsModule} from '@angular/forms';
 
@@ -12,7 +12,7 @@ import {FormsModule} from '@angular/forms';
     CommonModule,
     AdvanceElementsRoutingModule,
     SharedModule,
-    UiSwitchModule,
+    // UiSwitchModule,
     TagInputModule,
     FormsModule
   ],
