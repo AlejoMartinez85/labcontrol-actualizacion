@@ -27,56 +27,56 @@ File: style.scss
 ============= */
 
 // General theme contents
-@import "partials/variables";
-@import "partials/mixins";
-@import "partials/general";
-@import "partials/generic";
+@import "./partials/variables";
+@import "./partials/mixins";
+@import "./partials/general";
+@import "./partials/generic";
 // Menu
-@import "partials/menu/pcmenu";
+@import "./partials/menu/pcmenu";
 // Important Theme elements
-@import "partials/theme-elements/button";
-@import "partials/theme-elements/form-elements";
+@import "./partials/theme-elements/button";
+@import "./partials/theme-elements/form-elements";
 // Theme elements
-@import "partials/theme-elements/label-badges";
-@import "partials/theme-elements/icon-layout";
-@import "partials/theme-elements/ready-to-use";
-@import "partials/theme-elements/box-shadow";
+@import "./partials/theme-elements/label-badges";
+@import "./partials/theme-elements/icon-layout";
+@import "./partials/theme-elements/ready-to-use";
+@import "./partials/theme-elements/box-shadow";
 // Tables
-@import "partials/tables/tables";
+@import "./partials/tables/tables";
 // Widget
-@import "partials/widget-dashboard/widget";
-@import "partials/widget-dashboard/dashboard";
+@import "./partials/widget-dashboard/widget";
+@import "./partials/widget-dashboard/dashboard";
 // Other
-@import "partials/other/alert";
-@import "partials/other/authentication";
-@import "partials/other/breadcrumb";
-@import "partials/other/charts";
-@import "partials/other/chat";
-@import "partials/other/color";
-@import "partials/other/draggable";
-@import "partials/other/e-payment";
-@import "partials/other/editors";
-@import "partials/other/fb-wall";
-@import "partials/other/full-calender";
-@import "partials/other/job-find";
-@import "partials/other/mail-pages";
-@import "partials/other/maps";
-@import "partials/other/navbars";
-@import "partials/other/note";
-@import "partials/other/prism";
-@import "partials/other/progress-bar";
-@import "partials/other/pre-loader";
-@import "partials/other/range-slider";
-@import "partials/other/rating";
+@import "./partials/other/alert";
+@import "./partials/other/authentication";
+@import "./partials/other/breadcrumb";
+@import "./partials/other/charts";
+@import "./partials/other/chat";
+@import "./partials/other/color";
+@import "./partials/other/draggable";
+@import "./partials/other/e-payment";
+@import "./partials/other/editors";
+@import "./partials/other/fb-wall";
+@import "./partials/other/full-calender";
+@import "./partials/other/job-find";
+@import "./partials/other/mail-pages";
+@import "./partials/other/maps";
+@import "./partials/other/navbars";
+@import "./partials/other/note";
+@import "./partials/other/prism";
+@import "./partials/other/progress-bar";
+@import "./partials/other/pre-loader";
+@import "./partials/other/range-slider";
+@import "./partials/other/rating";
 //To-do
-@import "partials/todo/todo";
+@import "./partials/todo/todo";
 // Responsive css
-@import "partials/responsive/responsive";
+@import "./partials/responsive/responsive";
 // dark layout css
-@import "partials/dark";
+@import "./partials/dark";
 
 //angular custom
-@import "partials/custom";
+@import "./partials/custom";
 
 @import '~ngx-bar-rating/themes/br-default-theme';
 @import '~ngx-bar-rating/themes/br-bootstrap-theme';
@@ -88,7 +88,7 @@ File: style.scss
 @import '~ngx-bar-rating/themes/br-movie-theme';
 @import '~ngx-bar-rating/themes/br-square-theme';
 //angular mathquill
-@import "assets/mathquill-0.10.1/mathquill.css";
+@import "../assets/mathquill-0.10.1/mathquill.css";
 .swal2-container {
     z-index: 2000 !important;
 }

@@ -31,6 +31,7 @@
               "node_modules/bootstrap/scss/bootstrap.scss",
               "node_modules/font-awesome-scss/scss/font-awesome.scss",
               "src/assets/icon/themify-icons/themify-icons.css",
+              "src/scss/style.scss",
               "src/styles.scss"
             ],
             "scripts": [
@@ -62,7 +63,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
+                  "maximumWarning": "95kb",
                   "maximumError": "100kb"
                 }
               ]

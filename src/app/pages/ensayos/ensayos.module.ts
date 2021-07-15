@@ -78,8 +78,8 @@ import { NumeroPasteComaToPuntoPipe } from '../../pipes/numero-paste-coma-to-pun
     VerMuestraComponent,
     EditMuestraComponent
   ],
-  // exports: [
-  //   ActividadComponent,
-  // ]
+  exports: [
+    ActividadComponent,
+  ]
 })
 export class EnsayosModule { }

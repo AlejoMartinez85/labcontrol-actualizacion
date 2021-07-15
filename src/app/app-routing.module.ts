@@ -127,13 +127,13 @@ const routes: Routes = [
             m => m.AdvanceModule
           )
       },
-      {
+      /* {
         path: 'animations',
         loadChildren: () =>
           import('./theme/ui-elements/animation/animation.module').then(
             m => m.AnimationModule
           )
-      },
+      }, */
       {
         path: 'forms',
         loadChildren: () =>
