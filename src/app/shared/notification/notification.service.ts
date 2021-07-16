@@ -21,7 +21,6 @@ export class NotificationService {
 	theClass: string;
 	rtl = false;
 	animate = 'fromRight';
-	icons: string;
 	subType = 'success';
 
 	title: string;
@@ -44,8 +43,7 @@ export class NotificationService {
 			preventLastDuplicates: this.preventLastDuplicates,
 			theClass: this.theClass,
 			rtl: this.rtl,
-			animate: this.animate,
-			icons: this.icons
+			animate: this.animate
 		};
 	 }
 
@@ -66,8 +64,7 @@ export class NotificationService {
 			preventLastDuplicates: this.preventLastDuplicates,
 			theClass: this.theClass,
 			rtl: this.rtl,
-			animate: this.animate,
-			icons: this.icons
+			animate: this.animate
 		};
 	}
 

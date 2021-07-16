@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
+import { NotificationService } from './shared/notification';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,15 @@ import {NavigationEnd, Router} from '@angular/router';
 })
 export class AppComponent implements OnInit {
   title = 'lAbControlIms';
+  options = {};
 
-  constructor(private router: Router) { }
-
-  ngOnInit() {
+  constructor(
+    private router: Router,
+    private notificationService: NotificationService
+    ) { }
+    
+    ngOnInit() {
+    this.options = this.notificationService.options;
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
