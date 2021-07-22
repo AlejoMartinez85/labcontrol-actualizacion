@@ -14,8 +14,8 @@ import { EnvironmentService } from '../../shared/environment';
 export class FiledownloadService {
 
   constructor(private _http: HttpClient,
-    private environmentService: EnvironmentService,
-    private httpd: Http) { }
+              private environmentService: EnvironmentService,
+              private httpd: Http) { }
 
   download(id_ensayo) {
     let aut = "Bearer " + localStorage.getItem('access_token');
@@ -26,7 +26,8 @@ export class FiledownloadService {
       responseType: ResponseContentType.Blob
     });
     let url = this.environmentService.setApiService('pdf/ensayo/' + id_ensayo);
-    return this.httpd.get(url, options)
+    return this._http
+      .get(url, options)
       .map((response: Response) => <Blob>response.blob())
       .catch(this.handleError);
   }
