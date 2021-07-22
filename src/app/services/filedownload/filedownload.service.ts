@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { Http, Response, RequestOptions, ResponseContentType, Headers } from '@angular/http';
 import { EnvironmentService } from '../../shared/environment';
@@ -19,16 +19,15 @@ export class FiledownloadService {
 
   download(id_ensayo) {
     let aut = "Bearer " + localStorage.getItem('access_token');
-    let headers = new Headers();
+    let headers = new HttpHeaders();
     headers.append('Authorization', aut);
-    let options = new RequestOptions({
-      headers: headers,
-      responseType: ResponseContentType.Blob
-    });
     let url = this.environmentService.setApiService('pdf/ensayo/' + id_ensayo);
     return this._http
-      .get(url, options)
-      .map((response: Response) => <Blob>response.blob())
+      .get(url, {
+        headers: headers,
+        responseType: "arraybuffer"
+      })
+      .map((response) => new Blob([response], { type: 'application/pdf' }))
       .catch(this.handleError);
   }
   private handleError(error: HttpErrorResponse | any) {
