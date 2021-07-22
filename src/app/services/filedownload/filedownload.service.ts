@@ -4,8 +4,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
-import { Http, Response, RequestOptions, ResponseContentType, Headers } from '@angular/http';
 import { EnvironmentService } from '../../shared/environment';
 
 @Injectable({
@@ -14,8 +12,7 @@ import { EnvironmentService } from '../../shared/environment';
 export class FiledownloadService {
 
   constructor(private _http: HttpClient,
-              private environmentService: EnvironmentService,
-              private httpd: Http) { }
+              private environmentService: EnvironmentService) { }
 
   download(id_ensayo) {
     let aut = "Bearer " + localStorage.getItem('access_token');
